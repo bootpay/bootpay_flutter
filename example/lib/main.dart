@@ -1,4 +1,5 @@
 
+import 'package:bootpay_flutter/bootpay_app.dart';
 import 'package:bootpay_flutter/bootpay_webview.dart';
 import 'package:bootpay_flutter/model/extra.dart';
 import 'package:bootpay_flutter/model/item.dart';
@@ -6,7 +7,6 @@ import 'package:bootpay_flutter/model/payload.dart';
 import 'package:bootpay_flutter/model/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bootpay_flutter/bootpay_bottom_sheet.dart';
 
 void main() {
   runApp(MyApp());
@@ -44,8 +44,8 @@ class _MyAppState extends State<MyApp> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
 
-    payload.pg = 'kcp';
-    payload.method = 'phone';
+    payload.pg = 'nicepay';
+    payload.method = 'card';
     // _payload.methods = ['card', 'phone', 'vbank', 'bank'];
     payload.name = '테스트 상품';
     payload.price = 1000.0; //정기결제시 0 혹은 주석
@@ -67,8 +67,8 @@ class _MyAppState extends State<MyApp> {
     Extra extra = Extra();
     extra.appScheme = 'bootpayFlutterExample';
     extra.quotas = [0,2,3];
-    extra.popup = 0;
-    extra.quick_popup = 0;
+    extra.popup = 1;
+    extra.quick_popup = 1;
 
     payload.user = user;
     payload.extra = extra;
@@ -82,9 +82,11 @@ class _MyAppState extends State<MyApp> {
           return Container(
             child: Center(
               child: TextButton(
-                onPressed: () => BootpayBottomSheet.showCupertinoModalBottomSheet(
+                onPressed: () => BootpayApp.request(
                   context: context,
                   payload: payload,
+                  showCloseButton: true,
+                  closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
                   onCancel: (String data) {
                     print('------- onCancel: $data');
                   },
@@ -106,7 +108,7 @@ class _MyAppState extends State<MyApp> {
                     print('------- onDone: $data');
                   },
                 ),
-                child: Text('TextButton'),
+                child: Text('부트페이 결제테스트'),
               )
             ),
           );
