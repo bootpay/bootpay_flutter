@@ -4,12 +4,18 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'bootpay_webview.dart';
-import 'model/payload.dart';
+import '../bootpay.dart';
+import '../bootpay_api.dart';
+import '../bootpay_webview.dart';
+import '../model/payload.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as BottomSheet;
 
-class BootpayApp {
-  static void request({
+class BootpayPlatform extends BootpayApi{
+
+  BootpayWebView? webView;
+
+  @override
+  void request({
     Key? key,
     required BuildContext context,
     required Payload payload,
@@ -52,7 +58,7 @@ class BootpayApp {
     }
   }
 
-  static void _requestMaterialStyle({
+  void _requestMaterialStyle({
     Key? key,
     required BuildContext context,
     required Payload payload,
@@ -64,6 +70,20 @@ class BootpayApp {
     BootpayDefaultCallback? onReady,
     BootpayConfirmCallback? onConfirm,
     BootpayDefaultCallback? onDone}) {
+
+    webView = BootpayWebView(
+      key: key,
+      showCloseButton: showCloseButton,
+      closeButton: closeButton,
+      payload: payload,
+      onCancel: onCancel,
+      onError: onError,
+      onClose: onClose,
+      onReady: onReady,
+      onConfirm: onConfirm,
+      onDone: onDone,
+    );
+
     BottomSheet.showMaterialModalBottomSheet(
       expand: true,
       enableDrag: false,
@@ -81,18 +101,7 @@ class BootpayApp {
                     .scaffoldBackgroundColor
                     .withOpacity(0.95),
                 extendBodyBehindAppBar: true,
-                body: BootpayWebView(
-                  key: key,
-                  showCloseButton: showCloseButton,
-                  closeButton: closeButton,
-                  payload: payload,
-                  onCancel: onCancel,
-                  onError: onError,
-                  onClose: onClose,
-                  onReady: onReady,
-                  onConfirm: onConfirm,
-                  onDone: onDone,
-                ),
+                body: webView,
               ),
             ),
           ),
@@ -101,7 +110,7 @@ class BootpayApp {
     );
   }
 
-  static void _requestCupertinoStyle({
+  void _requestCupertinoStyle({
     Key? key,
     required BuildContext context,
     required Payload payload,
@@ -113,6 +122,20 @@ class BootpayApp {
     BootpayDefaultCallback? onReady,
     BootpayConfirmCallback? onConfirm,
     BootpayDefaultCallback? onDone}) {
+
+    webView = BootpayWebView(
+      key: key,
+      showCloseButton: showCloseButton,
+      closeButton: closeButton,
+      payload: payload,
+      onCancel: onCancel,
+      onError: onError,
+      onClose: onClose,
+      onReady: onReady,
+      onConfirm: onConfirm,
+      onDone: onDone,
+    );
+
     BottomSheet.showCupertinoModalBottomSheet(
       expand: true,
       enableDrag: false,
@@ -128,21 +151,20 @@ class BootpayApp {
                 .scaffoldBackgroundColor
                 .withOpacity(0.95),
             extendBodyBehindAppBar: true,
-            body: BootpayWebView(
-              key: key,
-              payload: payload,
-              showCloseButton: showCloseButton,
-              closeButton: closeButton,
-              onCancel: onCancel,
-              onError: onError,
-              onClose: onClose,
-              onReady: onReady,
-              onConfirm: onConfirm,
-              onDone: onDone,
-            ),
+            body: webView
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void removePaymentWindow() {
+    if(webView != null) webView!.removePaymentWindow();
+  }
+
+  @override
+  void transactionConfirm(String data) {
+    if(webView != null) webView!.transactionConfirm(data);
   }
 }

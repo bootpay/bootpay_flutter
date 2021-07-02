@@ -1,6 +1,6 @@
 
-import 'package:bootpay_flutter/bootpay_app.dart';
-import 'package:bootpay_flutter/bootpay_webview.dart';
+import 'package:bootpay_flutter/bootpay.dart';
+
 import 'package:bootpay_flutter/model/extra.dart';
 import 'package:bootpay_flutter/model/item.dart';
 import 'package:bootpay_flutter/model/payload.dart';
@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
 
     // _payload = Payload();
     // _payload.app
-    // _payload?.applicationId = '5b8f6a4d396fa665fdc2b5e8';
+    payload.applicationId = '5b8f6a4d396fa665fdc2b5e7';
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
 
@@ -82,10 +82,11 @@ class _MyAppState extends State<MyApp> {
           return Container(
             child: Center(
               child: TextButton(
-                onPressed: () => BootpayApp.request(
+                onPressed: () => Bootpay().request(
                   context: context,
                   payload: payload,
-                  showCloseButton: true,
+                  isMaterialStyle: false,
+                  showCloseButton: false,
                   closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
                   onCancel: (String data) {
                     print('------- onCancel: $data');
@@ -95,7 +96,6 @@ class _MyAppState extends State<MyApp> {
                   },
                   onClose: () {
                     print('------- onClose');
-                    Navigator.pop(context);
                   },
                   onReady: (String data) {
                     print('------- onReady: $data');

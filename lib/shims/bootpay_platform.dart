@@ -1,0 +1,1 @@
+export 'bootpay_app.dart' if (dart.library.html) 'bootpay_web.dart';

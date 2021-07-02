@@ -5,11 +5,9 @@ import 'package:bootpay_flutter/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:bootpay_webview_flutter/webview_flutter.dart';
 
+import 'bootpay.dart';
 import 'model/payload.dart';
 
-typedef void BootpayDefaultCallback(String data);
-typedef bool BootpayConfirmCallback(String data);
-typedef void BootpayCloseCallback();
 
 // 1. 웹앱을 대체하는 뷰를 활용한 샘플
 // 2. api 역할
@@ -28,6 +26,8 @@ class BootpayWebView extends StatefulWidget {
   bool showCloseButton = false;
   Widget? closeButton;
 
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
+
   BootpayWebView(
       {this.key,
       this.payload,
@@ -44,11 +44,23 @@ class BootpayWebView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _BootpayWebViewState();
+
+  void transactionConfirm(String data) {
+    _controller.future.then((controller) {
+      controller.evaluateJavascript(
+          "var data = JSON.parse('$data'); BootPay.transactionConfirm(data);");
+    });
+  }
+
+  void removePaymentWindow() {
+    _controller.future.then((controller) {
+      controller.evaluateJavascript("BootPay.removePaymentWindow();");
+    });
+  }
 }
 
 class _BootpayWebViewState extends State<BootpayWebView> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+
   final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
 
   @override
@@ -61,7 +73,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
           initialUrl: INAPP_URL,
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
-            _controller.complete(webViewController);
+            widget._controller.complete(webViewController);
           },
           javascriptChannels: <JavascriptChannel>[
             onCancel(context),
@@ -75,18 +87,14 @@ class _BootpayWebViewState extends State<BootpayWebView> {
             // if (request.url.startsWith('https://www.youtube.com/')) {
             //   return NavigationDecision.prevent;
             // }
-            print('------ ${request.url}');
             return NavigationDecision.navigate;
           },
           onPageFinished: (String url) {
-            print('Page finished loading: $url');
             if (url.startsWith(INAPP_URL)) {
-              _controller.future.then((controller) async {
+              widget._controller.future.then((controller) async {
                 for (String script in await getBootpayJSBeforeContentLoaded()) {
-                  print('------------ before script: $script');
                   controller.evaluateJavascript(script);
                 }
-                print('------------ ${getBootpayJS()}');
                 controller.evaluateJavascript(getBootpayJS());
               });
             }
@@ -177,16 +185,11 @@ extension BootpayMethod on _BootpayWebViewState {
   }
 
   void transactionConfirm(String data) {
-    _controller.future.then((controller) {
-      controller.evaluateJavascript(
-          "var data = JSON.parse('$data'); BootPay.transactionConfirm(data);");
-    });
+    widget.transactionConfirm(data);
   }
 
   void removePaymentWindow() {
-    _controller.future.then((controller) {
-      controller.evaluateJavascript("BootPay.removePaymentWindow();");
-    });
+    widget.removePaymentWindow();
   }
 }
 
@@ -214,6 +217,7 @@ extension BootpayCallback on _BootpayWebViewState {
         name: 'BootpayClose',
         onMessageReceived: (JavascriptMessage message) {
           if (this.widget.onClose != null) this.widget.onClose!();
+          Navigator.of(context).pop();
         });
   }
 

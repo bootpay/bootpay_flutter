@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:bootpay_flutter/model/extra.dart';
 import 'package:bootpay_flutter/model/item.dart';
 import 'package:bootpay_flutter/model/user.dart';
+import 'package:flutter/foundation.dart';
 
 class Payload {
   String applicationId = '';
@@ -52,60 +53,30 @@ class Payload {
 
     accountExpireAt = json["account_expire_at"];
     showAgreeWindow = json["show_agree_window"];
-
-    // extra = Extra.fromJson(json["extra"]);
-    // userInfo = User.fromJson(json["userInfo"]);
-    // try {
-    //   for(Map<String, dynamic> item in json["items"]) {
-    //     items.add(Item.fromJson(item));
-    //   }
-    // } catch (e) {
-    //
-    // }
   }
 
+
+  Map<String, dynamic> toJson() =>
+      {
+        'application_id': getApplicationId(),
+        'pg': pg,
+        'method': method,
+        'methods': methods,
+        'name': name,
+        'price': price,
+        'tax_free': taxFree,
+        'order_id': orderId,
+        'use_order_id': useOrderId,
+        'params': params,
+        'account_expire_at': accountExpireAt,
+        'show_agree_window': showAgreeWindow
+      };
+
   getApplicationId() {
-    if(this.applicationId.isNotEmpty) return this.applicationId;
+    if(kIsWeb) return this.applicationId;
     if(Platform.isIOS) return this.iosApplicationId;
     else return this.androidApplicationId;
   }
-
-  // Map<String, dynamic> toJsonUppercase() => {
-  //   "applicationId": getApplicationId(),
-  //   "pg": this.pg,
-  //   "method": this.method,
-  //   "methods": this.methods,
-  //   "name": this.name,
-  //   "price": this.price,
-  //   "taxFree": this.taxFree,
-  //   "orderId": this.orderId,
-  //   "useOrderId": this.useOrderId,
-  //   "params": this.params,
-  //   "accountExpireAt": this.accountExpireAt,
-  //   "showAgreeWindow": this.showAgreeWindow,
-  //   "userToken": this.userToken
-  // };
-
-  // Map<String, dynamic> toJsonLowcase() => {
-  //   "application_id": getApplicationId(),
-  //   "pg": this.pg,
-  //   "method": this.method,
-  //   "methods": this.methods,
-  //   "name": this.name,
-  //   "price": this.price,
-  //   "tax_free": this.taxFree,
-  //   "order_id": this.orderId,
-  //   "use_order_id": this.useOrderId,
-  //   "params": this.params,
-  //   "account_expire_at": this.accountExpireAt,
-  //   "show_agree_window": this.showAgreeWindow,
-  //   "user_token": this.userToken
-  // };
-
-  // String toString() {
-  //
-  //   return "{application_id: '${getApplicationId()}', pg: '${this.pg}'";
-  // }
 
   String toString() {
     return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${getMethodList()}, name: '$name', price: $price, tax_free: $taxFree, order_id: '$orderId', use_order_id: $useOrderId, params: ${getParamsStringAndroid()}, account_expire_at: '$accountExpireAt', show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user_info: ${user.toString()}, items: ${getItems()}}";
