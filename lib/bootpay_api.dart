@@ -1,11 +1,10 @@
-import 'package:flutter/services.dart';
+
 import 'package:flutter/widgets.dart';
 
 import 'bootpay.dart';
 import 'model/payload.dart';
 
 abstract class BootpayApi {
-  // static const MethodChannel _channel = const MethodChannel('bootpay_api');
 
   void request({
     Key? key,

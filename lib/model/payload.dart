@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:bootpay_flutter/model/extra.dart';
-import 'package:bootpay_flutter/model/item.dart';
-import 'package:bootpay_flutter/model/user.dart';
+import 'extra.dart';
+import 'item.dart';
+import 'user.dart';
 import 'package:flutter/foundation.dart';
 
 class Payload {

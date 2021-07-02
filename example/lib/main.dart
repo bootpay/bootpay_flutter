@@ -1,10 +1,10 @@
 
-import 'package:bootpay_flutter/bootpay.dart';
+import 'package:bootpay/bootpay.dart';
 
-import 'package:bootpay_flutter/model/extra.dart';
-import 'package:bootpay_flutter/model/item.dart';
-import 'package:bootpay_flutter/model/payload.dart';
-import 'package:bootpay_flutter/model/user.dart';
+import 'package:bootpay/model/extra.dart';
+import 'package:bootpay/model/item.dart';
+import 'package:bootpay/model/payload.dart';
+import 'package:bootpay/model/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
