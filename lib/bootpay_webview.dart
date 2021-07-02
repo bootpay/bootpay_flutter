@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bootpay/user_info.dart';
+import 'user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:bootpay_webview_flutter/webview_flutter.dart';
 
