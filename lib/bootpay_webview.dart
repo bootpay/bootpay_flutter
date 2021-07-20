@@ -90,6 +90,8 @@ class _BootpayWebViewState extends State<BootpayWebView> {
             return NavigationDecision.navigate;
           },
           onPageFinished: (String url) {
+            print(url);
+
             if (url.startsWith(INAPP_URL)) {
               widget._controller.future.then((controller) async {
                 for (String script in await getBootpayJSBeforeContentLoaded()) {

@@ -1,3 +1,6 @@
+## 1.0.4
+* bottom sheet 내부 위젯트리 변경   
+
 ## 1.0.3
 * iOS webview 충돌 버그 수정  
 

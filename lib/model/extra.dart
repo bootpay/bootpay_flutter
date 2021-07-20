@@ -13,7 +13,7 @@ class Extra {
   int quick_popup = 0;
   String dispCashResult = 'Y';
   int escrow = 0;
-  bool iosCloseButton = false;
+  // bool iosCloseButton = false;
 
   String offer_period = ''; //결제창 제공기간에 해당하는 string 값, 지원하는 PG만 적용됨
 
@@ -38,7 +38,7 @@ class Extra {
     quick_popup = json["quick_popup"];
     dispCashResult = json["disp_cash_result"];
     escrow = json["escrow"];
-    iosCloseButton = json["iosCloseButton"];
+    // iosCloseButton = json["iosCloseButton"];
 
     offer_period = json["offer_period"];
     theme = json["theme"];
@@ -58,7 +58,7 @@ class Extra {
         "quick_popup": this.quick_popup,
         "disp_cash_result": this.dispCashResult,
         "escrow": this.escrow,
-        "iosCloseButton": this.iosCloseButton,
+        // "iosCloseButton": this.iosCloseButton,
         "offer_period": this.offer_period,
         "theme": this.theme,
         "custom_background": this.custom_background,
@@ -79,7 +79,7 @@ class Extra {
     return "{start_at: '${reVal(startAt)}', end_at: '${reVal(endAt)}', expire_month: ${reVal(expireMonth)}, vbank_result: ${reVal(vbankResult)}," +
         "quotas: '${getQuotas()}', app_scheme: '${reVal(appScheme)}', locale: '${reVal(locale)}'," +
         "offer_period: '${reVal(offer_period)}', theme: '${reVal(appScheme)}', theme: '${reVal(theme)}', custom_background: '${reVal(custom_background)}', custom_font_color: '${reVal(custom_font_color)}'," +
-        "popup: ${reVal(popup)}, quick_popup: ${reVal(quick_popup)}, disp_cash_result: '${reVal(dispCashResult)}', escrow: ${reVal(escrow)}, iosCloseButton: $iosCloseButton}";
+        "popup: ${reVal(popup)}, quick_popup: ${reVal(quick_popup)}, disp_cash_result: '${reVal(dispCashResult)}', escrow: ${reVal(escrow)} }";
   }
 
   dynamic reVal(dynamic value) {

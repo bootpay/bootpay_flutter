@@ -1,6 +1,7 @@
 
 import 'dart:ui';
 
+import 'package:bootpay_webview_flutter/webview_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,21 @@ import '../bootpay_api.dart';
 import '../bootpay_webview.dart';
 import '../model/payload.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as BottomSheet;
+
+class WebViewRoute extends StatelessWidget {
+
+  BootpayWebView? webView;
+
+
+  WebViewRoute(this.webView);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+
+    return Scaffold(body: webView);
+  }
+}
 
 class BootpayPlatform extends BootpayApi{
 
@@ -28,6 +44,24 @@ class BootpayPlatform extends BootpayApi{
     BootpayDefaultCallback? onReady,
     BootpayConfirmCallback? onConfirm,
     BootpayDefaultCallback? onDone}) {
+
+    // webView = BootpayWebView(
+    //   key: key,
+    //   showCloseButton: showCloseButton,
+    //   closeButton: closeButton,
+    //   payload: payload,
+    //   onCancel: onCancel,
+    //   onError: onError,
+    //   onClose: onClose,
+    //   onReady: onReady,
+    //   onConfirm: onConfirm,
+    //   onDone: onDone,
+    // );
+    //
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => WebViewRoute(webView)),
+    // );
 
     if(isMaterialStyle) {
       _requestMaterialStyle(
@@ -82,6 +116,7 @@ class BootpayPlatform extends BootpayApi{
       onReady: onReady,
       onConfirm: onConfirm,
       onDone: onDone,
+      
     );
 
     BottomSheet.showMaterialModalBottomSheet(
@@ -91,20 +126,10 @@ class BootpayPlatform extends BootpayApi{
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => Material(
-        child: SafeArea(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-            child: Material(
-              color: Colors.transparent,
-              child: Scaffold(
-                backgroundColor: CupertinoTheme.of(context)
-                    .scaffoldBackgroundColor
-                    .withOpacity(0.95),
-                extendBodyBehindAppBar: true,
-                body: webView,
-              ),
-            ),
-          ),
+        child: Scaffold(
+          body: SafeArea(
+            child: webView!,
+          )
         ),
       ),
     );
@@ -144,15 +169,10 @@ class BootpayPlatform extends BootpayApi{
       backgroundColor: Colors.transparent,
       builder: (context) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-        child: Material(
-          color: Colors.transparent,
-          child: Scaffold(
-            backgroundColor: CupertinoTheme.of(context)
-                .scaffoldBackgroundColor
-                .withOpacity(0.95),
-            extendBodyBehindAppBar: true,
-            body: webView
-          ),
+        child: Scaffold(
+            body: SafeArea(
+              child: webView!,
+            )
         ),
       ),
     );
