@@ -33,6 +33,7 @@ class Bootpay extends BootpayApi {
       BootpayDefaultCallback? onCancel,
       BootpayDefaultCallback? onError,
       BootpayCloseCallback? onClose,
+      BootpayCloseCallback? onCloseHardware,
       BootpayDefaultCallback? onReady,
       BootpayConfirmCallback? onConfirm,
       BootpayDefaultCallback? onDone}) {
@@ -46,6 +47,7 @@ class Bootpay extends BootpayApi {
         onCancel: onCancel,
         onError: onError,
         onClose: onClose,
+        onCloseHardware: onCloseHardware,
         onConfirm: onConfirm,
         onDone: onDone
     );
@@ -59,5 +61,10 @@ class Bootpay extends BootpayApi {
   @override
   void removePaymentWindow() {
     _platform.removePaymentWindow();
+  }
+
+  @override
+  void dismiss(BuildContext context) {
+    _platform.dismiss(context);
   }
 }

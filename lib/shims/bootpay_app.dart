@@ -9,12 +9,13 @@ import '../bootpay.dart';
 import '../bootpay_api.dart';
 import '../bootpay_webview.dart';
 import '../model/payload.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as BottomSheet;
+import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as BottomSheet;
 
 class WebViewRoute extends StatelessWidget {
 
   BootpayWebView? webView;
-
+  DateTime currentBackPressTime = DateTime.now();
 
   WebViewRoute(this.webView);
 
@@ -22,7 +23,21 @@ class WebViewRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    return Scaffold(body: webView);
+    return WillPopScope(
+      child: Scaffold(
+          body: SafeArea(child: webView!)
+      ),
+      onWillPop: () async {
+        DateTime now = DateTime.now();
+        if (now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+          currentBackPressTime = now;
+          if(webView?.onCloseHardware != null) webView?.onCloseHardware!();
+          Fluttertoast.showToast(msg: "\'뒤로\' 버튼을 한번 더 눌러주세요.");
+          return Future.value(false);
+        }
+        return Future.value(true);
+      },
+    );
   }
 }
 
@@ -41,66 +56,7 @@ class BootpayPlatform extends BootpayApi{
     BootpayDefaultCallback? onCancel,
     BootpayDefaultCallback? onError,
     BootpayCloseCallback? onClose,
-    BootpayDefaultCallback? onReady,
-    BootpayConfirmCallback? onConfirm,
-    BootpayDefaultCallback? onDone}) {
-
-    // webView = BootpayWebView(
-    //   key: key,
-    //   showCloseButton: showCloseButton,
-    //   closeButton: closeButton,
-    //   payload: payload,
-    //   onCancel: onCancel,
-    //   onError: onError,
-    //   onClose: onClose,
-    //   onReady: onReady,
-    //   onConfirm: onConfirm,
-    //   onDone: onDone,
-    // );
-    //
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => WebViewRoute(webView)),
-    // );
-
-    if(isMaterialStyle) {
-      _requestMaterialStyle(
-        context: context,
-        payload: payload,
-        onCancel: onCancel,
-        onError: onError,
-        onClose: onClose,
-        onReady: onReady,
-        onConfirm: onConfirm,
-        onDone: onDone,
-        showCloseButton: showCloseButton,
-        closeButton: closeButton
-      );
-    } else {
-      _requestCupertinoStyle(
-          context: context,
-          payload: payload,
-          onCancel: onCancel,
-          onError: onError,
-          onClose: onClose,
-          onReady: onReady,
-          onConfirm: onConfirm,
-          onDone: onDone,
-          showCloseButton: showCloseButton,
-          closeButton: closeButton
-      );
-    }
-  }
-
-  void _requestMaterialStyle({
-    Key? key,
-    required BuildContext context,
-    required Payload payload,
-    bool showCloseButton = false,
-    Widget? closeButton,
-    BootpayDefaultCallback? onCancel,
-    BootpayDefaultCallback? onError,
-    BootpayCloseCallback? onClose,
+    BootpayCloseCallback? onCloseHardware,
     BootpayDefaultCallback? onReady,
     BootpayConfirmCallback? onConfirm,
     BootpayDefaultCallback? onDone}) {
@@ -113,74 +69,31 @@ class BootpayPlatform extends BootpayApi{
       onCancel: onCancel,
       onError: onError,
       onClose: onClose,
-      onReady: onReady,
-      onConfirm: onConfirm,
-      onDone: onDone,
-      
-    );
-
-    BottomSheet.showMaterialModalBottomSheet(
-      expand: true,
-      enableDrag: false,
-      useRootNavigator: true,
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Material(
-        child: Scaffold(
-          body: SafeArea(
-            child: webView!,
-          )
-        ),
-      ),
-    );
-  }
-
-  void _requestCupertinoStyle({
-    Key? key,
-    required BuildContext context,
-    required Payload payload,
-    bool showCloseButton = false,
-    Widget? closeButton,
-    BootpayDefaultCallback? onCancel,
-    BootpayDefaultCallback? onError,
-    BootpayCloseCallback? onClose,
-    BootpayDefaultCallback? onReady,
-    BootpayConfirmCallback? onConfirm,
-    BootpayDefaultCallback? onDone}) {
-
-    webView = BootpayWebView(
-      key: key,
-      showCloseButton: showCloseButton,
-      closeButton: closeButton,
-      payload: payload,
-      onCancel: onCancel,
-      onError: onError,
-      onClose: onClose,
+      onCloseHardware: onCloseHardware,
       onReady: onReady,
       onConfirm: onConfirm,
       onDone: onDone,
     );
 
-    BottomSheet.showCupertinoModalBottomSheet(
-      expand: true,
-      enableDrag: false,
-      useRootNavigator: true,
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-        child: Scaffold(
-            body: SafeArea(
-              child: webView!,
-            )
-        ),
-      ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WebViewRoute(webView)),
     );
   }
 
   @override
   void removePaymentWindow() {
-    if(webView != null) webView!.removePaymentWindow();
+    if(webView != null) {
+      webView!.removePaymentWindow();
+    }
+  }
+
+  @override
+  void dismiss(BuildContext context) {
+    if(webView != null) {
+      webView = null;
+      Navigator.of(context).pop();
+    }
   }
 
   @override

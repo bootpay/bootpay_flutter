@@ -22,4 +22,5 @@ abstract class BootpayApi {
 
   void transactionConfirm(String data);
   void removePaymentWindow();
+  void dismiss(BuildContext context);
 }

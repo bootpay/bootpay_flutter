@@ -46,6 +46,7 @@ class BootpayPlatform extends BootpayApi{
   BootpayDefaultCallback? _callbackCancel;
   BootpayDefaultCallback? _callbackError;
   BootpayCloseCallback? _callbackClose;
+  BootpayCloseCallback? _callbackCloseHardware;
   BootpayDefaultCallback? _callbackReady;
   BootpayConfirmCallback? _callbackConfirm;
   BootpayDefaultCallback? _callbackDone;
@@ -70,6 +71,7 @@ class BootpayPlatform extends BootpayApi{
     BootpayDefaultCallback? onCancel,
     BootpayDefaultCallback? onError,
     BootpayCloseCallback? onClose,
+    BootpayCloseCallback? onCloseHardware,
     BootpayDefaultCallback? onReady,
     BootpayConfirmCallback? onConfirm,
     BootpayDefaultCallback? onDone}) {
@@ -77,6 +79,7 @@ class BootpayPlatform extends BootpayApi{
     this._callbackCancel = onCancel;
     this._callbackError = onError;
     this._callbackClose = onClose;
+    this._callbackCloseHardware = onCloseHardware;
     this._callbackReady = onReady;
     this._callbackConfirm = onConfirm;
     this._callbackDone = onDone;
@@ -92,6 +95,10 @@ class BootpayPlatform extends BootpayApi{
   @override
   void transactionConfirm(String data) {
     _transactionConfirm(data);
+  }
+
+  void dismiss(BuildContext context) {
+    _removePaymentWindow();
   }
 
   void onClose() {

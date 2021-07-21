@@ -11,7 +11,7 @@ import 'model/payload.dart';
 
 // 1. 웹앱을 대체하는 뷰를 활용한 샘플
 // 2. api 역할
-class BootpayWebView extends StatefulWidget {
+class BootpayWebView extends WebView {
   // Payload;
   // Event
   // controller
@@ -20,6 +20,7 @@ class BootpayWebView extends StatefulWidget {
   final BootpayDefaultCallback? onCancel;
   final BootpayDefaultCallback? onError;
   final BootpayCloseCallback? onClose;
+  final BootpayCloseCallback? onCloseHardware;
   final BootpayDefaultCallback? onReady;
   final BootpayConfirmCallback? onConfirm;
   final BootpayDefaultCallback? onDone;
@@ -35,6 +36,7 @@ class BootpayWebView extends StatefulWidget {
       this.onCancel,
       this.onError,
       this.onClose,
+      this.onCloseHardware,
       this.onReady,
       this.onConfirm,
       this.onDone,
@@ -63,6 +65,12 @@ class _BootpayWebViewState extends State<BootpayWebView> {
 
   final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -219,7 +227,7 @@ extension BootpayCallback on _BootpayWebViewState {
         name: 'BootpayClose',
         onMessageReceived: (JavascriptMessage message) {
           if (this.widget.onClose != null) this.widget.onClose!();
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
         });
   }
 
