@@ -48,8 +48,8 @@ class _MyAppState extends State<MyApp> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
 
-    payload.pg = 'payapp';
-    payload.method = 'card';
+    payload.pg = 'nicepay';
+    payload.method = 'npay';
     // _payload.methods = ['card', 'phone', 'vbank', 'bank'];
     payload.name = '테스트 상품';
     payload.price = 1000.0; //정기결제시 0 혹은 주석
@@ -71,8 +71,8 @@ class _MyAppState extends State<MyApp> {
     Extra extra = Extra();
     extra.appScheme = 'bootpayFlutterExample';
     extra.quotas = [0,2,3];
-    // extra.popup = 1;
-    // extra.quick_popup = 1;
+    extra.popup = 1;
+    extra.quick_popup = 1;
 
     payload.user = user;
     payload.extra = extra;
@@ -100,7 +100,8 @@ class _MyAppState extends State<MyApp> {
                   },
                   onClose: () {
                     print('------- onClose');
-                    Bootpay().dismiss(context);
+                    Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+                    //TODO - 원하시는 라우터로 페이지 이동
                   },
                   onCloseHardware: () {
                     print('------- onCloseHardware');

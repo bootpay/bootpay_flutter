@@ -92,13 +92,11 @@ class _BootpayWebViewState extends State<BootpayWebView> {
             onDone(context)
           ].toSet(),
           navigationDelegate: (NavigationRequest request) {
-            // if (request.url.startsWith('https://www.youtube.com/')) {
-            //   return NavigationDecision.prevent;
-            // }
-            return NavigationDecision.navigate;
+            if(Platform.isAndroid)  return NavigationDecision.prevent;
+            else return NavigationDecision.navigate;
           },
+
           onPageFinished: (String url) {
-            print(url);
 
             if (url.startsWith(INAPP_URL)) {
               widget._controller.future.then((controller) async {
@@ -108,6 +106,13 @@ class _BootpayWebViewState extends State<BootpayWebView> {
                 controller.evaluateJavascript(getBootpayJS());
               });
             }
+
+            //네이버페이 일 경우 뒤로가기 버튼 제거 - 그러나 작동하지 않는다 (아마 팝업이라)
+            // if(url.startsWith("https://nid.naver.com/nidlogin.login")) {
+            //   widget._controller.future.then((controller) async {
+            //     controller.evaluateJavascript('window.document.getElementById("back").remove();');
+            //   });
+            // }
           },
           gestureNavigationEnabled: true,
         ),
