@@ -60,6 +60,7 @@ class _MyAppState extends State<MyApp> {
       "callbackParam3" : "value56",
       "callbackParam4" : "value78",
     };
+    payload.items = itemList;
 
     User user = User();
     user.username = "사용자 이름";
