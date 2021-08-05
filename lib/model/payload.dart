@@ -61,7 +61,7 @@ class Payload {
         'application_id': getApplicationId(),
         'pg': pg,
         'method': method,
-        'methods': methods,
+        'methods': getMethodList(),
         'name': name,
         'price': price,
         'tax_free': taxFree,
@@ -83,7 +83,11 @@ class Payload {
   }
 
   String getMethodList() {
-    return "[${methods.join("'")}]";
+    List<String> result = [];
+    for(String method in this.methods) {
+      result.add("\'$method\'");
+    }
+    return "[${result.join(",")}]";
   }
 
   String getItems() {
