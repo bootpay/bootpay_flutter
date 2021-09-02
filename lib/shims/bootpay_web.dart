@@ -65,7 +65,6 @@ class BootpayPlatform extends BootpayApi{
     Key? key,
     required BuildContext context,
     required Payload payload,
-    bool? isMaterialStyle,
     bool? showCloseButton,
     Widget? closeButton,
     BootpayDefaultCallback? onCancel,

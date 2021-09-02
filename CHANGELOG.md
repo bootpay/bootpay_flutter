@@ -1,3 +1,6 @@
+## 1.1.3
+* isMaterialStyle 파라미터 삭제  
+
 ## 1.1.2
 * webview 버전 업데이트 
 

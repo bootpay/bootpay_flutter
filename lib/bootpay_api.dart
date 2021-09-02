@@ -10,7 +10,6 @@ abstract class BootpayApi {
     Key? key,
     required BuildContext context,
     required Payload payload,
-    required bool isMaterialStyle,
     required bool showCloseButton,
     Widget? closeButton,
     BootpayDefaultCallback? onCancel,

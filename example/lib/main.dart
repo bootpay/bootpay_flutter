@@ -48,9 +48,9 @@ class _MyAppState extends State<MyApp> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
 
-    payload.pg = 'nicepay';
-    // payload.method = 'npay';
-    payload.methods = ['card', 'phone', 'vbank', 'bank'];
+    payload.pg = 'toss';
+    payload.method = 'card';
+    // payload.methods = ['card', 'phone', 'vbank', 'bank'];
     payload.name = '테스트 상품';
     payload.price = 1000.0; //정기결제시 0 혹은 주석
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString();
@@ -90,7 +90,6 @@ class _MyAppState extends State<MyApp> {
                 onPressed: () => Bootpay().request(
                   context: context,
                   payload: payload,
-                  isMaterialStyle: false,
                   showCloseButton: false,
                   closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
                   onCancel: (String data) {

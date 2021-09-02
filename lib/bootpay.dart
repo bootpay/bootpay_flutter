@@ -27,7 +27,6 @@ class Bootpay extends BootpayApi {
       {Key? key,
       required BuildContext context,
       required Payload payload,
-      required bool isMaterialStyle,
       required bool showCloseButton,
       Widget? closeButton,
       BootpayDefaultCallback? onCancel,
@@ -41,7 +40,6 @@ class Bootpay extends BootpayApi {
     _platform.request(
         context: context,
         payload: payload,
-        isMaterialStyle: isMaterialStyle,
         showCloseButton: showCloseButton,
         closeButton: closeButton,
         onCancel: onCancel,
