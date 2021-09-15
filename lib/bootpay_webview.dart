@@ -98,6 +98,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
 
           onPageFinished: (String url) {
 
+
             if (url.startsWith(INAPP_URL)) {
               widget._controller.future.then((controller) async {
                 for (String script in await getBootpayJSBeforeContentLoaded()) {
@@ -148,26 +149,26 @@ extension BootpayMethod on _BootpayWebViewState {
   Future<List<String>> getBootpayJSBeforeContentLoaded() async {
     List<String> result = [];
     if (Platform.isAndroid) {
-      result.add("BootPay.setDevice('ANDROID');");
+      result.add("(function() { " + "BootPay.setDevice('ANDROID');" + " })();");
     } else if (Platform.isIOS) {
-      result.add("BootPay.setDevice('IOS');");
+      result.add("(function() { " + "BootPay.setDevice('IOS');" + " })();");
     }
     result.add(await getAnalyticsData());
     if (this.widget.payload?.extra?.quick_popup == 1 &&
         this.widget.payload?.extra?.popup == 1) {
-      result.add("BootPay.startQuickPopup();");
+      result.add("(function() { " + "BootPay.startQuickPopup();" + " })();");
     }
     return result;
   }
 
   String getBootpayJS() {
-    return "BootPay.request(${this.widget.payload.toString()})" +
+    return "(function() { " + "BootPay.request(${this.widget.payload.toString()})" +
         error() +
         cancel() +
         ready() +
         confirm() +
         close() +
-        done();
+        done() + "; })();";
   }
 
   String error() {
