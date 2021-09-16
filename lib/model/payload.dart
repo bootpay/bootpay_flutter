@@ -56,21 +56,27 @@ class Payload {
   }
 
 
-  Map<String, dynamic> toJson() =>
-      {
-        'application_id': getApplicationId(),
-        'pg': pg,
-        'method': method,
-        'methods': getMethodList(),
-        'name': name,
-        'price': price,
-        'tax_free': taxFree,
-        'order_id': orderId,
-        'use_order_id': useOrderId,
-        'params': params,
-        'account_expire_at': accountExpireAt,
-        'show_agree_window': showAgreeWindow
-      };
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> result = {
+      'application_id': getApplicationId(),
+      'pg': pg,
+      'method': method,
+      'name': name,
+      'price': price,
+      'tax_free': taxFree,
+      'order_id': orderId,
+      'use_order_id': useOrderId,
+      'params': params,
+      'account_expire_at': accountExpireAt,
+      'show_agree_window': showAgreeWindow
+    };
+    if(this.methods.length > 0) {
+      result['methods'] = getMethodList();
+    }
+
+    return result;
+  }
+
 
   getApplicationId() {
     if(kIsWeb) return this.applicationId;
@@ -104,7 +110,7 @@ class Payload {
   }
 
   String getParamsString() {
-    if (params == null) return "{}";
+    if (params.isEmpty) return "{}";
     return reVal(params.toString());
   }
 

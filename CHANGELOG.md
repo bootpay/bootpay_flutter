@@ -1,3 +1,9 @@
+## 1.1.5
+* web 결제시 methods 버그 수정 
+
+## 1.1.4
+* bootpay reqeust시 경고 문구 남지 않게 수정 
+
 ## 1.1.3
 * isMaterialStyle 파라미터 삭제  
 

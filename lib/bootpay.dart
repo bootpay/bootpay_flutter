@@ -37,6 +37,8 @@ class Bootpay extends BootpayApi {
       BootpayConfirmCallback? onConfirm,
       BootpayDefaultCallback? onDone}) {
 
+    print(payload.toJson());
+
     _platform.request(
         context: context,
         payload: payload,
