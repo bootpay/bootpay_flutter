@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
 
     // _payload = Payload();
     // _payload.app
-    payload.applicationId = '5b8f6a4d396fa665fdc2b5e7';
+    payload.webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
 

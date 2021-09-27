@@ -7,7 +7,7 @@ import 'user.dart';
 import 'package:flutter/foundation.dart';
 
 class Payload {
-  String applicationId = '';
+  String webApplicationId = '';
   String androidApplicationId = '';
   String iosApplicationId = '';
 
@@ -81,7 +81,7 @@ class Payload {
 
 
   getApplicationId() {
-    if(kIsWeb) return this.applicationId;
+    if(kIsWeb) return this.webApplicationId;
     if(Platform.isIOS) return this.iosApplicationId;
     else return this.androidApplicationId;
   }

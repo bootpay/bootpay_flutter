@@ -1,3 +1,6 @@
+## 1.1.8
+* 필드명 변경 applicationId => webApplicationId
+
 ## 1.1.7
 * web 결제시 methods 버그 수정, 앱과 로직 분기 
 
