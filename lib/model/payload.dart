@@ -60,7 +60,6 @@ class Payload {
     Map<String, dynamic> result = {
       'application_id': getApplicationId(),
       'pg': pg,
-      'method': method,
       'name': name,
       'price': price,
       'tax_free': taxFree,
@@ -71,7 +70,10 @@ class Payload {
       'show_agree_window': showAgreeWindow
     };
     if(this.methods.length > 0) {
-      result['methods'] = getMethodList();
+      if(kIsWeb) result['methods'] = this.methods;
+      else result['methods'] = methodListString();
+    } else if(this.method.length > 0) {
+      result['method'] = this.method;
     }
 
     return result;
@@ -85,14 +87,15 @@ class Payload {
   }
 
   String toString() {
-    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${getMethodList()}, name: '$name', price: $price, tax_free: $taxFree, order_id: '$orderId', use_order_id: $useOrderId, params: ${getParamsStringAndroid()}, account_expire_at: '$accountExpireAt', show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user_info: ${user.toString()}, items: ${getItems()}}";
+    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${methodListString()}, name: '$name', price: $price, tax_free: $taxFree, order_id: '$orderId', use_order_id: $useOrderId, params: ${getParamsStringAndroid()}, account_expire_at: '$accountExpireAt', show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user_info: ${user.toString()}, items: ${getItems()}}";
   }
 
-  String getMethodList() {
+  String methodListString() {
     List<String> result = [];
     for(String method in this.methods) {
       result.add("\'$method\'");
     }
+
     return "[${result.join(",")}]";
   }
 

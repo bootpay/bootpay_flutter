@@ -97,7 +97,7 @@ class BootpayPlatform extends BootpayApi{
   }
 
   void dismiss(BuildContext context) {
-    _removePaymentWindow();
+    // _removePaymentWindow();
   }
 
   void onClose() {
