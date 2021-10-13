@@ -48,18 +48,18 @@ class _MyAppState extends State<MyApp> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
 
-    payload.pg = 'toss';
-    payload.method = 'card';
+    payload.pg = 'payapp';
+    payload.method = 'npay';
     // payload.methods = ['card', 'phone', 'vbank', 'bank'];
     payload.name = '테스트 상품';
     payload.price = 1000.0; //정기결제시 0 혹은 주석
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString();
-    payload.params = {
-      "callbackParam1" : "value12",
-      "callbackParam2" : "value34",
-      "callbackParam3" : "value56",
-      "callbackParam4" : "value78",
-    };
+    // payload.params = {
+    //   "callbackParam1" : "value12",
+    //   "callbackParam2" : "value34",
+    //   "callbackParam3" : "value56",
+    //   "callbackParam4" : "value78",
+    // };
     payload.items = itemList;
 
     User user = User();
@@ -79,10 +79,14 @@ class _MyAppState extends State<MyApp> {
     payload.extra = extra;
   }
 
+  String _data = "";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       home: Scaffold(
+
         body: Builder(builder: (BuildContext context) {
           return Container(
             child: Center(
@@ -111,7 +115,13 @@ class _MyAppState extends State<MyApp> {
                   },
                   onConfirm: (String data) {
                     print('------- onConfirm: $data');
-                    return true;
+                    _data = data;
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      Bootpay().transactionConfirm(_data);
+                    });
+                    //
+                    return false;
                   },
                   onDone: (String data) {
                     print('------- onDone: $data');

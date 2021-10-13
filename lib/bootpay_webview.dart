@@ -50,13 +50,15 @@ class BootpayWebView extends WebView {
   void transactionConfirm(String data) {
     _controller.future.then((controller) {
       controller.evaluateJavascript(
-          "var data = JSON.parse('$data'); BootPay.transactionConfirm(data);");
+          "BootPay.transactionConfirm(JSON.parse('$data'));");
     });
   }
 
   void removePaymentWindow() {
     _controller.future.then((controller) {
-      controller.evaluateJavascript("BootPay.removePaymentWindow();");
+      controller.evaluateJavascript(
+          "BootPay.removePaymentWindow();"
+      );
     });
   }
 }
@@ -155,19 +157,20 @@ extension BootpayMethod on _BootpayWebViewState {
     result.add(await getAnalyticsData());
     if (this.widget.payload?.extra?.quick_popup == 1 &&
         this.widget.payload?.extra?.popup == 1) {
-      result.add("BootPay.startQuickPopup();");
+      result.add("setTimeout(function() {BootPay.startQuickPopup();}, 30);");
     }
     return result;
   }
 
   String getBootpayJS() {
-    return "BootPay.request(${this.widget.payload.toString()})" +
+    String script = "BootPay.request(${this.widget.payload.toString()})" +
         error() +
         cancel() +
         ready() +
         confirm() +
         close() +
         done();
+    return "setTimeout(function() {" + script + "}, 50);";
   }
 
   String error() {

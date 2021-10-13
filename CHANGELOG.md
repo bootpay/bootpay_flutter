@@ -1,3 +1,6 @@
+## 1.1.4
+* javascript error 경고 문구가 나서 해당 부분 비동기 호출로 해결
+
 ## 1.1.3
 * isMaterialStyle 파라미터 삭제  
 
