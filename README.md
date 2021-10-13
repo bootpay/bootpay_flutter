@@ -1,4 +1,4 @@
-# bootpay - bootpay flutter library 
+# bootpay 플러터 라이브러리 
 
 부트페이에서 지원하는 공식 Flutter 라이브러리 입니다. (클라이언트 용)
 * PG 결제창 연동은 클라이언트 라이브러리에서 수행됩니다. (Javascript, Android, iOS, React Native, Flutter 등)
