@@ -1,4 +1,7 @@
 
+## 1.2.1
+* readme update 
+
 ## 1.1.9
 * javascript error 경고 문구가 나서 해당 부분 비동기 호출로 해결
 
