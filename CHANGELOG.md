@@ -1,5 +1,21 @@
-## 1.1.4
+
+## 1.1.9
 * javascript error 경고 문구가 나서 해당 부분 비동기 호출로 해결
+
+## 1.1.8
+* 필드명 변경 applicationId => webApplicationId
+
+## 1.1.7
+* web 결제시 methods 버그 수정, 앱과 로직 분기 
+
+## 1.1.6
+* debug 시 넣었던 주석 제거 
+
+## 1.1.5
+* web 결제시 methods 버그 수정 
+
+## 1.1.4
+* bootpay reqeust시 경고 문구 남지 않게 수정 
 
 ## 1.1.3
 * isMaterialStyle 파라미터 삭제  

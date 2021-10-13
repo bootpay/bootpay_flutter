@@ -7,7 +7,7 @@ import 'user.dart';
 import 'package:flutter/foundation.dart';
 
 class Payload {
-  String applicationId = '';
+  String webApplicationId = '';
   String androidApplicationId = '';
   String iosApplicationId = '';
 
@@ -56,37 +56,46 @@ class Payload {
   }
 
 
-  Map<String, dynamic> toJson() =>
-      {
-        'application_id': getApplicationId(),
-        'pg': pg,
-        'method': method,
-        'methods': getMethodList(),
-        'name': name,
-        'price': price,
-        'tax_free': taxFree,
-        'order_id': orderId,
-        'use_order_id': useOrderId,
-        'params': params,
-        'account_expire_at': accountExpireAt,
-        'show_agree_window': showAgreeWindow
-      };
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> result = {
+      'application_id': getApplicationId(),
+      'pg': pg,
+      'name': name,
+      'price': price,
+      'tax_free': taxFree,
+      'order_id': orderId,
+      'use_order_id': useOrderId,
+      'params': params,
+      'account_expire_at': accountExpireAt,
+      'show_agree_window': showAgreeWindow
+    };
+    if(this.methods.length > 0) {
+      if(kIsWeb) result['methods'] = this.methods;
+      else result['methods'] = methodListString();
+    } else if(this.method.length > 0) {
+      result['method'] = this.method;
+    }
+
+    return result;
+  }
+
 
   getApplicationId() {
-    if(kIsWeb) return this.applicationId;
+    if(kIsWeb) return this.webApplicationId;
     if(Platform.isIOS) return this.iosApplicationId;
     else return this.androidApplicationId;
   }
 
   String toString() {
-    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${getMethodList()}, name: '$name', price: $price, tax_free: $taxFree, order_id: '$orderId', use_order_id: $useOrderId, params: ${getParamsStringAndroid()}, account_expire_at: '$accountExpireAt', show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user_info: ${user.toString()}, items: ${getItems()}}";
+    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${methodListString()}, name: '$name', price: $price, tax_free: $taxFree, order_id: '$orderId', use_order_id: $useOrderId, params: ${getParamsStringAndroid()}, account_expire_at: '$accountExpireAt', show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user_info: ${user.toString()}, items: ${getItems()}}";
   }
 
-  String getMethodList() {
+  String methodListString() {
     List<String> result = [];
     for(String method in this.methods) {
       result.add("\'$method\'");
     }
+
     return "[${result.join(",")}]";
   }
 
@@ -104,7 +113,7 @@ class Payload {
   }
 
   String getParamsString() {
-    if (params == null) return "{}";
+    if (params.isEmpty) return "{}";
     return reVal(params.toString());
   }
 
