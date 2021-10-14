@@ -1,13 +1,13 @@
 class User {
-  String id = '';
-  String username = '';
-  String email = '';
-  int gender = 0;
+  String? id = '';
+  String? username = '';
+  String? email = '';
+  int? gender = 0;
 
-  String birth = '';
-  String phone = '';
-  String area = '';
-  String addr = '';
+  String? birth = '';
+  String? phone = '';
+  String? area = '';
+  String? addr = '';
 
   User();
 

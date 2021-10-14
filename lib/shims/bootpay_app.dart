@@ -15,7 +15,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 class WebViewRoute extends StatelessWidget {
 
   BootpayWebView? webView;
-  DateTime currentBackPressTime = DateTime.now();
+  DateTime? currentBackPressTime = DateTime.now();
 
   WebViewRoute(this.webView);
 
@@ -29,7 +29,7 @@ class WebViewRoute extends StatelessWidget {
       ),
       onWillPop: () async {
         DateTime now = DateTime.now();
-        if (now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+        if (now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
           currentBackPressTime = now;
           if(webView?.onCloseHardware != null) webView?.onCloseHardware!();
           Fluttertoast.showToast(msg: "\'뒤로\' 버튼을 한번 더 눌러주세요.");
@@ -46,25 +46,27 @@ class BootpayPlatform extends BootpayApi{
   BootpayWebView? webView;
 
   @override
-  void request({
-    Key? key,
-    required BuildContext context,
-    required Payload payload,
-    required bool showCloseButton,
-    Widget? closeButton,
-    BootpayDefaultCallback? onCancel,
-    BootpayDefaultCallback? onError,
-    BootpayCloseCallback? onClose,
-    BootpayCloseCallback? onCloseHardware,
-    BootpayDefaultCallback? onReady,
-    BootpayConfirmCallback? onConfirm,
-    BootpayDefaultCallback? onDone}) {
+  void request(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onReady,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone
+      }) {
 
     webView = BootpayWebView(
-      key: key,
-      showCloseButton: showCloseButton,
-      closeButton: closeButton,
       payload: payload,
+      showCloseButton: showCloseButton,
+      key: key,
+      closeButton: closeButton,
       onCancel: onCancel,
       onError: onError,
       onClose: onClose,
@@ -74,6 +76,7 @@ class BootpayPlatform extends BootpayApi{
       onDone: onDone,
     );
 
+    if(context == null) return;
 
     Navigator.push(
       context,

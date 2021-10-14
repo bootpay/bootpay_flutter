@@ -1,3 +1,9 @@
+## 1.3.2
+* null safety migration
+
+## 1.3.1
+* null safety migration
+
 ## 1.3.0
 * 가상계좌 발급시 onReady 호출 안되는 치명적 버그 수정 
 

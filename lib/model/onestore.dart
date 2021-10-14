@@ -1,7 +1,7 @@
 class Onestore {
-  String adId = "UNKNOWN_ADID";
-  String simOperator = "UNKNOWN_SIM_OPERATOR";
-  String installerPackageName = "UNKNOWN_INSTALLER";
+  String? adId = "UNKNOWN_ADID";
+  String? simOperator = "UNKNOWN_SIM_OPERATOR";
+  String? installerPackageName = "UNKNOWN_INSTALLER";
 
   Onestore();
 

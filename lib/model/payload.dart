@@ -7,30 +7,30 @@ import 'user.dart';
 import 'package:flutter/foundation.dart';
 
 class Payload {
-  String webApplicationId = '';
-  String androidApplicationId = '';
-  String iosApplicationId = '';
+  String? webApplicationId = '';
+  String? androidApplicationId = '';
+  String? iosApplicationId = '';
 
-  String pg = '';
-  String method = '';
-  List<String> methods = [];
-  String name = '';
+  String? pg = '';
+  String? method = '';
+  List<String>? methods = [];
+  String? name = '';
 
-  double price = 0;
-  double taxFree = 0;
+  double? price = 0;
+  double? taxFree = 0;
 
-  String orderId = '';
-  int useOrderId = 0;
+  String? orderId = '';
+  int? useOrderId = 0;
 
-  Map<String, dynamic> params = {};
+  Map<String, dynamic>? params = {};
 
-  String accountExpireAt = '';
+  String? accountExpireAt = '';
   bool showAgreeWindow = false;
-  String userToken = '';
+  String? userToken = '';
 
-  Extra extra = Extra();
-  User user = User();
-  List<Item> items = [];
+  Extra? extra = Extra();
+  User? user = User();
+  List<Item>? items = [];
 
   Payload();
 
@@ -69,10 +69,10 @@ class Payload {
       'account_expire_at': accountExpireAt,
       'show_agree_window': showAgreeWindow
     };
-    if(this.methods.length > 0) {
+    if(this.methods != null && this.methods!.length > 0) {
       if(kIsWeb) result['methods'] = this.methods;
       else result['methods'] = methodListString();
-    } else if(this.method.length > 0) {
+    } else if(this.method != null && this.method!.length > 0) {
       result['method'] = this.method;
     }
 
@@ -92,18 +92,25 @@ class Payload {
 
   String methodListString() {
     List<String> result = [];
-    for(String method in this.methods) {
-      result.add("\'$method\'");
+    if(this.method != null) {
+      for(String method in this.methods!) {
+        result.add("\'$method\'");
+      }
     }
+
 
     return "[${result.join(",")}]";
   }
 
   String getItems() {
     List<String> result = [];
-    for(Item item in this.items) {
-      result.add(item.toString());
+
+    if(this.items != null) {
+      for(Item item in this.items!) {
+        result.add(item.toString());
+      }
     }
+
     return "[${result.join(",")}]";
   }
 
@@ -113,7 +120,7 @@ class Payload {
   }
 
   String getParamsString() {
-    if (params.isEmpty) return "{}";
+    if (params != null || params!.isEmpty) return "{}";
     return reVal(params.toString());
   }
 
@@ -129,9 +136,9 @@ class Payload {
   }
 
   String getMethods() {
-    if (methods.isEmpty) return '';
+    if (methods != null || methods!.isEmpty) return '';
     String result = '';
-    for (String method in methods) {
+    for (String method in methods!) {
       if (result.length > 0) result += ',';
       result += method;
     }

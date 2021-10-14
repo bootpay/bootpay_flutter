@@ -1,11 +1,11 @@
 class Item {
-  String itemName = '';
-  int qty = 0;
-  String unique = '';
-  double price = 0;
-  String cat1 = '';
-  String cat2 = '';
-  String cat3 = '';
+  String? itemName = '';
+  int? qty = 0;
+  String? unique = '';
+  double? price = 0;
+  String? cat1 = '';
+  String? cat2 = '';
+  String? cat3 = '';
 
   Item();
 

@@ -61,19 +61,21 @@ class BootpayPlatform extends BootpayApi{
   }
 
   @override
-  void request({
-    Key? key,
-    required BuildContext context,
-    required Payload payload,
-    bool? showCloseButton,
-    Widget? closeButton,
-    BootpayDefaultCallback? onCancel,
-    BootpayDefaultCallback? onError,
-    BootpayCloseCallback? onClose,
-    BootpayCloseCallback? onCloseHardware,
-    BootpayDefaultCallback? onReady,
-    BootpayConfirmCallback? onConfirm,
-    BootpayDefaultCallback? onDone}) {
+  void request(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onReady,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone
+      }) {
 
     this._callbackCancel = onCancel;
     this._callbackError = onError;
@@ -83,7 +85,7 @@ class BootpayPlatform extends BootpayApi{
     this._callbackConfirm = onConfirm;
     this._callbackDone = onDone;
 
-    _request(jsonEncode(payload.toJson()));
+    _request(jsonEncode(payload?.toJson()));
   }
 
   @override

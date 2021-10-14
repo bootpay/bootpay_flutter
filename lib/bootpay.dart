@@ -25,9 +25,9 @@ class Bootpay extends BootpayApi {
   @override
   void request(
       {Key? key,
-      required BuildContext context,
-      required Payload payload,
-      required bool showCloseButton,
+      BuildContext? context,
+      Payload? payload,
+      bool? showCloseButton,
       Widget? closeButton,
       BootpayDefaultCallback? onCancel,
       BootpayDefaultCallback? onError,
@@ -36,7 +36,6 @@ class Bootpay extends BootpayApi {
       BootpayDefaultCallback? onReady,
       BootpayConfirmCallback? onConfirm,
       BootpayDefaultCallback? onDone}) {
-
 
     _platform.request(
         context: context,

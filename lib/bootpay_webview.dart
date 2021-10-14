@@ -24,7 +24,7 @@ class BootpayWebView extends WebView {
   final BootpayDefaultCallback? onReady;
   final BootpayConfirmCallback? onConfirm;
   final BootpayDefaultCallback? onDone;
-  bool showCloseButton = false;
+  bool? showCloseButton = false;
   Widget? closeButton;
 
   final Completer<WebViewController> _controller = Completer<WebViewController>();
@@ -32,7 +32,7 @@ class BootpayWebView extends WebView {
   BootpayWebView(
       {this.key,
       this.payload,
-      required this.showCloseButton,
+      this.showCloseButton,
       this.onCancel,
       this.onError,
       this.onClose,

@@ -6,18 +6,20 @@ import 'model/payload.dart';
 
 abstract class BootpayApi {
 
-  void request({
-    Key? key,
-    required BuildContext context,
-    required Payload payload,
-    required bool showCloseButton,
-    Widget? closeButton,
-    BootpayDefaultCallback? onCancel,
-    BootpayDefaultCallback? onError,
-    BootpayCloseCallback? onClose,
-    BootpayDefaultCallback? onReady,
-    BootpayConfirmCallback? onConfirm,
-    BootpayDefaultCallback? onDone});
+  void request(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayDefaultCallback? onReady,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone
+      });
 
   void transactionConfirm(String data);
   void removePaymentWindow();

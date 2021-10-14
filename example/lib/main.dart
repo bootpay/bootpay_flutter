@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
 
 
-    payload.pg = 'nicepay';
+    payload.pg = 'welcome';
     payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.name = '테스트 상품'; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
@@ -64,8 +64,8 @@ class _MyAppState extends State<MyApp> {
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
     extra.quotas = [0,2,3];
-    extra.popup = 1;
-    extra.quick_popup = 1;
+    // extra.popup = 1;
+    // extra.quick_popup = 1;
 
     payload.user = user;
     payload.extra = extra;

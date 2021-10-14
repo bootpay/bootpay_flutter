@@ -1,25 +1,25 @@
 class Extra {
-  String startAt = '';
-  String endAt = '';
-  int expireMonth = 0;
-  bool vbankResult = true;
-  List<int> quotas = [];
+  String? startAt = '';
+  String? endAt = '';
+  int? expireMonth = 0;
+  bool? vbankResult = true;
+  List<int>? quotas = [];
 
-  String appScheme = '';
+  String? appScheme = '';
 
-  String locale = 'ko';
+  String? locale = 'ko';
 
-  int popup = 0;
-  int quick_popup = 0;
-  String dispCashResult = 'Y';
-  int escrow = 0;
+  int? popup = 0;
+  int? quick_popup = 0;
+  String? dispCashResult = 'Y';
+  int? escrow = 0;
   // bool iosCloseButton = false;
 
-  String offer_period = ''; //결제창 제공기간에 해당하는 string 값, 지원하는 PG만 적용됨
+  String? offer_period = ''; //결제창 제공기간에 해당하는 string 값, 지원하는 PG만 적용됨
 
-  String theme = 'purple'; //통합 결제창 색상 지정 (purple, red, custom 지정 가능 )
-  String custom_background = ''; //theme가 custom인 경우 배경 색 지정 가능 ( ex: #f2f2f2 )
-  String custom_font_color = ''; //theme가 custom인 경우 폰트색 지정 가능 ( ex: #333333 )
+  String? theme = 'purple'; //통합 결제창 색상 지정 (purple, red, custom 지정 가능 )
+  String? custom_background = ''; //theme가 custom인 경우 배경 색 지정 가능 ( ex: #f2f2f2 )
+  String? custom_font_color = ''; //theme가 custom인 경우 폰트색 지정 가능 ( ex: #333333 )
 
   Extra();
 
@@ -66,9 +66,9 @@ class Extra {
       };
 
   String getQuotas() {
-    if (quotas == null || quotas.isEmpty) return '';
+    if (quotas == null || quotas!.isEmpty) return '';
     String result = '';
-    for (int quota in  quotas) {
+    for (int quota in  quotas!) {
       if (result.length > 0) result += ',';
       result += quota.toString();
     }
