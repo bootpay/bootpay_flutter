@@ -250,7 +250,7 @@ extension BootpayCallback on _BootpayWebViewState {
   JavascriptChannel onReady(BuildContext context) {
     return JavascriptChannel(
         name: 'BootpayReady',
-        onMessageReceived: (JavascriptMessage message) {
+        onMessageReceived: (JavascriptMessage message) { 
           if (this.widget.onReady != null)
             this.widget.onReady!(message.message);
         });

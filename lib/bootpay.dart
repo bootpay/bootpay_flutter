@@ -46,6 +46,7 @@ class Bootpay extends BootpayApi {
         onCancel: onCancel,
         onError: onError,
         onClose: onClose,
+        onReady: onReady,
         onCloseHardware: onCloseHardware,
         onConfirm: onConfirm,
         onDone: onDone
