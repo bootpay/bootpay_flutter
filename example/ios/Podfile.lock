@@ -5,6 +5,8 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - package_info (0.0.1):
+    - Flutter
   - shared_preferences (0.0.1):
     - Flutter
   - Toast (4.0.0)
@@ -13,6 +15,7 @@ DEPENDENCIES:
   - bootpay_webview_flutter (from `.symlinks/plugins/bootpay_webview_flutter/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
 
 SPEC REPOS:
@@ -26,6 +29,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
 
@@ -33,9 +38,10 @@ SPEC CHECKSUMS:
   bootpay_webview_flutter: b136b15869e909a7bb729081d73276c855a9926c
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   shared_preferences: 5033afbb22d372e15aff8ff766df9021b845f273
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
 PODFILE CHECKSUM: a75497545d4391e2d394c3668e20cfb1c2bbd4aa
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

@@ -19,6 +19,8 @@ dependencies:
 #  modal_bottom_sheet: ^2.0.0
   js: ^0.6.3
   fluttertoast: ^8.0.8
+  http: ^0.13.4
+  package_info: ^2.0.2
 
 dev_dependencies:
   flutter_test:
