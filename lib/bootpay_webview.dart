@@ -156,7 +156,7 @@ extension BootpayMethod on _BootpayWebViewState {
       result.add("(function() { " + "BootPay.setDevice('IOS');" + " })();");
     }
     result.add(await getAnalyticsData());
-    if (this.widget.payload?.extra?.quick_popup == 1 &&
+    if (this.widget.payload?.extra?.quickPopup == 1 &&
         this.widget.payload?.extra?.popup == 1) {
 
       result.add("setTimeout(function() {BootPay.startQuickPopup();}, 30);");
