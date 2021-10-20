@@ -30,16 +30,44 @@ class _MyAppState extends State<MyApp> {
     else return '5b8f6a4d396fa665fdc2b5e8';
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    bootpayAnalyticsUserTrace(); //통계용 함수 호출
+    bootpayAnalyticsPageTrace(); //통계용 함수 호출
+    bootpayReqeustDataInit(); //결제용 데이터 init
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Builder(builder: (BuildContext context) {
+          return Container(
+            child: Center(
+              child: TextButton(
+                onPressed: () => goBootpayTest(context),
+                child: Text('부트페이 결제테스트'),
+              )
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
 
   //통계용 함수
   bootpayAnalyticsUserTrace() async {
     await BootpayAnalytics.userTrace(
-      id: 'user_1234',
-      email: 'user1234@gmail.com',
-      gender: -1,
-      birth: '19941014',
-      area: '서울',
-      applicationId: applicationId
+        id: 'user_1234',
+        email: 'user1234@gmail.com',
+        gender: -1,
+        birth: '19941014',
+        area: '서울',
+        applicationId: applicationId
     );
   }
 
@@ -63,11 +91,11 @@ class _MyAppState extends State<MyApp> {
     List<StatItem> items = [item1, item2];
 
     await BootpayAnalytics.pageTrace(
-      url: 'main_1234',
-      pageType: 'sub_page_1234',
-      applicationId: applicationId,
-      userId: 'user_1234',
-      items: items
+        url: 'main_1234',
+        pageType: 'sub_page_1234',
+        applicationId: applicationId,
+        userId: 'user_1234',
+        items: items
     );
   }
 
@@ -121,15 +149,7 @@ class _MyAppState extends State<MyApp> {
     payload.extra = extra;
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
 
-    bootpayAnalyticsUserTrace(); //통계용 함수 호출
-    bootpayAnalyticsPageTrace(); //통계용 함수 호출
-    bootpayReqeustDataInit(); //결제용 데이터 init
-  }
 
   //버튼클릭시 부트페이 결제요청 실행
   void goBootpayTest(BuildContext context) {
@@ -170,24 +190,6 @@ class _MyAppState extends State<MyApp> {
       onDone: (String data) {
         print('------- onDone: $data');
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Builder(builder: (BuildContext context) {
-          return Container(
-            child: Center(
-              child: TextButton(
-                onPressed: () => goBootpayTest(context),
-                child: Text('부트페이 결제테스트'),
-              )
-            ),
-          );
-        }),
-      ),
     );
   }
 }
