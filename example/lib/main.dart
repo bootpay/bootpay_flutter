@@ -22,6 +22,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Payload payload = Payload();
+  String _data = ""; // 서버승인을 위해 사용되기 위한 변수
 
   String get applicationId {
     if(kIsWeb) return '5b8f6a4d396fa665fdc2b5e7';
@@ -30,6 +31,7 @@ class _MyAppState extends State<MyApp> {
   }
 
 
+  //통계용 함수
   bootpayAnalyticsUserTrace() async {
     await BootpayAnalytics.userTrace(
       id: 'user_1234',
@@ -41,6 +43,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  //통계용 함수
   bootpayAnalyticsPageTrace() async {
 
     StatItem item1 = StatItem();
@@ -68,14 +71,8 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    bootpayAnalyticsUserTrace();
-    bootpayAnalyticsPageTrace();
-
+  //결제용 데이터 init
+  bootpayReqeustDataInit() {
     Item item1 = Item();
     item1.itemName = "미키 마우스"; // 주문정보에 담길 상품명
     item1.qty = 1; // 해당 상품의 주문 수량
@@ -92,7 +89,6 @@ class _MyAppState extends State<MyApp> {
     payload.webApplicationId = '5b8f6a4d396fa665fdc2b5e7'; // web application id
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
-
 
     payload.pg = 'kcp';
     payload.method = 'card';
@@ -125,7 +121,17 @@ class _MyAppState extends State<MyApp> {
     payload.extra = extra;
   }
 
-  String _data = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    bootpayAnalyticsUserTrace(); //통계용 함수 호출
+    bootpayAnalyticsPageTrace(); //통계용 함수 호출
+    bootpayReqeustDataInit(); //결제용 데이터 init
+  }
+
+  //버튼클릭시 부트페이 결제요청 실행
   void goBootpayTest(BuildContext context) {
     Bootpay().request(
       context: context,
@@ -151,13 +157,15 @@ class _MyAppState extends State<MyApp> {
       },
       onConfirm: (String data) {
         print('------- onConfirm: $data');
-        _data = data;
+        return true; //결제를 최종 승인하고자 할때 return true
 
+        //서버승인을 위한 로직 시작
+        // _data = data;
         // Future.delayed(const Duration(milliseconds: 100), () {
         //   Bootpay().transactionConfirm(_data); // 서버승인 이용시 해당 함수 호출
         // });
         // return false;
-        return true; //결제를 최종 승인하고자 할때 return true
+        //서버 승인을 위한 로직 끝
       },
       onDone: (String data) {
         print('------- onDone: $data');
