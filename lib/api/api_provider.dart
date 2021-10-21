@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:bootpay/api/security/bootpay_simple_aes256.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:bootpay/user_info.dart';
 import 'package:http/http.dart' as http;
@@ -32,10 +33,16 @@ class ApiProvider {
       "area": area ?? ''
     };
 
+    var aes256 = BootpaySimpleAES256();
+    var data = {
+      "data": aes256.strEncode(json.encode(payload)),
+      "session_key": aes256.getSessionKey()
+    };
+
     var uri = Uri.parse('$defaultUrl/login');
     return await http.post(
         uri,
-        body: payload
+        body: data
     );
   }
 
@@ -48,11 +55,7 @@ class ApiProvider {
     List<StatItem>? items,
   }) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-    print(1234);
     var list = items?.map((e) => e.toJson()).toList();
-
-    print(jsonEncode(list ?? []));
 
     var payload = {
       "ver": packageInfo.version,
@@ -62,13 +65,19 @@ class ApiProvider {
       "user_id": userId ?? '',
       "url": url ?? '',
       "page_type": pageType ?? 'ios',
-      "items": jsonEncode(list ?? [])
+      "items": list
     };
 
-    var uri = Uri.parse('$defaultUrl/login');
+    var aes256 = BootpaySimpleAES256();
+    var data = {
+      "data": aes256.strEncode(json.encode(payload)),
+      "session_key": aes256.getSessionKey()
+    };
+
+    var uri = Uri.parse('$defaultUrl/call');
     return await http.post(
         uri,
-        body: payload
+        body: data
     );
   }
 }

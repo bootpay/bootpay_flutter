@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:bootpay/bootpay.dart';
@@ -144,6 +145,9 @@ class _MyAppState extends State<MyApp> {
     extra.quotas = [0,2,3];
     // extra.popup = 1;
     // extra.quick_popup = 1;
+
+    // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
+    // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
 
     payload.user = user;
     payload.extra = extra;
