@@ -24,8 +24,9 @@ class WebViewRoute extends StatelessWidget {
     // TODO: implement build
 
     return WillPopScope(
+
       child: Scaffold(
-          body: SafeArea(child: webView!)
+          body: SafeArea(child: Container(child: webView!))
       ),
       onWillPop: () async {
         DateTime now = DateTime.now();
@@ -94,7 +95,6 @@ class BootpayPlatform extends BootpayApi{
   @override
   void dismiss(BuildContext context) {
     if(webView != null) {
-      webView = null;
       Navigator.of(context).pop();
     }
   }

@@ -119,8 +119,8 @@ class _MyAppState extends State<MyApp> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
 
-    payload.pg = 'kcp';
-    payload.method = 'card';
+    payload.pg = 'danal';
+    payload.method = 'phone';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.name = '테스트 상품'; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
@@ -137,7 +137,7 @@ class _MyAppState extends State<MyApp> {
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
-    user.phone = "010-4033-4678";
+    user.phone = "010-1234-5678";
     user.addr = '서울시 동작구 상도로 222';
 
     Extra extra = Extra(); // 결제 옵션

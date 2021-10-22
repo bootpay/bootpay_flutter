@@ -50,7 +50,8 @@ class BootpayWebView extends WebView {
   void transactionConfirm(String data) {
     _controller.future.then((controller) {
       controller.evaluateJavascript(
-          "BootPay.transactionConfirm(JSON.parse('$data'));");
+        "setTimeout(function() { BootPay.transactionConfirm(JSON.parse('$data')); }, 30);"
+      );
     });
   }
 
@@ -59,6 +60,7 @@ class BootpayWebView extends WebView {
       controller.evaluateJavascript(
           "BootPay.removePaymentWindow();"
       );
+      // controller.
     });
   }
 }
@@ -66,6 +68,8 @@ class BootpayWebView extends WebView {
 class _BootpayWebViewState extends State<BootpayWebView> {
 
   final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
+
+  bool isClosed = false;
 
   @override
   void initState() {
@@ -78,7 +82,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
     // TODO: implement build
     return Stack(
       children: [
-        WebView(
+        isClosed == false ? WebView(
           key: widget.key,
           initialUrl: INAPP_URL,
           javascriptMode: JavascriptMode.unrestricted,
@@ -118,7 +122,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
             // }
           },
           gestureNavigationEnabled: true,
-        ),
+        ) : Container(),
         widget.showCloseButton == false ?
         Container() :
         widget.closeButton != null ?
@@ -151,9 +155,9 @@ extension BootpayMethod on _BootpayWebViewState {
   Future<List<String>> getBootpayJSBeforeContentLoaded() async {
     List<String> result = [];
     if (Platform.isAndroid) {
-      result.add("(function() { " + "BootPay.setDevice('ANDROID');" + " })();");
+      result.add("BootPay.setDevice('ANDROID');");
     } else if (Platform.isIOS) {
-      result.add("(function() { " + "BootPay.setDevice('IOS');" + " })();");
+      result.add("BootPay.setDevice('IOS');");
     }
     result.add(await getAnalyticsData());
     if (this.widget.payload?.extra?.quickPopup == 1 &&
@@ -215,6 +219,10 @@ extension BootpayMethod on _BootpayWebViewState {
   }
 
   void removePaymentWindow() {
+    setState(() {
+      this.isClosed = true;
+    });
+
     widget.removePaymentWindow();
   }
 }

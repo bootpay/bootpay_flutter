@@ -1,3 +1,9 @@
+## 1.4.1
+* Bootpay.transacntionConfirm 호출시 경고문구 안뜨게 수정 
+
+## 1.4.0
+* analytics bootpay api added 
+
 ## 1.3.2
 * null safety migration
 
