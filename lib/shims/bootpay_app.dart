@@ -1,9 +1,11 @@
 
-import 'dart:ui';
-
-import 'package:bootpay_webview_flutter/webview_flutter.dart';
+import 'dart:io';
+import 'package:bootpay/api/bootpay_analytics.dart';
+import 'package:bootpay/model/stat_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:package_info/package_info.dart';
 
 import '../bootpay.dart';
 import '../bootpay_api.dart';
@@ -86,6 +88,13 @@ class BootpayPlatform extends BootpayApi{
   }
 
   @override
+  String applicationId(String webApplicationId, String androidApplicationId, String iosApplicationId) {
+    if(Platform.isIOS) return iosApplicationId;
+    else return androidApplicationId;
+  }
+
+
+  @override
   void removePaymentWindow() {
     if(webView != null) {
       webView!.removePaymentWindow();
@@ -102,5 +111,57 @@ class BootpayPlatform extends BootpayApi{
   @override
   void transactionConfirm(String data) {
     if(webView != null) webView!.transactionConfirm(data);
+  }
+
+  // 회원 추적 코드
+  Future<http.Response> userTrace({
+    String? id,
+    String? email,
+    int? gender,
+    String? birth,
+    String? phone,
+    String? area,
+    String? applicationId,
+    String? ver,
+  }) async {
+    if(ver == null) {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      ver = packageInfo.version;
+    }
+
+    return BootpayAnalytics.userTrace(
+      id: id,
+      email: email,
+      gender: gender,
+      birth: birth,
+      phone: phone,
+      area: area,
+      applicationId: applicationId,
+      ver: ver
+    );
+  }
+
+  // 페이지 추적 코드
+  Future<http.Response> pageTrace({
+    String? url,
+    String? pageType,
+    String? applicationId,
+    String? userId,
+    List<StatItem>? items,
+    String? ver,
+  }) async {
+    if(ver == null) {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      ver = packageInfo.version;
+    }
+
+    return BootpayAnalytics.pageTrace(
+        url: url,
+        pageType: pageType,
+        userId: userId,
+        items: items,
+        applicationId: applicationId,
+        ver: ver
+    );
   }
 }

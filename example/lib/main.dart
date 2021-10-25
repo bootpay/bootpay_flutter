@@ -1,5 +1,4 @@
 
-import 'dart:io';
 
 import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/model/extra.dart';
@@ -7,7 +6,6 @@ import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:bootpay/model/user.dart';
-import 'package:bootpay/api/bootpay_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +24,11 @@ class _MyAppState extends State<MyApp> {
   String _data = ""; // 서버승인을 위해 사용되기 위한 변수
 
   String get applicationId {
-    if(kIsWeb) return '5b8f6a4d396fa665fdc2b5e7';
-    if(Platform.isIOS) return '5b8f6a4d396fa665fdc2b5e9';
-    else return '5b8f6a4d396fa665fdc2b5e8';
+    return Bootpay().applicationId(
+        '5b8f6a4d396fa665fdc2b5e7',
+        '5b8f6a4d396fa665fdc2b5e8',
+        '5b8f6a4d396fa665fdc2b5e9'
+    );
   }
 
   @override
@@ -62,18 +62,25 @@ class _MyAppState extends State<MyApp> {
 
   //통계용 함수
   bootpayAnalyticsUserTrace() async {
-    await BootpayAnalytics.userTrace(
+    String? ver;
+    if(kIsWeb) ver = '1.0'; //web 일 경우 버전 지정, 웹이 아닌 android, ios일 경우 package_info 통해 자동으로 생성
+
+
+    await Bootpay().userTrace(
         id: 'user_1234',
         email: 'user1234@gmail.com',
         gender: -1,
         birth: '19941014',
         area: '서울',
-        applicationId: applicationId
+        applicationId: applicationId,
+        ver: ver
     );
   }
 
   //통계용 함수
   bootpayAnalyticsPageTrace() async {
+    String? ver;
+    if(kIsWeb) ver = '1.0'; //web 일 경우 버전 지정, 웹이 아닌 android, ios일 경우 package_info 통해 자동으로 생성
 
     StatItem item1 = StatItem();
     item1.itemName = "미키 마우스"; // 주문정보에 담길 상품명
@@ -91,13 +98,15 @@ class _MyAppState extends State<MyApp> {
 
     List<StatItem> items = [item1, item2];
 
-    await BootpayAnalytics.pageTrace(
+    var res = await Bootpay().pageTrace(
         url: 'main_1234',
         pageType: 'sub_page_1234',
         applicationId: applicationId,
         userId: 'user_1234',
-        items: items
+        items: items,
+        ver: ver
     );
+    print(res.body);
   }
 
   //결제용 데이터 init
@@ -119,11 +128,12 @@ class _MyAppState extends State<MyApp> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
 
-    payload.pg = 'danal';
-    payload.method = 'phone';
+    payload.pg = 'payapp';
+    payload.method = 'npay';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.name = '테스트 상품'; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
+
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
     payload.params = {
       "callbackParam1" : "value12",
@@ -143,8 +153,9 @@ class _MyAppState extends State<MyApp> {
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
     extra.quotas = [0,2,3];
-    // extra.popup = 1;
-    // extra.quick_popup = 1;
+    extra.popup = 1;
+    extra.quickPopup = 1;
+    // extra.clo
 
     // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
     // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
@@ -160,8 +171,8 @@ class _MyAppState extends State<MyApp> {
     Bootpay().request(
       context: context,
       payload: payload,
-      showCloseButton: false,
-      closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
+      showCloseButton: true,
+      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data) {
         print('------- onCancel: $data');
       },

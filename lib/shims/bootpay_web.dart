@@ -4,6 +4,9 @@ library bootpay_api;
 
 import 'dart:convert';
 
+import 'package:bootpay/api/bootpay_analytics.dart';
+import 'package:bootpay/model/stat_item.dart';
+import 'package:http/src/response.dart';
 import 'package:js/js.dart';
 import 'package:flutter/material.dart';
 import '../bootpay.dart';
@@ -60,6 +63,12 @@ class BootpayPlatform extends BootpayApi{
     _BootpayError = allowInterop(onError);
   }
 
+
+  @override
+  String applicationId(String webApplicationId, String androidApplicationId, String iosApplicationId) {
+    return webApplicationId;
+  }
+
   @override
   void request(
       {
@@ -77,6 +86,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onDone
       }) {
 
+
     this._callbackCancel = onCancel;
     this._callbackError = onError;
     this._callbackClose = onClose;
@@ -85,7 +95,10 @@ class BootpayPlatform extends BootpayApi{
     this._callbackConfirm = onConfirm;
     this._callbackDone = onDone;
 
-    _request(jsonEncode(payload?.toJson()));
+
+    if(payload != null) {
+      _request(jsonEncode(payload.toJson()));
+    }
   }
 
   @override
@@ -120,5 +133,33 @@ class BootpayPlatform extends BootpayApi{
   }
   void onError(String data) {
     if(this._callbackError != null) this._callbackError!(data);
+  }
+
+  @override
+  Future<Response> pageTrace({String? url, String? pageType, String? applicationId, String? userId, List<StatItem>? items, String? ver}) {
+    // TODO: implement pageTrace
+    return BootpayAnalytics.pageTrace(
+        url: url,
+        pageType: pageType,
+        userId: userId,
+        items: items,
+        applicationId: applicationId,
+        ver: ver
+    );
+  }
+
+  @override
+  Future<Response> userTrace({String? id, String? email, int? gender, String? birth, String? phone, String? area, String? applicationId, String? ver}) {
+    // TODO: implement userTrace
+    return BootpayAnalytics.userTrace(
+        id: id,
+        email: email,
+        gender: gender,
+        birth: birth,
+        phone: phone,
+        area: area,
+        applicationId: applicationId,
+        ver: ver
+    );
   }
 }

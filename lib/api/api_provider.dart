@@ -5,7 +5,6 @@ import 'package:bootpay/api/security/bootpay_simple_aes256.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:bootpay/user_info.dart';
 import 'package:http/http.dart' as http;
-import 'package:package_info/package_info.dart';
 
 
 class ApiProvider {
@@ -20,10 +19,11 @@ class ApiProvider {
     String? phone,
     String? area,
     String? applicationId,
+    String? ver,
   }) async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
     var payload = {
-      "ver": packageInfo.version,
+      "ver": ver ?? '',
       "application_id": applicationId ?? '',
       "id": id ?? '',
       "email": email ?? '',
@@ -53,12 +53,13 @@ class ApiProvider {
     String? applicationId,
     String? userId,
     List<StatItem>? items,
+    String? ver,
   }) async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
     var list = items?.map((e) => e.toJson()).toList();
 
     var payload = {
-      "ver": packageInfo.version,
+      "ver": ver ?? '',
       "application_id": applicationId ?? '',
       "referer": '',
       "sk": await UserInfo.getBootpaySK(),

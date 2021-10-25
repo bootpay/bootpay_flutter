@@ -16,6 +16,7 @@ class BootpayAnalytics {
     String? phone,
     String? area,
     String? applicationId,
+    String? ver,
   }) async {
     var provider = ApiProvider();
     return provider.userTrace(
@@ -25,7 +26,8 @@ class BootpayAnalytics {
       birth: birth,
       phone: phone,
       area: area,
-      applicationId: applicationId
+      applicationId: applicationId,
+      ver: ver
     );
   }
 
@@ -36,6 +38,7 @@ class BootpayAnalytics {
     String? applicationId,
     String? userId,
     List<StatItem>? items,
+    String? ver,
   }) async {
     var provider = ApiProvider();
 
@@ -44,7 +47,8 @@ class BootpayAnalytics {
       pageType: pageType,
       applicationId: applicationId,
       userId: userId,
-      items: items
+      items: items,
+      ver: ver
     );
   }
 }

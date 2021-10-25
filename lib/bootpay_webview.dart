@@ -128,7 +128,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
         widget.closeButton != null ?
         GestureDetector(
           child: widget.closeButton!,
-          onTap: () => removePaymentWindow(),
+          onTap: () => clickCloseButton(),
         ) :
         Padding(
           padding: const EdgeInsets.all(5.0),
@@ -139,7 +139,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
               children: [
                 Expanded(child: Container()),
                 IconButton(
-                    onPressed: () => removePaymentWindow(),
+                    onPressed: () => clickCloseButton(),
                     icon: Icon(Icons.close, size: 35.0, color: Colors.black54),
                 ),
               ],
@@ -180,6 +180,9 @@ extension BootpayMethod on _BootpayWebViewState {
         confirm() +
         close() +
         done();
+
+    print(script);
+
     return "setTimeout(function() {" + script + "}, 50);";
 
 
@@ -216,6 +219,15 @@ extension BootpayMethod on _BootpayWebViewState {
 
   void transactionConfirm(String data) {
     widget.transactionConfirm(data);
+  }
+
+  void clickCloseButton() {
+    removePaymentWindow();
+
+    if (this.widget.onCancel != null)
+      this.widget.onCancel!('{"action":"BootpayCancel","status":-100,"message":"사용자에 의한 취소"}');
+    if (this.widget.onClose != null)
+      this.widget.onClose!();
   }
 
   void removePaymentWindow() {

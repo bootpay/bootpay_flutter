@@ -56,6 +56,7 @@ class Payload {
   }
 
 
+  //실제 사용되지 않음
   Map<String, dynamic> toJson() {
     Map<String, dynamic> result = {
       'application_id': getApplicationId(),
@@ -67,13 +68,23 @@ class Payload {
       'use_order_id': useOrderId,
       'params': params,
       'account_expire_at': accountExpireAt,
-      'show_agree_window': showAgreeWindow
+      'show_agree_window': showAgreeWindow,
+      'user_token': userToken
     };
     if(this.methods != null && this.methods!.length > 0) {
       if(kIsWeb) result['methods'] = this.methods;
       else result['methods'] = methodListString();
     } else if(this.method != null && this.method!.length > 0) {
       result['method'] = this.method;
+    }
+    if(extra != null) {
+      result['extra'] = extra!.toJson();
+    }
+    if(user != null) {
+      result['user_info'] = user!.toJson();
+    }
+    if(items!.length > 0) {
+      result['items'] = items!.map((e) => e.toJson()).toList();
     }
 
     return result;
@@ -86,6 +97,7 @@ class Payload {
     else return this.androidApplicationId;
   }
 
+  //toJson 대신에 이 함수가 사용됨
   String toString() {
     return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${methodListString()}, name: '$name', price: $price, tax_free: $taxFree, order_id: '$orderId', use_order_id: $useOrderId, params: ${getParamsStringAndroid()}, account_expire_at: '$accountExpireAt', show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user_info: ${user.toString()}, items: ${getItems()}}";
   }

@@ -1,3 +1,7 @@
+## 1.5.0
+* 통계용 함수 인터페이스명 변경
+* bootpay closeButton 클릭시 이벤트 누락 버그 수정 
+
 ## 1.4.1
 * Bootpay.transacntionConfirm 호출시 경고문구 안뜨게 수정 
 
