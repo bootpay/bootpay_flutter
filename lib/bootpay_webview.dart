@@ -172,7 +172,6 @@ extension BootpayMethod on _BootpayWebViewState {
   }
 
   String getBootpayJS() {
-    // return "(function() { " + "BootPay.request(${this.widget.payload.toString()})" +
     String script = "BootPay.request(${this.widget.payload.toString()})" +
         error() +
         cancel() +

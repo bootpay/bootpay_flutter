@@ -1,3 +1,7 @@
+## 1.6.0
+* bootpay webview 2.1.4 적용 
+ - android manifest 외부앱 패키지명 update
+
 ## 1.5.0
 * 통계용 함수 인터페이스명 변경
 * bootpay closeButton 클릭시 이벤트 누락 버그 수정 

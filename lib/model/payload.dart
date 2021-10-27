@@ -53,6 +53,7 @@ class Payload {
 
     accountExpireAt = json["account_expire_at"];
     showAgreeWindow = json["show_agree_window"];
+    extra = Extra.fromJson(json["extra"]);
   }
 
 

@@ -98,7 +98,7 @@ class _MyAppState extends State<MyApp> {
 
     List<StatItem> items = [item1, item2];
 
-    var res = await Bootpay().pageTrace(
+    await Bootpay().pageTrace(
         url: 'main_1234',
         pageType: 'sub_page_1234',
         applicationId: applicationId,
@@ -106,7 +106,6 @@ class _MyAppState extends State<MyApp> {
         items: items,
         ver: ver
     );
-    print(res.body);
   }
 
   //결제용 데이터 init
@@ -128,11 +127,12 @@ class _MyAppState extends State<MyApp> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
 
-    payload.pg = 'payapp';
-    payload.method = 'npay';
+    payload.pg = 'welcome';
+    payload.method = 'card';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.name = '테스트 상품'; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
+
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
     payload.params = {
