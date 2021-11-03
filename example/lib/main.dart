@@ -170,7 +170,7 @@ class _MyAppState extends State<MyApp> {
     Bootpay().request(
       context: context,
       payload: payload,
-      showCloseButton: true,
+      showCloseButton: false,
       // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data) {
         print('------- onCancel: $data');
