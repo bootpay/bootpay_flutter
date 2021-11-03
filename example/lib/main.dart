@@ -199,6 +199,10 @@ class _MyAppState extends State<MyApp> {
         checkQtyFromServer(data);
         return false;
         ***/
+        /***
+        3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
+        return false; 후에 서버에서 결제승인 수행
+         */
         checkQtyFromServer(data);
         return false;
       },

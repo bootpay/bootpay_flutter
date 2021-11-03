@@ -1,3 +1,6 @@
+## 1.6.1
+* 연동 예제 update
+
 ## 1.6.0
 * bootpay webview 2.1.4 적용 
  - android manifest 외부앱 패키지명 update
