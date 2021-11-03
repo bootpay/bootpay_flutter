@@ -180,8 +180,6 @@ extension BootpayMethod on _BootpayWebViewState {
         close() +
         done();
 
-    print(script);
-
     return "setTimeout(function() {" + script + "}, 50);";
 
 
@@ -278,7 +276,7 @@ extension BootpayCallback on _BootpayWebViewState {
   JavascriptChannel onConfirm(BuildContext context) {
     return JavascriptChannel(
         name: 'BootpayConfirm',
-        onMessageReceived: (JavascriptMessage message) {
+        onMessageReceived: (JavascriptMessage message) async {
           if (this.widget.onConfirm != null) {
             bool goTransactionConfirm = this.widget.onConfirm!(message.message);
             if (goTransactionConfirm) {

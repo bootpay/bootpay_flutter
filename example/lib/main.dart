@@ -127,8 +127,8 @@ class _MyAppState extends State<MyApp> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
 
-    payload.pg = 'welcome';
-    payload.method = 'card';
+    payload.pg = 'danal';
+    payload.method = 'phone';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.name = '테스트 상품'; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
@@ -147,7 +147,7 @@ class _MyAppState extends State<MyApp> {
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
-    user.phone = "010-1234-5678";
+    user.phone = "010-4033-4678";
     user.addr = '서울시 동작구 상도로 222';
 
     Extra extra = Extra(); // 결제 옵션
@@ -163,7 +163,6 @@ class _MyAppState extends State<MyApp> {
     payload.user = user;
     payload.extra = extra;
   }
-
 
 
   //버튼클릭시 부트페이 결제요청 실행
@@ -191,20 +190,29 @@ class _MyAppState extends State<MyApp> {
         print('------- onReady: $data');
       },
       onConfirm: (String data) {
-        print('------- onConfirm: $data');
-        return true; //결제를 최종 승인하고자 할때 return true
-
-        //서버승인을 위한 로직 시작
-        // _data = data;
-        // Future.delayed(const Duration(milliseconds: 100), () {
-        //   Bootpay().transactionConfirm(_data); // 서버승인 이용시 해당 함수 호출
-        // });
-        // return false;
-        //서버 승인을 위한 로직 끝
+        /**
+        1. 바로 승인하고자 할 때
+        return true;
+        **/
+        /***
+        2. 비동기 승인 하고자 할 때
+        checkQtyFromServer(data);
+        return false;
+        ***/
+        checkQtyFromServer(data);
+        return false;
       },
       onDone: (String data) {
         print('------- onDone: $data');
       },
     );
+  }
+
+  Future<void> checkQtyFromServer(String data) async {
+    //TODO 서버로부터 재고파악을 한다
+    print('checkQtyFromServer http call');
+
+    //재고파악 후 결제를 승인한다. 아래 함수를 호출하지 않으면 결제를 승인하지 않게된다.
+    Bootpay().transactionConfirm(data);
   }
 }

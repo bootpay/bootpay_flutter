@@ -55,7 +55,7 @@ class Bootpay extends BootpayApi {
         onClose: onClose,
         onReady: onReady,
         onCloseHardware: onCloseHardware,
-        onConfirm: onConfirm,
+        onConfirm: onConfirm, 
         onDone: onDone
     );
   }
