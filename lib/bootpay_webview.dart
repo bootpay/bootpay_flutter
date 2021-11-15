@@ -24,6 +24,7 @@ class BootpayWebView extends WebView {
   final BootpayDefaultCallback? onReady;
   final BootpayConfirmCallback? onConfirm;
   final BootpayDefaultCallback? onDone;
+  ShowHeaderCallback? onShowHeader;
   bool? showCloseButton = false;
   Widget? closeButton;
 
@@ -98,6 +99,11 @@ class _BootpayWebViewState extends State<BootpayWebView> {
             onDone(context)
           ].toSet(),
           navigationDelegate: (NavigationRequest request) {
+
+            if(widget.onShowHeader != null) {
+              widget.onShowHeader!(request.url.contains("https://nid.naver.com"));
+            }
+
             if(Platform.isAndroid)  return NavigationDecision.prevent;
             else return NavigationDecision.navigate;
           },

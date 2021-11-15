@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 typedef void BootpayDefaultCallback(String data);
 typedef bool BootpayConfirmCallback(String data);
 typedef void BootpayCloseCallback();
+typedef void ShowHeaderCallback(bool showHeader);
 
 class Bootpay extends BootpayApi {
   static final Bootpay _bootpay = Bootpay._internal();

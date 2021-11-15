@@ -127,8 +127,8 @@ class _MyAppState extends State<MyApp> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
 
-    payload.pg = 'danal';
-    payload.method = 'phone';
+    payload.pg = 'nicepay';
+    payload.method = 'card';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.name = '테스트 상품'; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석

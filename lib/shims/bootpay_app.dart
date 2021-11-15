@@ -14,27 +14,88 @@ import '../model/payload.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as BottomSheet;
 
-class WebViewRoute extends StatelessWidget {
+class WebViewRoute extends StatefulWidget {
 
   BootpayWebView? webView;
-  DateTime? currentBackPressTime = DateTime.now();
-
   WebViewRoute(this.webView);
+
+  @override
+  _WebViewRouteState createState() => _WebViewRouteState();
+}
+
+class _WebViewRouteState extends State<WebViewRoute> {
+  DateTime? currentBackPressTime = DateTime.now();
+  bool showHeaderView = false;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.webView?.onShowHeader = updateShowHeader;
+
+  }
+
+  void updateShowHeader(bool showHeader) {
+    if(this.showHeaderView != showHeader) {
+      setState(() {
+        showHeaderView = showHeader;
+      });
+    }
+
+  }
+
+  clickCloseButton() {
+    if (widget.webView?.onCancel != null)
+      widget.webView?.onCancel!('{"action":"BootpayCancel","status":-100,"message":"사용자에 의한 취소"}');
+    if (widget.webView?.onClose != null)
+      widget.webView?.onClose!();
+  }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
 
+    // widget.webView?.on
+
+
+    // print(widget.webView?.showHeaderView);
+
     return WillPopScope(
 
       child: Scaffold(
-          body: SafeArea(child: Container(child: webView!))
+          body: SafeArea(
+              child: Stack(
+                children: [
+                  Container(
+                      child: widget.webView!
+                  ),
+                  this.showHeaderView == true ? Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      height: 40,
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: Container()),
+                          IconButton(
+                            onPressed: () => clickCloseButton(),
+                            icon: Icon(Icons.close, size: 35.0, color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ) : Container()
+                ],
+              )
+          )
       ),
       onWillPop: () async {
         DateTime now = DateTime.now();
         if (now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
           currentBackPressTime = now;
-          if(webView?.onCloseHardware != null) webView?.onCloseHardware!();
+          if(widget.webView?.onCloseHardware != null) widget.webView?.onCloseHardware!();
           Fluttertoast.showToast(msg: "\'뒤로\' 버튼을 한번 더 눌러주세요.");
           return Future.value(false);
         }
