@@ -11,15 +11,44 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(
+    title: 'Navigation Basics',
+    home: FirstRoute(),
+  ));
+  // runApp(FirstRoute());
 }
 
-class MyApp extends StatefulWidget {
+class FirstRoute extends StatelessWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('First Route'),
+      ),
+      body: Center(
+        child: RaisedButton(
+          child: Text('결제 route로 이동'),
+          onPressed: () {
+            // 눌렀을 때 두 번째 route로 이동합니다.
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondRoute()),
+            );
+          },
+        ),
+      ),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+class SecondRoute extends StatefulWidget {
+
+  _SecondRouteState createState() => _SecondRouteState();
+}
+
+class _SecondRouteState extends State<SecondRoute> {
+
+// class _MyAppState extends State<MyApp> {
   Payload payload = Payload();
   String _data = ""; // 서버승인을 위해 사용되기 위한 변수
 
@@ -43,8 +72,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         body: Builder(builder: (BuildContext context) {
           return Container(
             child: Center(
@@ -55,8 +83,7 @@ class _MyAppState extends State<MyApp> {
             ),
           );
         }),
-      ),
-    );
+      );
   }
 
 
