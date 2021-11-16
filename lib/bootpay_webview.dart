@@ -100,8 +100,9 @@ class _BootpayWebViewState extends State<BootpayWebView> {
           ].toSet(),
           navigationDelegate: (NavigationRequest request) {
 
+
             if(widget.onShowHeader != null) {
-              widget.onShowHeader!(request.url.contains("https://nid.naver.com"));
+              widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
             }
 
             if(Platform.isAndroid)  return NavigationDecision.prevent;
@@ -109,7 +110,6 @@ class _BootpayWebViewState extends State<BootpayWebView> {
           },
 
           onPageFinished: (String url) {
-
 
             if (url.startsWith(INAPP_URL)) {
               widget._controller.future.then((controller) async {
@@ -159,21 +159,18 @@ class _BootpayWebViewState extends State<BootpayWebView> {
 
 extension BootpayMethod on _BootpayWebViewState {
   Future<List<String>> getBootpayJSBeforeContentLoaded() async {
-    List<String> result = [];
-    if (Platform.isAndroid) {
-      result.add("BootPay.setDevice('ANDROID');");
-    } else if (Platform.isIOS) {
-      result.add("BootPay.setDevice('IOS');");
-    }
-    result.add(await getAnalyticsData());
-    if (this.widget.payload?.extra?.quickPopup == 1 &&
-        this.widget.payload?.extra?.popup == 1) {
+      List<String> result = [];
+      if (Platform.isAndroid) {
+        result.add("BootPay.setDevice('ANDROID');");
+      } else if (Platform.isIOS) {
+        result.add("BootPay.setDevice('IOS');");
+      }
+      result.add(await getAnalyticsData());
 
-      result.add("setTimeout(function() {BootPay.startQuickPopup();}, 30);");
-
-      // result.add("(function() { " + "BootPay.startQuickPopup();" + " })();");
-
-    }
+      if (this.widget.payload?.extra?.quickPopup == 1 &&
+          this.widget.payload?.extra?.popup == 1) {
+        result.add("setTimeout(function() {BootPay.startQuickPopup();}, 30);");
+      }
     return result;
   }
 
@@ -187,8 +184,6 @@ extension BootpayMethod on _BootpayWebViewState {
         done();
 
     return "setTimeout(function() {" + script + "}, 50);";
-
-
   }
 
   String error() {
@@ -225,7 +220,6 @@ extension BootpayMethod on _BootpayWebViewState {
   }
 
   void clickCloseButton() {
-    removePaymentWindow();
 
     if (this.widget.onCancel != null)
       this.widget.onCancel!('{"action":"BootpayCancel","status":-100,"message":"사용자에 의한 취소"}');

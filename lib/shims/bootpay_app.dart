@@ -164,8 +164,10 @@ class BootpayPlatform extends BootpayApi{
 
   @override
   void dismiss(BuildContext context) {
+
     if(webView != null) {
       Navigator.of(context).pop();
+      webView = null;
     }
   }
 
