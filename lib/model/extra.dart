@@ -3,7 +3,8 @@ class Extra {
   String? endAt = '';
   int? expireMonth = 0;
   bool? vbankResult = true;
-  List<int>? quotas = [];
+  String? quota = '';
+  // List<int>? quotas = [];
 
   String? appScheme = '';
 
@@ -31,7 +32,8 @@ class Extra {
     endAt = json["end_at"];
     expireMonth = json["expire_month"];
     vbankResult = json["vbank_result"];
-    quotas = json["quotas"];
+    quota = json["quota"];
+    // quotas = json["quotas"];
 
     appScheme = json["app_scheme"];
 
@@ -57,7 +59,7 @@ class Extra {
         "end_at": this.endAt,
         "expire_month": this.expireMonth,
         "vbank_result": this.vbankResult,
-        "quotas": this.quotas,
+        "quota": this.quota,
         "app_scheme": this.appScheme,
         "locale": this.locale,
         "popup": this.popup,
@@ -73,19 +75,19 @@ class Extra {
         "age_limit": this.ageLimit
       };
 
-  String getQuotas() {
-    if (quotas == null || quotas!.isEmpty) return '';
-    String result = '';
-    for (int quota in  quotas!) {
-      if (result.length > 0) result += ',';
-      result += quota.toString();
-    }
-    return result;
-  }
+  // String getQuotas() {
+  //   if (quotas == null || quotas!.isEmpty) return '';
+  //   String result = '';
+  //   for (int quota in  quotas!) {
+  //     if (result.length > 0) result += ',';
+  //     result += quota.toString();
+  //   }
+  //   return result;
+  // }
 
   String toString() {
     return "{start_at: '${reVal(startAt)}', end_at: '${reVal(endAt)}', expire_month: ${reVal(expireMonth)}, vbank_result: ${reVal(vbankResult)}," +
-        "quotas: '${getQuotas()}', app_scheme: '${reVal(appScheme)}', locale: '${reVal(locale)}'," +
+        "quota: '${reVal(quota)}', app_scheme: '${reVal(appScheme)}', locale: '${reVal(locale)}'," +
         "offer_period: '${reVal(offer_period)}', theme: '${reVal(appScheme)}', theme: '${reVal(theme)}', custom_background: '${reVal(customBackground)}', custom_font_color: '${reVal(customFontColor)}'," +
         "popup: ${reVal(popup)}, quick_popup: ${reVal(quickPopup)}, disp_cash_result: '${reVal(dispCashResult)}', escrow: ${reVal(escrow)}, carrier: '${reVal(carrier)}', age_limit: ${reVal(ageLimit)} }";
   }

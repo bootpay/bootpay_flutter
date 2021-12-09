@@ -1,3 +1,6 @@
+## 1.7.4
+* quota 버그 수정 
+
 ## 1.7.3
 * bootpay_webview_flutter 2.1.41 적용 
 
