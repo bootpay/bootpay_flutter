@@ -35,14 +35,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.6.0"
+    version: "1.7.2"
   bootpay_webview_flutter:
     dependency: transitive
     description:
       name: bootpay_webview_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.41"
   characters:
     dependency: transitive
     description:
