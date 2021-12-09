@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'extra.dart';
 import 'item.dart';
 import 'user.dart';
+import '../extension/json_query_string.dart';
 import 'package:flutter/foundation.dart';
 
 class Payload {
@@ -100,8 +101,10 @@ class Payload {
 
   //toJson 대신에 이 함수가 사용됨
   String toString() {
-    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${methodListString()}, name: '$name', price: $price, tax_free: $taxFree, order_id: '$orderId', use_order_id: $useOrderId, params: ${getParamsStringAndroid()}, account_expire_at: '$accountExpireAt', show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user_info: ${user.toString()}, items: ${getItems()}}";
+    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${methodListString()}, name: '${name.queryReplace()}', price: $price, tax_free: $taxFree, order_id: '${orderId.queryReplace()}', use_order_id: $useOrderId, params: ${getParamsStringAndroid()}, account_expire_at: '$accountExpireAt', show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user_info: ${user.toString()}, items: ${getItems()}}";
   }
+
+
 
   String methodListString() {
     List<String> result = [];
@@ -110,7 +113,6 @@ class Payload {
         result.add("\'$method\'");
       }
     }
-
 
     return "[${result.join(",")}]";
   }

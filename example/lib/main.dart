@@ -138,7 +138,7 @@ class _SecondRouteState extends State<SecondRoute> {
   //결제용 데이터 init
   bootpayReqeustDataInit() {
     Item item1 = Item();
-    item1.itemName = "미키 마우스"; // 주문정보에 담길 상품명
+    item1.itemName = "미키 '마우스"; // 주문정보에 담길 상품명
     item1.qty = 1; // 해당 상품의 주문 수량
     item1.unique = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
     item1.price = 500; // 상품의 가격
@@ -154,10 +154,10 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
 
-    payload.pg = 'nicepay';
-    // payload.method = 'card';
+    payload.pg = 'welcome';
+    payload.method = 'phone';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
-    payload.name = '테스트 상품'; //결제할 상품명
+    payload.name = "테스트 상품"; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
 
 
