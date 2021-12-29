@@ -21,12 +21,13 @@ class BootpayWebView extends WebView {
   final BootpayDefaultCallback? onError;
   final BootpayCloseCallback? onClose;
   final BootpayCloseCallback? onCloseHardware;
-  final BootpayDefaultCallback? onReady;
+  final BootpayDefaultCallback? onIssued;
   final BootpayConfirmCallback? onConfirm;
   final BootpayDefaultCallback? onDone;
   ShowHeaderCallback? onShowHeader;
   bool? showCloseButton = false;
   Widget? closeButton;
+  int? requestType = 1; //1: 결제, 2:정기결제, 3: 본인인증
 
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
@@ -38,20 +39,32 @@ class BootpayWebView extends WebView {
       this.onError,
       this.onClose,
       this.onCloseHardware,
-      this.onReady,
+      this.onIssued,
       this.onConfirm,
       this.onDone,
-      this.closeButton
+      this.closeButton,
+      this.requestType
       })
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _BootpayWebViewState();
 
-  void transactionConfirm(String data) {
+  void transactionConfirm() {
+    String script = "Bootpay.confirm()" +
+        ".then( function (res) {" +
+        confirm() +
+        issued() +
+        done() +
+        "}, function (res) {" +
+        error() +
+        cancel() +
+        "});";
+
+
     _controller.future.then((controller) {
       controller.evaluateJavascript(
-        "setTimeout(function() { BootPay.transactionConfirm(JSON.parse('$data')); }, 30);"
+        "setTimeout(function() { $script }, 30);"
       );
     });
   }
@@ -59,16 +72,45 @@ class BootpayWebView extends WebView {
   void removePaymentWindow() {
     _controller.future.then((controller) {
       controller.evaluateJavascript(
-          "BootPay.removePaymentWindow();"
+          "Bootpay.removePaymentWindow();"
       );
       // controller.
     });
+  }
+
+
+
+  String confirm() {
+    return "if (res.event === 'confirm') { if (window.BootpayConfirm && window.BootpayConfirm.postMessage) { BootpayConfirm.postMessage(JSON.stringify(res)); } }";
+  }
+
+
+  String done() {
+    return "else if (res.event === 'done') { if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(res)); } }";
+  }
+
+
+  String issued() {
+    return "else if (res.event === 'issued') { if (window.BootpayIssued && window.BootpayIssued.postMessage) { BootpayIssued.postMessage(JSON.stringify(res)); } }";
+  }
+
+  String error() {
+    return "if (res.event === 'error') { if (window.BootpayError && window.BootpayError.postMessage) { BootpayError.postMessage(JSON.stringify(res)); } }";
+  }
+
+  String cancel() {
+    return "else if (res.event === 'cancel') { if (window.BootpayCancel && window.BootpayCancel.postMessage) { BootpayCancel.postMessage(JSON.stringify(res)); } }";
+  }
+
+  String close() {
+    return "document.addEventListener('bootpayclose', function (e) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage('결제창이 닫혔습니다'); } });";
   }
 }
 
 class _BootpayWebViewState extends State<BootpayWebView> {
 
-  final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
+  // final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.0.0/';
 
   bool isClosed = false;
 
@@ -94,12 +136,11 @@ class _BootpayWebViewState extends State<BootpayWebView> {
             onCancel(context),
             onError(context),
             onClose(context),
-            onReady(context),
+            onIssued(context),
             onConfirm(context),
             onDone(context)
           ].toSet(),
           navigationDelegate: (NavigationRequest request) {
-
 
             if(widget.onShowHeader != null) {
               widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
@@ -161,63 +202,53 @@ extension BootpayMethod on _BootpayWebViewState {
   Future<List<String>> getBootpayJSBeforeContentLoaded() async {
       List<String> result = [];
       if (Platform.isAndroid) {
-        result.add("BootPay.setDevice('ANDROID');");
+        result.add("Bootpay.setDevice('ANDROID');");
       } else if (Platform.isIOS) {
-        result.add("BootPay.setDevice('IOS');");
+        result.add("Bootpay.setDevice('IOS');");
       }
-      result.add(await getAnalyticsData());
+      result.add("Bootpay.setEnvironmentMode('development');");
+      result.add( "setTimeout(function() {" + await getAnalyticsData() + "}, 50);");
+      result.add(widget.close());
 
-      if (this.widget.payload?.extra?.quickPopup == 1 &&
-          this.widget.payload?.extra?.popup == 1) {
-        result.add("setTimeout(function() {BootPay.startQuickPopup();}, 30);");
-      }
+      // if (this.widget.payload?.extra?.quickPopup == 1 &&
+      //     this.widget.payload?.extra?.popup == 1) {
+      //   result.add("setTimeout(function() {BootPay.startQuickPopup();}, 30);");
+      // }
     return result;
   }
 
   String getBootpayJS() {
+    String requestMethod = 'requestPayment';
+    if(widget.requestType == 2) {
+      requestMethod = 'requestSubscription';
+    } else if(widget.requestType == 3) {
+      requestMethod = 'requestMethod';
+    }
 
-    String script = "BootPay.request(${this.widget.payload.toString()})" +
-        error() +
-        cancel() +
-        ready() +
-        confirm() +
-        close() +
-        done();
+    String script = "Bootpay.${requestMethod}(" +
+        "${this.widget.payload.toString()}" +
+        ")" +
+        ".then( function (res) {" +
+        widget.confirm() +
+        widget.issued() +
+        widget.done() +
+        "}, function (res) {" +
+        widget.error() +
+        widget.cancel() +
+        "})";
 
     return "setTimeout(function() {" + script + "}, 50);";
   }
 
-  String error() {
-    return ".error(function (data) { if (window.BootpayError && window.BootpayError.postMessage) { BootpayError.postMessage(JSON.stringify(data)); } })";
-  }
 
-  String cancel() {
-    return ".cancel(function (data) { if (window.BootpayCancel && window.BootpayCancel.postMessage) { BootpayCancel.postMessage(JSON.stringify(data)); } })";
-  }
-
-  String ready() {
-    return ".ready(function (data) { if (window.BootpayReady && window.BootpayReady.postMessage) { BootpayReady.postMessage(JSON.stringify(data)); } })";
-  }
-
-  String confirm() {
-    return ".confirm(function (data) { if (window.BootpayConfirm && window.BootpayConfirm.postMessage) { BootpayConfirm.postMessage(JSON.stringify(data)); } })";
-  }
-
-  String close() {
-    return ".close(function (data) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage(JSON.stringify(data)); } })";
-  }
-
-  String done() {
-    return ".done(function (data) { if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(data)); } })";
-  }
 
   Future<String> getAnalyticsData() async {
     UserInfo.updateInfo();
-    return "BootPay.setAnalyticsData({uuid:'${await UserInfo.getBootpayUUID()}',sk:'${await UserInfo.getBootpaySK()}',sk_time:'${await UserInfo.getBootpayLastTime()}',time:'${DateTime.now().millisecondsSinceEpoch - await UserInfo.getBootpayLastTime()}'});";
+    return "Bootpay.setAnalyticsData({uuid:'${await UserInfo.getBootpayUUID()}',sk:'${await UserInfo.getBootpaySK()}',sk_time:'${await UserInfo.getBootpayLastTime()}',time:'${DateTime.now().millisecondsSinceEpoch - await UserInfo.getBootpayLastTime()}'});";
   }
 
-  void transactionConfirm(String data) {
-    widget.transactionConfirm(data);
+  void transactionConfirm() {
+    widget.transactionConfirm();
   }
 
   void clickCloseButton() {
@@ -251,6 +282,7 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayError',
         onMessageReceived: (JavascriptMessage message) {
+          print(message);
           if (this.widget.onError != null)
             this.widget.onError!(message.message);
         });
@@ -265,12 +297,12 @@ extension BootpayCallback on _BootpayWebViewState {
         });
   }
 
-  JavascriptChannel onReady(BuildContext context) {
+  JavascriptChannel onIssued(BuildContext context) {
     return JavascriptChannel(
-        name: 'BootpayReady',
+        name: 'BootpayIssued',
         onMessageReceived: (JavascriptMessage message) { 
-          if (this.widget.onReady != null)
-            this.widget.onReady!(message.message);
+          if (this.widget.onIssued != null)
+            this.widget.onIssued!(message.message);
         });
   }
 
@@ -281,7 +313,7 @@ extension BootpayCallback on _BootpayWebViewState {
           if (this.widget.onConfirm != null) {
             bool goTransactionConfirm = this.widget.onConfirm!(message.message);
             if (goTransactionConfirm) {
-              transactionConfirm(message.message);
+              transactionConfirm();
             }
           }
         });

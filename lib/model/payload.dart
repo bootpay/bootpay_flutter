@@ -15,17 +15,19 @@ class Payload {
   String? pg = '';
   String? method = '';
   List<String>? methods = [];
-  String? name = '';
+  String? orderName = '';
 
   double? price = 0;
   double? taxFree = 0;
 
   String? orderId = '';
-  int? useOrderId = 0;
+  String? subscriptionId = '';
+  String? authenticationId = '';
+  // int? useOrderId = 0;
 
   Map<String, dynamic>? params = {};
 
-  String? accountExpireAt = '';
+  // String? accountExpireAt = '';
   bool showAgreeWindow = false;
   String? userToken = '';
 
@@ -42,34 +44,40 @@ class Payload {
     pg = json["pg"];
     method = json["method"];
     methods = json["methods"];
-    name = json["name"];
+    orderName = json["name"];
 
     price = json["price"];
     taxFree = json["tax_free"];
 
     orderId = json["order_id"];
-    useOrderId = json["use_order_id"];
+    subscriptionId = json["subscription_id"];
+    authenticationId = json["authentication_id"];
+
+
+    // useOrderId = json["use_order_id"];
 
     params = json["params"];
 
-    accountExpireAt = json["account_expire_at"];
+    // accountExpireAt = json["account_expire_at"];
     showAgreeWindow = json["show_agree_window"];
     extra = Extra.fromJson(json["extra"]);
   }
 
 
-  //실제 사용되지 않음
+  //web에서 사용됨
   Map<String, dynamic> toJson() {
     Map<String, dynamic> result = {
       'application_id': getApplicationId(),
       'pg': pg,
-      'name': name,
+      'order_name': orderName,
       'price': price,
       'tax_free': taxFree,
       'order_id': orderId,
-      'use_order_id': useOrderId,
+      'subscription_id': subscriptionId,
+      'authentication_id': authenticationId,
+      // 'use_order_id': useOrderId,
       'params': params,
-      'account_expire_at': accountExpireAt,
+      // 'account_expire_at': accountExpireAt,
       'show_agree_window': showAgreeWindow,
       'user_token': userToken
     };
@@ -83,7 +91,7 @@ class Payload {
       result['extra'] = extra!.toJson();
     }
     if(user != null) {
-      result['user_info'] = user!.toJson();
+      result['user'] = user!.toJson();
     }
     if(items!.length > 0) {
       result['items'] = items!.map((e) => e.toJson()).toList();
@@ -99,12 +107,10 @@ class Payload {
     else return this.androidApplicationId;
   }
 
-  //toJson 대신에 이 함수가 사용됨
+  //android, ios에서 사용됨
   String toString() {
-    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${methodListString()}, name: '${name.queryReplace()}', price: $price, tax_free: $taxFree, order_id: '${orderId.queryReplace()}', use_order_id: $useOrderId, params: ${getParamsStringAndroid()}, account_expire_at: '$accountExpireAt', show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user_info: ${user.toString()}, items: ${getItems()}}";
+    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${methodListString()}, order_name: '${orderName.queryReplace()}', price: $price, tax_free: $taxFree, order_id: '${orderId.queryReplace()}', subscription_id: '${subscriptionId.queryReplace()}', authentication_id: '${authenticationId.queryReplace()}', params: ${getParamsStringAndroid()}, show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user: ${user.toString()}, items: ${getItems()}}";
   }
-
-
 
   String methodListString() {
     List<String> result = [];

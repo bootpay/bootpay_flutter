@@ -54,9 +54,12 @@ class _SecondRouteState extends State<SecondRoute> {
 
   String get applicationId {
     return Bootpay().applicationId(
-        '5b8f6a4d396fa665fdc2b5e7',
-        '5b8f6a4d396fa665fdc2b5e8',
-        '5b8f6a4d396fa665fdc2b5e9'
+        // '5b8f6a4d396fa665fdc2b5e7',
+        // '5b8f6a4d396fa665fdc2b5e8',
+        // '5b8f6a4d396fa665fdc2b5e9'
+      '59a568d3e13f3336c21bf707',
+      '5a029249b957d73c2b3ae5f5',
+      '59bfc733e13f337dbd6ca489'
     );
   }
 
@@ -64,7 +67,6 @@ class _SecondRouteState extends State<SecondRoute> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     bootpayAnalyticsUserTrace(); //통계용 함수 호출
     bootpayAnalyticsPageTrace(); //통계용 함수 호출
     bootpayReqeustDataInit(); //결제용 데이터 init
@@ -138,27 +140,32 @@ class _SecondRouteState extends State<SecondRoute> {
   //결제용 데이터 init
   bootpayReqeustDataInit() {
     Item item1 = Item();
-    item1.itemName = "미키 '마우스"; // 주문정보에 담길 상품명
+    item1.name = "미키 '마우스"; // 주문정보에 담길 상품명
     item1.qty = 1; // 해당 상품의 주문 수량
-    item1.unique = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
+    item1.id = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
     item1.price = 500; // 상품의 가격
 
     Item item2 = Item();
-    item2.itemName = "키보드"; // 주문정보에 담길 상품명
+    item2.name = "키보드"; // 주문정보에 담길 상품명
     item2.qty = 1; // 해당 상품의 주문 수량
-    item2.unique = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
+    item2.id = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
     item2.price = 500; // 상품의 가격
     List<Item> itemList = [item1, item2];
 
-    payload.webApplicationId = '5b8f6a4d396fa665fdc2b5e7'; // web application id
-    payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
-    payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
+    // payload.webApplicationId = '5b8f6a4d396fa665fdc2b5e7'; // web application id
+    // payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
+    // payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
+
+    payload.webApplicationId = '59a568d3e13f3336c21bf707'; // web application id
+    payload.androidApplicationId = '5a029249b957d73c2b3ae5f5'; // android application id
+    payload.iosApplicationId = '59bfc733e13f337dbd6ca489'; // ios application id
+
 
     payload.pg = 'danal';
-    payload.method = 'card';
+    payload.method = 'phone';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
-    payload.name = "테스트 상품"; //결제할 상품명
-    payload.price = 50000.0; //정기결제시 0 혹은 주석
+    payload.orderName = "테스트 상품"; //결제할 상품명
+    payload.price = 1000.0; //정기결제시 0 혹은 주석
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -179,12 +186,8 @@ class _SecondRouteState extends State<SecondRoute> {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
-    // extra.quotas = [0,2,3];
-    extra.quota = '0,2,3';
-    extra.popup = 1;
-    extra.quickPopup = 1;
-
-    // extra.clo
+    extra.cardQuota = '0,2,3';
+    extra.popup = false;
 
     // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
     // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
@@ -196,7 +199,7 @@ class _SecondRouteState extends State<SecondRoute> {
 
   //버튼클릭시 부트페이 결제요청 실행
   void goBootpayTest(BuildContext context) {
-    Bootpay().request(
+    Bootpay().requestPayment(
       context: context,
       payload: payload,
       showCloseButton: false,
@@ -215,8 +218,8 @@ class _SecondRouteState extends State<SecondRoute> {
       onCloseHardware: () {
         print('------- onCloseHardware');
       },
-      onReady: (String data) {
-        print('------- onReady: $data');
+      onIssued: (String data) {
+        print('------- onIssued: $data');
       },
       onConfirm: (String data) {
         /**
@@ -243,9 +246,9 @@ class _SecondRouteState extends State<SecondRoute> {
 
   Future<void> checkQtyFromServer(String data) async {
     //TODO 서버로부터 재고파악을 한다
-    print('checkQtyFromServer http call');
+    print('checkQtyFromServer http call: $data');
 
     //재고파악 후 결제를 승인한다. 아래 함수를 호출하지 않으면 결제를 승인하지 않게된다.
-    Bootpay().transactionConfirm(data);
+    Bootpay().confirm();
   }
 }

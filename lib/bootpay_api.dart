@@ -9,7 +9,7 @@ import 'model/stat_item.dart';
 
 abstract class BootpayApi {
 
-  void request(
+  void requestPayment(
       {
         Key? key,
         BuildContext? context,
@@ -19,13 +19,46 @@ abstract class BootpayApi {
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayDefaultCallback? onReady,
+        BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
-        BootpayDefaultCallback? onDone
+        BootpayDefaultCallback? onDone,
+        int? requestType
       });
 
-  String applicationId(String webApplicationId, String androidApplicationId, String iosApplicationId);
-  void transactionConfirm(String data);
+  void requestSubscription(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType
+      });
+
+  void requestAuthentication(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType
+      });
+
+  // String applicationId(String webApplicationId, String androidApplicationId, String iosApplicationId);
+  void confirm();
   void removePaymentWindow();
   void dismiss(BuildContext context);
 

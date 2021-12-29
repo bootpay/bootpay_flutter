@@ -1,7 +1,7 @@
 class Item {
-  String? itemName = '';
+  String? name = '';
   int? qty = 0;
-  String? unique = '';
+  String? id = '';
   double? price = 0;
   String? cat1 = '';
   String? cat2 = '';
@@ -10,9 +10,9 @@ class Item {
   Item();
 
   Item.fromJson(Map<String, dynamic> json) {
-    itemName = json["item_name"];
+    name = json["name"];
     qty = json["qty"];
-    unique = json["unique"];
+    id = json["id"];
     price = json["price"];
 
     cat1 = json["cat1"];
@@ -21,9 +21,9 @@ class Item {
   }
 
   Map<String, dynamic> toJson() => {
-        "item_name": reVal(this.itemName),
+        "name": reVal(this.name),
         "qty": reVal(this.qty),
-        "unique": reVal(this.unique),
+        "id": reVal(this.id),
         "price": reVal(this.price),
         "cat1": reVal(this.cat1),
         "cat2": reVal(this.cat2),
@@ -31,7 +31,7 @@ class Item {
   };
 
   String toString() {
-    return "{item_name: '${reVal(itemName)}', qty: ${reVal(qty)}, unique: '${reVal(unique)}', price: ${reVal(price)}, cat1: '${reVal(cat1)}', cat2: '${reVal(cat2)}', cat3: '${reVal(cat3)}'}";
+    return "{name: '${reVal(name)}', qty: ${reVal(qty)}, id: '${reVal(id)}', price: ${reVal(price)}, cat1: '${reVal(cat1)}', cat2: '${reVal(cat2)}', cat3: '${reVal(cat3)}'}";
   }
 
   dynamic reVal(dynamic value) {
