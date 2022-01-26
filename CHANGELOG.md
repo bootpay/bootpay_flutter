@@ -1,3 +1,8 @@
+## 1.7.5
+* android 12를 위한 gradle 7.0 버전 적용, minSdk 21 이상 적용
+* 안드로이드 navgation url 로직 수정 
+* 네이버페이 뒤로가기 버튼 제거 
+
 ## 1.7.4
 * quota 버그 수정 
 

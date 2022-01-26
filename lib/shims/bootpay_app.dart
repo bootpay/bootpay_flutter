@@ -74,15 +74,15 @@ class _WebViewRouteState extends State<WebViewRoute> {
                     padding: const EdgeInsets.all(5.0),
                     child: Container(
                       height: 40,
-                      color: Colors.white,
+                      color: Colors.transparent,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(child: Container()),
                           IconButton(
                             onPressed: () => clickCloseButton(),
-                            icon: Icon(Icons.close, size: 35.0, color: Colors.black54),
+                            icon: Icon(Icons.close, size: 35.0, color: Colors.black38),
                           ),
+                          Expanded(child: Container()),
                         ],
                       ),
                     ),

@@ -28,7 +28,7 @@ class BootpayWebView extends WebView {
   bool? showCloseButton = false;
   Widget? closeButton;
 
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
+  final Completer<WebViewController> controller = Completer<WebViewController>();
 
   BootpayWebView(
       {this.key,
@@ -49,7 +49,7 @@ class BootpayWebView extends WebView {
   State<StatefulWidget> createState() => _BootpayWebViewState();
 
   void transactionConfirm(String data) {
-    _controller.future.then((controller) {
+    controller.future.then((controller) {
       controller.evaluateJavascript(
         "setTimeout(function() { BootPay.transactionConfirm(JSON.parse('$data')); }, 30);"
       );
@@ -57,7 +57,7 @@ class BootpayWebView extends WebView {
   }
 
   void removePaymentWindow() {
-    _controller.future.then((controller) {
+    controller.future.then((controller) {
       controller.evaluateJavascript(
           "BootPay.removePaymentWindow();"
       );
@@ -88,7 +88,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
           initialUrl: INAPP_URL,
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
-            widget._controller.complete(webViewController);
+            widget.controller.complete(webViewController);
           },
           javascriptChannels: <JavascriptChannel>[
             onCancel(context),
@@ -105,27 +105,18 @@ class _BootpayWebViewState extends State<BootpayWebView> {
               widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
             }
 
-            if(Platform.isAndroid)  return NavigationDecision.prevent;
-            else return NavigationDecision.navigate;
+            return NavigationDecision.navigate;
           },
 
-          onPageFinished: (String url) {
-
+          onPageFinished: (String url) async {
             if (url.startsWith(INAPP_URL)) {
-              widget._controller.future.then((controller) async {
+              widget.controller.future.then((controller) async {
                 for (String script in await getBootpayJSBeforeContentLoaded()) {
                   controller.evaluateJavascript(script);
                 }
                 controller.evaluateJavascript(getBootpayJS());
               });
             }
-
-            //네이버페이 일 경우 뒤로가기 버튼 제거 - 그러나 작동하지 않는다 (아마 팝업이라)
-            // if(url.startsWith("https://nid.naver.com/nidlogin.login")) {
-            //   widget._controller.future.then((controller) async {
-            //     controller.evaluateJavascript('window.document.getElementById("back").remove();');
-            //   });
-            // }
           },
           gestureNavigationEnabled: true,
         ) : Container(),
@@ -143,7 +134,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: Container()),
+                Expanded(child: Container(color: Colors.transparent)),
                 IconButton(
                     onPressed: () => clickCloseButton(),
                     icon: Icon(Icons.close, size: 35.0, color: Colors.black54),
@@ -221,7 +212,6 @@ extension BootpayMethod on _BootpayWebViewState {
   }
 
   void clickCloseButton() {
-
     if (this.widget.onCancel != null)
       this.widget.onCancel!('{"action":"BootpayCancel","status":-100,"message":"사용자에 의한 취소"}');
     if (this.widget.onClose != null)
