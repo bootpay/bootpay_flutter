@@ -1,3 +1,6 @@
+## 1.7.6
+* 안드로이드 백버튼 종료 - onCloseHardware 버그 수정 
+
 ## 1.7.5
 * android 12를 위한 gradle 7.0 버전 적용, minSdk 21 이상 적용
 * 안드로이드 navgation url 로직 수정 
