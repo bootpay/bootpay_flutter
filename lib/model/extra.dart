@@ -16,7 +16,7 @@ class Extra {
   int? escrow = 0;
   // bool iosCloseButton = false;
 
-  String? carrier; //본인인증 시 고정할 통신사명, ex) 'SKT,KT,LGT'
+  String? carrier = ''; //본인인증 시 고정할 통신사명, ex) 'SKT,KT,LGT'
   int? ageLimit; //제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
 
   String? offer_period = ''; //결제창 제공기간에 해당하는 string 값, 지원하는 PG만 적용됨

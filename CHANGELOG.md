@@ -1,3 +1,6 @@
+## 1.7.7
+* extra carrier option define default value 
+
 ## 1.7.6
 * 안드로이드 백버튼 종료 - onCloseHardware 버그 수정 
 

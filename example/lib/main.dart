@@ -154,11 +154,11 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
 
-    payload.pg = 'nicepay';
+    payload.pg = 'toss';
     payload.method = 'card';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.name = "테스트 상품"; //결제할 상품명
-    payload.price = 50000.0; //정기결제시 0 혹은 주석
+    payload.price = 1000.0; //정기결제시 0 혹은 주석
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -179,10 +179,12 @@ class _SecondRouteState extends State<SecondRoute> {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
+    extra.quota = "12";
     // extra.quotas = [0,2,3];
     extra.quota = '0,2,3';
-    extra.popup = 1;
-    extra.quickPopup = 1;
+    extra.carrier = "";
+    // extra.popup = 1;
+    // extra.quickPopup = 1;
     // extra.theme = 'custom'; //통합 결제창 색상 지정 (purple, red, custom 지정 가능 )
     // extra.customBackground = ' #f2f2f2'; //theme가 custom인 경우 배경 색 지정 가능 ( ex: #f2f2f2 )
     // extra.customFontColor = '#333333'; //theme가 custom인 경우 폰트색 지정 가능 ( ex: #333333 )
