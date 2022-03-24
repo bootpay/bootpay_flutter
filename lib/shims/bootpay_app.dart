@@ -95,10 +95,10 @@ class _WebViewRouteState extends State<WebViewRoute> {
         DateTime now = DateTime.now();
         if (now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
           currentBackPressTime = now;
-          if(widget.webView?.onCloseHardware != null) widget.webView?.onCloseHardware!();
           Fluttertoast.showToast(msg: "\'뒤로\' 버튼을 한번 더 눌러주세요.");
           return Future.value(false);
         }
+        if(widget.webView?.onCloseHardware != null) widget.webView?.onCloseHardware!();
         return Future.value(true);
       },
     );

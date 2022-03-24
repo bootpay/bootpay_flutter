@@ -222,7 +222,7 @@ extension BootpayMethod on _BootpayWebViewState {
     if(widget.requestType == 2) {
       requestMethod = 'requestSubscription';
     } else if(widget.requestType == 3) {
-      requestMethod = 'requestMethod';
+      requestMethod = 'requestAuthentication';
     }
 
     String script = "Bootpay.${requestMethod}(" +

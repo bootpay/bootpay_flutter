@@ -19,6 +19,7 @@
         <entry key="async">
           <value>
             <list>
+              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/lib" />
               <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib" />
             </list>
           </value>
@@ -40,6 +41,7 @@
         <entry key="characters">
           <value>
             <list>
+              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.2.0/lib" />
               <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0/lib" />
             </list>
           </value>
@@ -166,6 +168,7 @@
         <entry key="matcher">
           <value>
             <list>
+              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.11/lib" />
               <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10/lib" />
             </list>
           </value>
@@ -336,6 +339,7 @@
         <entry key="test_api">
           <value>
             <list>
+              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.3/lib" />
               <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2/lib" />
             </list>
           </value>
@@ -357,6 +361,7 @@
         <entry key="vector_math">
           <value>
             <list>
+              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.1/lib" />
               <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib" />
             </list>
           </value>
@@ -382,9 +387,11 @@
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/asn1lib-1.0.2/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.1/lib" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_flutter-2.1.41/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0/lib" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.2.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0/lib" />
@@ -400,6 +407,7 @@
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10/lib" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.11/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/package_info-2.0.2/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.0/lib" />
@@ -431,9 +439,11 @@
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/term_glyph-1.2.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.2/lib" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.3/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/uuid-3.0.5/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0/lib" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.1/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.2.5/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.2.9/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0/lib" />
