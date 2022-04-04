@@ -1,3 +1,6 @@
+## 1.8.1
+* bootpay webview update to 3.0.11
+
 ## 1.8.0
 * bootpay webview update to 3.0.1
 
