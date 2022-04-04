@@ -56,10 +56,6 @@ class _WebViewRouteState extends State<WebViewRoute> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    // widget.webView?.on
-
-
-    // print(widget.webView?.showHeaderView);
 
     return WillPopScope(
 

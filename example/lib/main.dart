@@ -154,7 +154,7 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
 
-    payload.pg = 'toss';
+    payload.pg = 'danal';
     payload.method = 'card';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.name = "테스트 상품"; //결제할 상품명
@@ -183,7 +183,7 @@ class _SecondRouteState extends State<SecondRoute> {
     // extra.quotas = [0,2,3];
     extra.quota = '0,2,3';
     extra.carrier = "";
-    // extra.popup = 1;
+    extra.popup = 0;
     // extra.quickPopup = 1;
     // extra.theme = 'custom'; //통합 결제창 색상 지정 (purple, red, custom 지정 가능 )
     // extra.customBackground = ' #f2f2f2'; //theme가 custom인 경우 배경 색 지정 가능 ( ex: #f2f2f2 )

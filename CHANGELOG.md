@@ -1,3 +1,6 @@
+## 1.8.0
+* bootpay webview update to 3.0.1
+
 ## 1.7.7
 * extra carrier option define default value 
 

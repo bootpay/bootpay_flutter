@@ -175,7 +175,6 @@ extension BootpayMethod on _BootpayWebViewState {
         close() +
         done();
 
-    print(script);
 
     return "setTimeout(function() {" + script + "}, 50);";
   }
@@ -234,7 +233,6 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayCancel',
         onMessageReceived: (JavascriptMessage message) {
-          print('bootpay cancel');
           if (this.widget.onCancel != null)
             this.widget.onCancel!(message.message);
         });
@@ -253,7 +251,6 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayClose',
         onMessageReceived: (JavascriptMessage message) {
-          print('bootpay close');
           if (this.widget.onClose != null) this.widget.onClose!();
           // Navigator.of(context).pop();
         });
