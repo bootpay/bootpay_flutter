@@ -50,17 +50,19 @@ class BootpayWebView extends WebView {
 
   void transactionConfirm(String data) {
     controller.future.then((controller) {
-      controller.evaluateJavascript(
-        "setTimeout(function() { BootPay.transactionConfirm(JSON.parse('$data')); }, 30);"
-      );
+      controller.evaluateJavascript("setTimeout(function() { BootPay.transactionConfirm(JSON.parse('$data')); }, 30);");
+      // controller.runJavascript(
+      //   "setTimeout(function() { BootPay.transactionConfirm(JSON.parse('$data')); }, 30);"
+      // );
     });
   }
 
   void removePaymentWindow() {
     controller.future.then((controller) {
-      controller.evaluateJavascript(
-          "BootPay.removePaymentWindow();"
-      );
+      controller.evaluateJavascript("BootPay.removePaymentWindow();");
+      // controller.runJavascript(
+      //     "BootPay.removePaymentWindow();"
+      // );
       // controller.
     });
   }
@@ -78,9 +80,57 @@ class _BootpayWebViewState extends State<BootpayWebView> {
     super.initState();
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    // return WebView(
+    //   key: widget.key,
+    //   // initialUrl: 'https://dev-js.bootapi.com/test/payment/',
+    //   initialUrl: INAPP_URL,
+    //   javascriptMode: JavascriptMode.unrestricted,
+    //   onWebViewCreated: (WebViewController webViewController) {
+    //     widget.controller.complete(webViewController);
+    //   },
+    //   javascriptChannels: <JavascriptChannel>[
+    //     onCancel(context),
+    //     onError(context),
+    //     onClose(context),
+    //     onReady(context),
+    //     onConfirm(context),
+    //     onDone(context)
+    //   ].toSet(),
+    //   // navigationDelegate: (NavigationRequest request) {
+    //   //
+    //   //   // print("navigationDelegate: " + request.url+ " : " + request.isForMainFrame.toString());
+    //   //
+    //   //
+    //   //   if(widget.onShowHeader != null) {
+    //   //     widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
+    //   //   }
+    //   //
+    //   //
+    //   //   return NavigationDecision.navigate;
+    //   // },
+    //
+    //   onPageFinished: (String url) async {
+    //     // print("pageFinish: $url");
+    //
+    //     if (url.startsWith(INAPP_URL)) {
+    //       widget.controller.future.then((controller) async {
+    //         for (String script in await getBootpayJSBeforeContentLoaded()) {
+    //           // print(script);
+    //           controller.evaluateJavascript(script);
+    //
+    //         }
+    //         // print(getBootpayJS());
+    //         controller.evaluateJavascript(getBootpayJS());
+    //       });
+    //     }
+    //   },
+    //   gestureNavigationEnabled: true,
+    // );
+
     return Stack(
       children: [
         isClosed == false ? WebView(
@@ -100,26 +150,35 @@ class _BootpayWebViewState extends State<BootpayWebView> {
           ].toSet(),
           navigationDelegate: (NavigationRequest request) {
 
+            print("navigationDelegate: " + request.url+ " : " + request.isForMainFrame.toString());
+
 
             if(widget.onShowHeader != null) {
               widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
             }
 
+
             return NavigationDecision.navigate;
           },
 
           onPageFinished: (String url) async {
+            print("pageFinish: $url");
+
             if (url.startsWith(INAPP_URL)) {
               widget.controller.future.then((controller) async {
                 for (String script in await getBootpayJSBeforeContentLoaded()) {
+                  print(script);
                   controller.evaluateJavascript(script);
                 }
+                print(getBootpayJS());
                 controller.evaluateJavascript(getBootpayJS());
               });
             }
           },
           gestureNavigationEnabled: true,
-        ) : Container(),
+        ) : Container(
+          color: Colors.red,
+        ),
         widget.showCloseButton == false ?
         Container() :
         widget.closeButton != null ?
@@ -158,10 +217,10 @@ extension BootpayMethod on _BootpayWebViewState {
       }
       result.add(await getAnalyticsData());
 
-      if (this.widget.payload?.extra?.quickPopup == 1 &&
-          this.widget.payload?.extra?.popup == 1) {
-        result.add("setTimeout(function() {BootPay.startQuickPopup();}, 30);");
-      }
+      // if (this.widget.payload?.extra?.quickPopup == 1 &&
+      //     this.widget.payload?.extra?.popup == 1) {
+      //   result.add("setTimeout(function() {BootPay.startQuickPopup();}, 30);");
+      // }
     return result;
   }
 
@@ -202,6 +261,30 @@ extension BootpayMethod on _BootpayWebViewState {
   String done() {
     return ".done(function (data) { if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(data)); } })";
   }
+
+  // String error() {
+  //   return ".error(function (data) { if (window.BootpayError && window.BootpayError.postMessage) { BootpayError.postMessage(JSON.stringify(data)); } })";
+  // }
+  //
+  // String cancel() {
+  //   return ".cancel(function (data) { if (window.BootpayCancel && window.BootpayCancel.postMessage) { BootpayCancel.postMessage(JSON.stringify(data)); } })";
+  // }
+  //
+  // String ready() {
+  //   return ".ready(function (data) { if (window.BootpayReady && window.BootpayReady.postMessage) { BootpayReady.postMessage(JSON.stringify(data)); } })";
+  // }
+  //
+  // String confirm() {
+  //   return ".confirm(function (data) { if (window.BootpayConfirm && window.BootpayConfirm.postMessage) { BootpayConfirm.postMessage(JSON.stringify(data)); } })";
+  // }
+  //
+  // String close() {
+  //   return ".close(function (data) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage(JSON.stringify(data)); } })";
+  // }
+  //
+  // String done() {
+  //   return ".done(function (data) { if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(data)); } })";
+  // }
 
   Future<String> getAnalyticsData() async {
     UserInfo.updateInfo();
@@ -251,6 +334,8 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayClose',
         onMessageReceived: (JavascriptMessage message) {
+          print('close');
+
           if (this.widget.onClose != null) this.widget.onClose!();
           // Navigator.of(context).pop();
         });
@@ -269,6 +354,8 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayConfirm',
         onMessageReceived: (JavascriptMessage message) async {
+          print('confirm: ${message.message}');
+
           if (this.widget.onConfirm != null) {
             bool goTransactionConfirm = this.widget.onConfirm!(message.message);
             if (goTransactionConfirm) {

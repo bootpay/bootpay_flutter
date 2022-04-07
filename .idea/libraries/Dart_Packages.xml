@@ -34,28 +34,7 @@
         <entry key="bootpay_webview_flutter">
           <value>
             <list>
-              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_flutter-3.0.11/lib" />
-            </list>
-          </value>
-        </entry>
-        <entry key="bootpay_webview_flutter_android">
-          <value>
-            <list>
-              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_flutter_android-2.8.32/lib" />
-            </list>
-          </value>
-        </entry>
-        <entry key="bootpay_webview_flutter_platform_interface">
-          <value>
-            <list>
-              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_flutter_platform_interface-1.8.1/lib" />
-            </list>
-          </value>
-        </entry>
-        <entry key="bootpay_webview_ios">
-          <value>
-            <list>
-              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_ios-2.7.11/lib" />
+              <option value="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_flutter-2.3.0/lib" />
             </list>
           </value>
         </entry>
@@ -421,10 +400,7 @@
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/asn1lib-1.1.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
-      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_flutter-3.0.11/lib" />
-      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_flutter_android-2.8.32/lib" />
-      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_flutter_platform_interface-1.8.1/lib" />
-      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_ios-2.7.11/lib" />
+      <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/bootpay_webview_flutter-2.3.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.2.0/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib" />
       <root url="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.0/lib" />

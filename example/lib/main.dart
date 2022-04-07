@@ -138,7 +138,7 @@ class _SecondRouteState extends State<SecondRoute> {
   //결제용 데이터 init
   bootpayReqeustDataInit() {
     Item item1 = Item();
-    item1.itemName = "미키 '마우스"; // 주문정보에 담길 상품명
+    item1.itemName = "미키 마우스"; // 주문정보에 담길 상품명
     item1.qty = 1; // 해당 상품의 주문 수량
     item1.unique = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
     item1.price = 500; // 상품의 가격
@@ -154,11 +154,13 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
     payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
 
-    payload.pg = 'danal';
+    payload.pg = 'nicepay';
     payload.method = 'card';
+    // payload.method = 'card';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.name = "테스트 상품"; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
+
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -171,6 +173,7 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.items = itemList; // 상품정보 배열
 
     User user = User(); // 구매자 정보
+    user.id = "12342134567";
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
@@ -183,8 +186,8 @@ class _SecondRouteState extends State<SecondRoute> {
     // extra.quotas = [0,2,3];
     extra.quota = '0,2,3';
     extra.carrier = "";
-    extra.popup = 0;
-    // extra.quickPopup = 1;
+    extra.popup = 1;
+    extra.quickPopup = 1;
     // extra.theme = 'custom'; //통합 결제창 색상 지정 (purple, red, custom 지정 가능 )
     // extra.customBackground = ' #f2f2f2'; //theme가 custom인 경우 배경 색 지정 가능 ( ex: #f2f2f2 )
     // extra.customFontColor = '#333333'; //theme가 custom인 경우 폰트색 지정 가능 ( ex: #333333 )
