@@ -334,7 +334,7 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayClose',
         onMessageReceived: (JavascriptMessage message) {
-          print('close');
+          // print('close');
 
           if (this.widget.onClose != null) this.widget.onClose!();
           // Navigator.of(context).pop();

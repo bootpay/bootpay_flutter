@@ -1,3 +1,6 @@
+## 1.8.12
+* bootpay webview upgrade to 3.0.12
+
 ## 1.8.11
 * bootpay webview downgrade to 2.3.0
 
