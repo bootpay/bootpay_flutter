@@ -1,3 +1,6 @@
+## 1.8.13
+* v2 webview android 에서 webview_flutter와 충돌나는 버그 수정 
+
 ## 1.8.12
 * bootpay webview upgrade to 3.0.12
 
