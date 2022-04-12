@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  bootpay_webview_flutter: 3.0.13
+  bootpay_webview_flutter: 2.2.21
   uuid: ^3.0.5
   shared_preferences: ^2.0.8
   js: ^0.6.3

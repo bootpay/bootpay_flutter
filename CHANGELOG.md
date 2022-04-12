@@ -1,3 +1,6 @@
+## 1.9.0
+* bootpay webview downgrade to 2.2.21
+
 ## 1.8.13
 * v2 webview android 에서 webview_flutter와 충돌나는 버그 수정 
 
