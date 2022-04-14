@@ -150,7 +150,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
           ].toSet(),
           navigationDelegate: (NavigationRequest request) {
 
-            print("navigationDelegate: " + request.url+ " : " + request.isForMainFrame.toString());
+            // print("navigationDelegate: " + request.url+ " : " + request.isForMainFrame.toString());
 
 
             if(widget.onShowHeader != null) {
@@ -162,15 +162,15 @@ class _BootpayWebViewState extends State<BootpayWebView> {
           },
 
           onPageFinished: (String url) async {
-            print("pageFinish: $url");
+            // print("pageFinish: $url");
 
             if (url.startsWith(INAPP_URL)) {
               widget.controller.future.then((controller) async {
                 for (String script in await getBootpayJSBeforeContentLoaded()) {
-                  print(script);
+                  // print(script);
                   controller.evaluateJavascript(script);
                 }
-                print(getBootpayJS());
+                // print(getBootpayJS());
                 controller.evaluateJavascript(getBootpayJS());
               });
             }
@@ -354,7 +354,7 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayConfirm',
         onMessageReceived: (JavascriptMessage message) async {
-          print('confirm: ${message.message}');
+          // print('confirm: ${message.message}');
 
           if (this.widget.onConfirm != null) {
             bool goTransactionConfirm = this.widget.onConfirm!(message.message);

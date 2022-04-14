@@ -1,3 +1,6 @@
+## 1.9.01
+* 통계관련 세션키 버그 수정 
+
 ## 1.9.0
 * bootpay webview downgrade to 2.2.21
 
