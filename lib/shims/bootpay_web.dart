@@ -14,11 +14,19 @@ import '../bootpay_api.dart';
 import '../model/payload.dart';
 
 @JS()
-external String _request(String payload);
+external String _jsBeforeLoad();
+@JS()
+external String _requestPayment(String payload);
+@JS()
+external String _requestSubscription(String payload);
+@JS()
+external String _requestAuthentication(String payload);
 @JS()
 external void _removePaymentWindow();
 @JS()
-external void _transactionConfirm(String data);
+external void _confirm();
+@JS()
+external void _addCloseEvent();
 
 @JS()
 external void BootpayClose();
@@ -33,9 +41,9 @@ external void BootpayDone(String data);
 @JS('BootpayDone')
 external set _BootpayDone(void Function(String) f);
 @JS()
-external void BootpayReady(String data);
-@JS('BootpayReady')
-external set _BootpayReady(void Function(String) f);
+external void BootpayIssued(String data);
+@JS('BootpayIssued')
+external set _BootpayIssued(void Function(String) f);
 @JS()
 external bool BootpayConfirm(String data);
 @JS('BootpayConfirm')
@@ -50,7 +58,7 @@ class BootpayPlatform extends BootpayApi{
   BootpayDefaultCallback? _callbackError;
   BootpayCloseCallback? _callbackClose;
   BootpayCloseCallback? _callbackCloseHardware;
-  BootpayDefaultCallback? _callbackReady;
+  BootpayDefaultCallback? _callbackIssued;
   BootpayConfirmCallback? _callbackConfirm;
   BootpayDefaultCallback? _callbackDone;
 
@@ -58,7 +66,7 @@ class BootpayPlatform extends BootpayApi{
     _BootpayClose = allowInterop(onClose);
     _BootpayCancel = allowInterop(onCancel);
     _BootpayDone = allowInterop(onDone);
-    _BootpayReady = allowInterop(onReady);
+    _BootpayIssued = allowInterop(onIssued);
     _BootpayConfirm = allowInterop(onConfirm);
     _BootpayError = allowInterop(onError);
   }
@@ -70,7 +78,7 @@ class BootpayPlatform extends BootpayApi{
   }
 
   @override
-  void request(
+  void requestPayment(
       {
         Key? key,
         BuildContext? context,
@@ -81,9 +89,42 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
         BootpayCloseCallback? onCloseHardware,
-        BootpayDefaultCallback? onReady,
+        BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
-        BootpayDefaultCallback? onDone
+        BootpayDefaultCallback? onDone,
+        int? requestType
+      }) {
+
+    this._callbackCancel = onCancel;
+    this._callbackError = onError;
+    this._callbackClose = onClose;
+    this._callbackCloseHardware = onCloseHardware;
+    this._callbackIssued = onIssued;
+    this._callbackConfirm = onConfirm;
+    this._callbackDone = onDone;
+
+    if(payload != null) {
+      _jsBeforeLoad();
+      _requestPayment(jsonEncode(payload.toJson()));
+    }
+  }
+
+  @override
+  void requestSubscription(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType
       }) {
 
 
@@ -91,24 +132,65 @@ class BootpayPlatform extends BootpayApi{
     this._callbackError = onError;
     this._callbackClose = onClose;
     this._callbackCloseHardware = onCloseHardware;
-    this._callbackReady = onReady;
+    this._callbackIssued = onIssued;
     this._callbackConfirm = onConfirm;
     this._callbackDone = onDone;
 
 
     if(payload != null) {
-      _request(jsonEncode(payload.toJson()));
+      if(payload.subscriptionId == null || payload.subscriptionId?.length == 0) {
+        payload.subscriptionId = payload.orderId ?? "";
+      }
+      _jsBeforeLoad();
+      _requestSubscription(jsonEncode(payload.toJson()));
+    }
+  }
+
+  @override
+  void requestAuthentication(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType
+      }) {
+
+
+    this._callbackCancel = onCancel;
+    this._callbackError = onError;
+    this._callbackClose = onClose;
+    this._callbackCloseHardware = onCloseHardware;
+    this._callbackIssued = onIssued;
+    this._callbackConfirm = onConfirm;
+    this._callbackDone = onDone;
+
+
+    if(payload != null) {
+      if(payload.subscriptionId == null || payload.subscriptionId?.length == 0) {
+        payload.subscriptionId = payload.orderId ?? "";
+      }
+      _jsBeforeLoad();
+      _requestAuthentication(jsonEncode(payload.toJson()));
     }
   }
 
   @override
   void removePaymentWindow() {
-    _removePaymentWindow();
+    // _removePaymentWindow();
   }
 
   @override
-  void transactionConfirm(String data) {
-    _transactionConfirm(data);
+  void confirm() {
+    _confirm();
   }
 
   void dismiss(BuildContext context) {
@@ -121,8 +203,8 @@ class BootpayPlatform extends BootpayApi{
   void onCancel(String data) {
     if(this._callbackCancel != null) this._callbackCancel!(data);
   }
-  void onReady(String data) {
-    if(this._callbackReady != null) this._callbackReady!(data);
+  void onIssued(String data) {
+    if(this._callbackIssued != null) this._callbackIssued!(data);
   }
   bool onConfirm(String data) {
     if(this._callbackConfirm != null) return this._callbackConfirm!(data);

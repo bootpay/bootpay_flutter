@@ -56,9 +56,7 @@ class _WebViewRouteState extends State<WebViewRoute> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-
     return WillPopScope(
-
       child: Scaffold(
           body: SafeArea(
               child: Stack(
@@ -70,15 +68,15 @@ class _WebViewRouteState extends State<WebViewRoute> {
                     padding: const EdgeInsets.all(5.0),
                     child: Container(
                       height: 40,
-                      color: Colors.transparent,
+                      color: Colors.white,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Expanded(child: Container()),
                           IconButton(
                             onPressed: () => clickCloseButton(),
-                            icon: Icon(Icons.close, size: 35.0, color: Colors.black38),
+                            icon: Icon(Icons.close, size: 35.0, color: Colors.black54),
                           ),
-                          Expanded(child: Container()),
                         ],
                       ),
                     ),
@@ -106,7 +104,7 @@ class BootpayPlatform extends BootpayApi{
   BootpayWebView? webView;
 
   @override
-  void request(
+  void requestPayment(
       {
         Key? key,
         BuildContext? context,
@@ -117,9 +115,112 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
         BootpayCloseCallback? onCloseHardware,
-        BootpayDefaultCallback? onReady,
+        BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
-        BootpayDefaultCallback? onDone
+        BootpayDefaultCallback? onDone,
+        int? requestType
+      }) {
+
+    goBootpayRequest(
+        key: key,
+        context: context,
+        payload: payload,
+        showCloseButton: showCloseButton,
+        closeButton: closeButton,
+        onCancel: onCancel,
+        onError: onError,
+        onClose: onClose,
+        onCloseHardware: onCloseHardware,
+        onIssued: onIssued,
+        onConfirm: onConfirm,
+        onDone: onDone,
+        requestType: requestType
+    );
+  }
+
+  @override
+  void requestSubscription(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType
+      }) {
+    goBootpayRequest(
+        key: key,
+        context: context,
+        payload: payload,
+        showCloseButton: showCloseButton,
+        closeButton: closeButton,
+        onCancel: onCancel,
+        onError: onError,
+        onClose: onClose,
+        onCloseHardware: onCloseHardware,
+        onIssued: onIssued,
+        onConfirm: onConfirm,
+        onDone: onDone,
+        requestType: requestType
+    );
+  }
+
+  @override
+  void requestAuthentication(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType
+      }) {
+    goBootpayRequest(
+        key: key,
+        context: context,
+        payload: payload,
+        showCloseButton: showCloseButton,
+        closeButton: closeButton,
+        onCancel: onCancel,
+        onError: onError,
+        onClose: onClose,
+        onCloseHardware: onCloseHardware,
+        onIssued: onIssued,
+        onConfirm: onConfirm,
+        onDone: onDone,
+        requestType: requestType
+    );
+  }
+
+  void goBootpayRequest(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType
       }) {
 
     webView = BootpayWebView(
@@ -131,9 +232,10 @@ class BootpayPlatform extends BootpayApi{
       onError: onError,
       onClose: onClose,
       onCloseHardware: onCloseHardware,
-      onReady: onReady,
+      onIssued: onIssued,
       onConfirm: onConfirm,
       onDone: onDone,
+      requestType: requestType,
     );
 
     if(context == null) return;
@@ -168,8 +270,8 @@ class BootpayPlatform extends BootpayApi{
   }
 
   @override
-  void transactionConfirm(String data) {
-    if(webView != null) webView!.transactionConfirm(data);
+  void confirm() {
+    if(webView != null) webView!.transactionConfirm();
   }
 
   // 회원 추적 코드
@@ -189,14 +291,14 @@ class BootpayPlatform extends BootpayApi{
     }
 
     return BootpayAnalytics.userTrace(
-      id: id,
-      email: email,
-      gender: gender,
-      birth: birth,
-      phone: phone,
-      area: area,
-      applicationId: applicationId,
-      ver: ver
+        id: id,
+        email: email,
+        gender: gender,
+        birth: birth,
+        phone: phone,
+        area: area,
+        applicationId: applicationId,
+        ver: ver
     );
   }
 

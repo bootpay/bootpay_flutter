@@ -20,14 +20,14 @@ class BootpayAnalytics {
   }) async {
     var provider = ApiProvider();
     return provider.userTrace(
-      id: id,
-      email: email,
-      gender: gender,
-      birth: birth,
-      phone: phone,
-      area: area,
-      applicationId: applicationId,
-      ver: ver
+        id: id,
+        email: email,
+        gender: gender,
+        birth: birth,
+        phone: phone,
+        area: area,
+        applicationId: applicationId,
+        ver: ver
     );
   }
 
@@ -43,12 +43,12 @@ class BootpayAnalytics {
     var provider = ApiProvider();
 
     return provider.pageTrace(
-      url: url,
-      pageType: pageType,
-      applicationId: applicationId,
-      userId: userId,
-      items: items,
-      ver: ver
+        url: url,
+        pageType: pageType,
+        applicationId: applicationId,
+        userId: userId,
+        items: items,
+        ver: ver
     );
   }
 }

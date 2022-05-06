@@ -29,13 +29,13 @@ class User {
     "email": reVal(this.email),
     "gender": this.gender,
     "birth": this.birth,
-    "phone": reVal(this.phone),
+    "phone": reVal(this.phone?.replaceAll("-", "")),
     "area": reVal(this.area),
     "addr": reVal(this.addr),
   };
 
   String toString() {
-    return "{id: '${reVal(id)}', username: '${reVal(username)}', email: '${reVal(email)}', gender: ${reVal(gender)}, birth: '${reVal(birth)}', phone: '${reVal(phone)}', area: '${reVal(area)}', addr: '${reVal(addr)}'}";
+    return "{id: '${reVal(id)}', username: '${reVal(username)}', email: '${reVal(email)}', gender: ${reVal(gender)}, birth: '${reVal(birth)}', phone: '${reVal(phone?.replaceAll("-", ""))}', area: '${reVal(area)}', addr: '${reVal(addr)}'}";
   }
 
   dynamic reVal(dynamic value) {

@@ -32,21 +32,22 @@ class Bootpay extends BootpayApi {
   }
 
   @override
-  void request(
+  void requestPayment(
       {Key? key,
-      BuildContext? context,
-      Payload? payload,
-      bool? showCloseButton,
-      Widget? closeButton,
-      BootpayDefaultCallback? onCancel,
-      BootpayDefaultCallback? onError,
-      BootpayCloseCallback? onClose,
-      BootpayCloseCallback? onCloseHardware,
-      BootpayDefaultCallback? onReady,
-      BootpayConfirmCallback? onConfirm,
-      BootpayDefaultCallback? onDone}) {
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType}) {
 
-    _platform.request(
+    _platform.requestPayment(
         context: context,
         payload: payload,
         showCloseButton: showCloseButton,
@@ -54,16 +55,89 @@ class Bootpay extends BootpayApi {
         onCancel: onCancel,
         onError: onError,
         onClose: onClose,
-        onReady: onReady,
+        onIssued: onIssued,
         onCloseHardware: onCloseHardware,
-        onConfirm: onConfirm, 
-        onDone: onDone
+        onConfirm: onConfirm,
+        onDone: onDone,
+        requestType: requestType
     );
   }
 
   @override
-  void transactionConfirm(String data) {
-    _platform.transactionConfirm(data);
+  void requestSubscription(
+      {Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType}) {
+
+    if(payload?.subscriptionId == null || payload?.subscriptionId?.length == 0) {
+      payload?.subscriptionId = payload.orderId ?? "";
+    }
+
+    _platform.requestSubscription(
+        context: context,
+        payload: payload,
+        showCloseButton: showCloseButton,
+        closeButton: closeButton,
+        onCancel: onCancel,
+        onError: onError,
+        onClose: onClose,
+        onIssued: onIssued,
+        onCloseHardware: onCloseHardware,
+        onConfirm: onConfirm,
+        onDone: onDone,
+        requestType: requestType
+    );
+  }
+
+  @override
+  void requestAuthentication(
+      {Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType}) {
+
+    if(payload?.subscriptionId == null || payload?.subscriptionId?.length == 0) {
+      payload?.subscriptionId = payload.orderId ?? "";
+    }
+
+    _platform.requestAuthentication(
+        context: context,
+        payload: payload,
+        showCloseButton: showCloseButton,
+        closeButton: closeButton,
+        onCancel: onCancel,
+        onError: onError,
+        onClose: onClose,
+        onIssued: onIssued,
+        onCloseHardware: onCloseHardware,
+        onConfirm: onConfirm,
+        onDone: onDone,
+        requestType: requestType
+    );
+  }
+
+  @override
+  void confirm() {
+    _platform.confirm();
   }
 
   @override

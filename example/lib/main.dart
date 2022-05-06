@@ -52,11 +52,20 @@ class _SecondRouteState extends State<SecondRoute> {
   Payload payload = Payload();
   String _data = ""; // 서버승인을 위해 사용되기 위한 변수
 
+  String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
+  String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
+  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+
+  // String webApplicationId = '59a568d3e13f3336c21bf707';
+  // String androidApplicationId = '5a029249b957d73c2b3ae5f5';
+  // String iosApplicationId = '59bfc733e13f337dbd6ca489';
+
+
   String get applicationId {
     return Bootpay().applicationId(
-        '5b8f6a4d396fa665fdc2b5e7',
-        '5b8f6a4d396fa665fdc2b5e8',
-        '5b8f6a4d396fa665fdc2b5e9'
+      webApplicationId,
+      androidApplicationId,
+      iosApplicationId
     );
   }
 
@@ -64,7 +73,6 @@ class _SecondRouteState extends State<SecondRoute> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     bootpayAnalyticsUserTrace(); //통계용 함수 호출
     bootpayAnalyticsPageTrace(); //통계용 함수 호출
     bootpayReqeustDataInit(); //결제용 데이터 init
@@ -73,17 +81,17 @@ class _SecondRouteState extends State<SecondRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Builder(builder: (BuildContext context) {
-          return Container(
-            child: Center(
+      body: Builder(builder: (BuildContext context) {
+        return Container(
+          child: Center(
               child: TextButton(
                 onPressed: () => goBootpayTest(context),
                 child: Text('부트페이 결제테스트'),
               )
-            ),
-          );
-        }),
-      );
+          ),
+        );
+      }),
+    );
   }
 
 
@@ -138,29 +146,28 @@ class _SecondRouteState extends State<SecondRoute> {
   //결제용 데이터 init
   bootpayReqeustDataInit() {
     Item item1 = Item();
-    item1.itemName = "미키 마우스"; // 주문정보에 담길 상품명
+    item1.name = "미키 '마우스"; // 주문정보에 담길 상품명
     item1.qty = 1; // 해당 상품의 주문 수량
-    item1.unique = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
+    item1.id = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
     item1.price = 500; // 상품의 가격
 
     Item item2 = Item();
-    item2.itemName = "키보드"; // 주문정보에 담길 상품명
+    item2.name = "키보드"; // 주문정보에 담길 상품명
     item2.qty = 1; // 해당 상품의 주문 수량
-    item2.unique = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
+    item2.id = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
     item2.price = 500; // 상품의 가격
     List<Item> itemList = [item1, item2];
 
-    payload.webApplicationId = '5b8f6a4d396fa665fdc2b5e7'; // web application id
-    payload.androidApplicationId = '5b8f6a4d396fa665fdc2b5e8'; // android application id
-    payload.iosApplicationId = '5b8f6a4d396fa665fdc2b5e9'; // ios application id
+    payload.webApplicationId = webApplicationId; // web application id
+    payload.androidApplicationId = androidApplicationId; // android application id
+    payload.iosApplicationId = iosApplicationId; // ios application id
 
-    payload.pg = 'nicepay';
-    payload.method = 'npay';
-    // payload.method = 'card';
+
+    payload.pg = 'kcp';
+    payload.method = 'payco';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
-    payload.name = "테스트 상품"; //결제할 상품명
+    payload.orderName = "테스트 상품"; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
-
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -173,7 +180,6 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.items = itemList; // 상품정보 배열
 
     User user = User(); // 구매자 정보
-    user.id = "12342134567";
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
@@ -182,16 +188,11 @@ class _SecondRouteState extends State<SecondRoute> {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
-    extra.quota = "12";
-    // extra.quotas = [0,2,3];
-    extra.quota = '0,2,3';
-    extra.carrier = "";
-    extra.popup = 1; //npay 결제수단 일 경우 popup 1로 해야함
-    // extra.quickPopup = 1;
-    // extra.theme = 'custom'; //통합 결제창 색상 지정 (purple, red, custom 지정 가능 )
-    // extra.customBackground = ' #f2f2f2'; //theme가 custom인 경우 배경 색 지정 가능 ( ex: #f2f2f2 )
-    // extra.customFontColor = '#333333'; //theme가 custom인 경우 폰트색 지정 가능 ( ex: #333333 )
+    extra.cardQuota = '3';
+    extra.openType = 'iframe';
 
+    // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
+    // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
 
     payload.user = user;
     payload.extra = extra;
@@ -200,7 +201,7 @@ class _SecondRouteState extends State<SecondRoute> {
 
   //버튼클릭시 부트페이 결제요청 실행
   void goBootpayTest(BuildContext context) {
-    Bootpay().request(
+    Bootpay().requestPayment(
       context: context,
       payload: payload,
       showCloseButton: false,
@@ -219,22 +220,22 @@ class _SecondRouteState extends State<SecondRoute> {
       onCloseHardware: () {
         print('------- onCloseHardware');
       },
-      onReady: (String data) {
-        print('------- onReady: $data');
+      onIssued: (String data) {
+        print('------- onIssued: $data');
       },
       onConfirm: (String data) {
         /**
-        1. 바로 승인하고자 할 때
-        return true;
-        **/
+            1. 바로 승인하고자 할 때
+            return true;
+         **/
         /***
-        2. 비동기 승인 하고자 할 때
-        checkQtyFromServer(data);
-        return false;
-        ***/
+            2. 비동기 승인 하고자 할 때
+            checkQtyFromServer(data);
+            return false;
+         ***/
         /***
-        3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-        return false; 후에 서버에서 결제승인 수행
+            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
+            return false; 후에 서버에서 결제승인 수행
          */
         checkQtyFromServer(data);
         return false;
@@ -247,9 +248,9 @@ class _SecondRouteState extends State<SecondRoute> {
 
   Future<void> checkQtyFromServer(String data) async {
     //TODO 서버로부터 재고파악을 한다
-    print('checkQtyFromServer http call');
+    print('checkQtyFromServer http call: $data');
 
     //재고파악 후 결제를 승인한다. 아래 함수를 호출하지 않으면 결제를 승인하지 않게된다.
-    Bootpay().transactionConfirm(data);
+    Bootpay().confirm();
   }
 }
