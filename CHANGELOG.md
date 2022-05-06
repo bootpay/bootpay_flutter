@@ -1,3 +1,6 @@
+## 4.0.0
+* bootpay js major update 
+
 ## 1.9.01
 * 통계관련 세션키 버그 수정 
 
