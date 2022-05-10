@@ -134,7 +134,7 @@ class BootpayPlatform extends BootpayApi{
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
-        requestType: requestType
+        requestType: 1
     );
   }
 
@@ -168,7 +168,7 @@ class BootpayPlatform extends BootpayApi{
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
-        requestType: requestType
+        requestType: 2
     );
   }
 
@@ -202,7 +202,7 @@ class BootpayPlatform extends BootpayApi{
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
-        requestType: requestType
+        requestType: 3
     );
   }
 

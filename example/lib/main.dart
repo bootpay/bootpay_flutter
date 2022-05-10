@@ -83,11 +83,33 @@ class _SecondRouteState extends State<SecondRoute> {
     return Scaffold(
       body: Builder(builder: (BuildContext context) {
         return Container(
-          child: Center(
-              child: TextButton(
-                onPressed: () => goBootpayTest(context),
-                child: Text('부트페이 결제테스트'),
-              )
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: TextButton(
+                    onPressed: () => goBootpayTest(context),
+                    child: Text('일반결제 테스트'),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Center(
+                  child: TextButton(
+                    onPressed: () => goBootpaySubscriptionTest(context),
+                    child: Text('정기결제 테스트'),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Center(
+                  child: TextButton(
+                    onPressed: () => goBootpayAuthTest(context),
+                    child: Text('본인인증 테스트'),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       }),
@@ -99,7 +121,6 @@ class _SecondRouteState extends State<SecondRoute> {
   bootpayAnalyticsUserTrace() async {
     String? ver;
     if(kIsWeb) ver = '1.0'; //web 일 경우 버전 지정, 웹이 아닌 android, ios일 경우 package_info 통해 자동으로 생성
-
 
     await Bootpay().userTrace(
         id: 'user_1234',
@@ -163,14 +184,16 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.iosApplicationId = iosApplicationId; // ios application id
 
 
-    payload.pg = 'kcp';
-    payload.method = 'payco';
+    payload.pg = 'nicepay';
+    payload.method = 'card';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.orderName = "테스트 상품"; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+
+
     payload.params = {
       "callbackParam1" : "value12",
       "callbackParam2" : "value34",
@@ -202,6 +225,106 @@ class _SecondRouteState extends State<SecondRoute> {
   //버튼클릭시 부트페이 결제요청 실행
   void goBootpayTest(BuildContext context) {
     Bootpay().requestPayment(
+      context: context,
+      payload: payload,
+      showCloseButton: false,
+      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
+      onCancel: (String data) {
+        print('------- onCancel: $data');
+      },
+      onError: (String data) {
+        print('------- onCancel: $data');
+      },
+      onClose: () {
+        print('------- onClose');
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        //TODO - 원하시는 라우터로 페이지 이동
+      },
+      onCloseHardware: () {
+        print('------- onCloseHardware');
+      },
+      onIssued: (String data) {
+        print('------- onIssued: $data');
+      },
+      onConfirm: (String data) {
+        /**
+            1. 바로 승인하고자 할 때
+            return true;
+         **/
+        /***
+            2. 비동기 승인 하고자 할 때
+            checkQtyFromServer(data);
+            return false;
+         ***/
+        /***
+            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
+            return false; 후에 서버에서 결제승인 수행
+         */
+        checkQtyFromServer(data);
+        return false;
+      },
+      onDone: (String data) {
+        print('------- onDone: $data');
+      },
+    );
+  }
+
+  //버튼클릭시 부트페이 정기결제 요청 실행
+  void goBootpaySubscriptionTest(BuildContext context) {
+    payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+    payload.method = "card_rebill";
+
+    Bootpay().requestSubscription(
+      context: context,
+      payload: payload,
+      showCloseButton: false,
+      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
+      onCancel: (String data) {
+        print('------- onCancel: $data');
+      },
+      onError: (String data) {
+        print('------- onCancel: $data');
+      },
+      onClose: () {
+        print('------- onClose');
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        //TODO - 원하시는 라우터로 페이지 이동
+      },
+      onCloseHardware: () {
+        print('------- onCloseHardware');
+      },
+      onIssued: (String data) {
+        print('------- onIssued: $data');
+      },
+      onConfirm: (String data) {
+        /**
+            1. 바로 승인하고자 할 때
+            return true;
+         **/
+        /***
+            2. 비동기 승인 하고자 할 때
+            checkQtyFromServer(data);
+            return false;
+         ***/
+        /***
+            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
+            return false; 후에 서버에서 결제승인 수행
+         */
+        checkQtyFromServer(data);
+        return false;
+      },
+      onDone: (String data) {
+        print('------- onDone: $data');
+      },
+    );
+  }
+
+  void goBootpayAuthTest(BuildContext context) {
+    payload.pg = "danal";
+    payload.method = "auth";
+    payload.authenticationId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+
+    Bootpay().requestAuthentication(
       context: context,
       payload: payload,
       showCloseButton: false,
