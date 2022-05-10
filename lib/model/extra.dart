@@ -1,3 +1,7 @@
+import 'package:bootpay/model/browser_open_type.dart';
+
+import 'extra_card_easy_option.dart';
+
 class Extra {
 
   String? cardQuota = ''; //할부허용 범위 (5만원 이상 구매시)
@@ -24,6 +28,8 @@ class Extra {
   bool? displaySuccessResult = false; // 결제 완료되면 부트페이가 제공하는 완료창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
   bool? displayErrorResult = true; // 결제 실패되면 부트페이가 제공하는 실패창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
   double? disposableCupDeposit = 0; // 배달대행 플랫폼을 위한 컵 보증급 가격
+  ExtraCardEasyOption cardEasyOption = ExtraCardEasyOption();
+  List<BrowserOpenType>? browserOpenType = [];
 
 
   Extra();
