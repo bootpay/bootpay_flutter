@@ -155,10 +155,8 @@ class _BootpayWebViewState extends State<BootpayWebView> {
             if (url.startsWith(INAPP_URL)) {
               widget._controller.future.then((controller) async {
                 for (String script in await getBootpayJSBeforeContentLoaded()) {
-                  print(script);
                   controller.evaluateJavascript(script);
                 }
-                print(getBootpayJS());
                 controller.evaluateJavascript(getBootpayJS());
               });
             }
@@ -284,7 +282,6 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayError',
         onMessageReceived: (JavascriptMessage message) {
-          print(message);
           if (this.widget.onError != null)
             this.widget.onError!(message.message);
         });
