@@ -1,3 +1,6 @@
+## 4.0.4
+* extra openType redirect default 적용
+
 ## 4.0.3
 * print log 부분 삭제 
 

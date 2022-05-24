@@ -8,7 +8,7 @@ class Extra {
   String? sellerName = '';  //노출되는 판매자명 설정
   int? deliveryDay = 1; //배송일자
   String? locale = 'ko'; //결제창 언어지원
-  String? offerPeriod; //결제창 제공기간에 해당하는 string 값, 지원하는 PG만 적용됨
+  String? offerPeriod = ''; //결제창 제공기간에 해당하는 string 값, 지원하는 PG만 적용됨
   bool? displayCashReceipt = true; // 현금영수증 보일지 말지.. 가상계좌 KCP 옵션
   String? depositExpiration = ""; //가상계좌 입금 만료일자 설정
   String? appScheme;  //모바일 앱에서 결제 완료 후 돌아오는 옵션 ( 아이폰만 적용 )
@@ -23,13 +23,15 @@ class Extra {
   bool? enableErrorWebhook = false; //결제 오류시 Feedback URL로 webhook
   bool? separatelyConfirmed = true; // confirm 이벤트를 호출할지 말지, false일 경우 자동승인
   bool? confirmOnlyRestApi = false; // REST API로만 승인 처리
-  String? openType = 'iframe'; //페이지 오픈 type, [iframe, popup, redirect] 중 택 1
-  String? redirectUrl = ''; //open_type이 redirect일 경우 페이지 이동할 URL (  오류 및 결제 완료 모두 수신 가능 )
+  String? openType = 'redirect'; //페이지 오픈 type, [iframe, popup, redirect] 중 택 1
+  bool? useBootpayInappSdk = true; //native app에서는 redirect를 완성도있게 지원하기 위한 옵션
+  String? redirectUrl = 'https://api.bootpay.co.kr/v2'; //open_type이 redirect일 경우 페이지 이동할 URL (  오류 및 결제 완료 모두 수신 가능 )
   bool? displaySuccessResult = false; // 결제 완료되면 부트페이가 제공하는 완료창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
   bool? displayErrorResult = true; // 결제 실패되면 부트페이가 제공하는 실패창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
   double? disposableCupDeposit = 0; // 배달대행 플랫폼을 위한 컵 보증급 가격
   ExtraCardEasyOption cardEasyOption = ExtraCardEasyOption();
   List<BrowserOpenType>? browserOpenType = [];
+  int? useWelcomepayment = 0; //웰컴 재판모듈 진행시 1
 
 
   Extra();
@@ -58,10 +60,12 @@ class Extra {
     separatelyConfirmed = json["separately_confirmed"];
     confirmOnlyRestApi = json["confirm_only_rest_api"];
     openType = json["open_type"];
+    useBootpayInappSdk = json["use_bootpay_inapp_sdk"];
     redirectUrl = json["redirect_url"];
     displaySuccessResult = json["display_success_result"];
     displayErrorResult = json["display_error_result"];
     disposableCupDeposit = json["disposable_cup_deposit"];
+    useWelcomepayment = json["use_welcomepayment"];
   }
 
   Map<String, dynamic> toJson() => {
@@ -85,10 +89,12 @@ class Extra {
     "separately_confirmed": this.separatelyConfirmed,
     "confirm_only_rest_api": this.confirmOnlyRestApi,
     "open_type": this.openType,
+    "use_bootpay_inapp_sdk": this.useBootpayInappSdk,
     "redirect_url": this.redirectUrl,
     "display_success_result": this.displaySuccessResult,
     "display_error_result": this.displayErrorResult,
     "disposable_cup_deposit": this.disposableCupDeposit,
+    "use_welcomepayment": this.useWelcomepayment,
   };
 
   // String getQuotas() {
@@ -106,8 +112,8 @@ class Extra {
         "offer_period: '${reVal(offerPeriod)}', display_cash_receipt: '${reVal(displayCashReceipt)}', deposit_expiration: '${reVal(depositExpiration)}'," +
         "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card: '${reVal(directCard)}', use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
         "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: '${reVal(directAppCard)}', direct_samsungpay: '${reVal(directSamsungpay)}', test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
-        "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}" +
-        "}";
+        "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
+        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment} }";
   }
 
   dynamic reVal(dynamic value) {

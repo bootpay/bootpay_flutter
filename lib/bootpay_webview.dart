@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+
+import 'package:bootpay/config/bootpay_config.dart';
 
 import 'user_info.dart';
 import 'package:flutter/material.dart';
@@ -110,7 +113,7 @@ class BootpayWebView extends WebView {
 class _BootpayWebViewState extends State<BootpayWebView> {
 
   // final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.0.0/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.0.6/';
 
   bool isClosed = false;
 
@@ -138,9 +141,11 @@ class _BootpayWebViewState extends State<BootpayWebView> {
             onClose(context),
             onIssued(context),
             onConfirm(context),
-            onDone(context)
+            onDone(context),
+            onRedirect(context)
           ].toSet(),
           navigationDelegate: (NavigationRequest request) {
+
 
             if(widget.onShowHeader != null) {
               widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
@@ -203,8 +208,13 @@ extension BootpayMethod on _BootpayWebViewState {
     List<String> result = [];
     if (Platform.isAndroid) {
       result.add("Bootpay.setDevice('ANDROID');");
+      result.add("Bootpay.setVersion('" + BootpayConfig.VERSION + "', 'android_flutter')");
     } else if (Platform.isIOS) {
       result.add("Bootpay.setDevice('IOS');");
+      result.add("Bootpay.setVersion('" + BootpayConfig.VERSION + "', 'ios_flutter')");
+    }
+    if (BootpayConfig.DEBUG) {
+      result.add("Bootpay.setEnvironmentMode('development');");
     }
     // result.add("Bootpay.setEnvironmentMode('development');");
     result.add( "setTimeout(function() {" + await getAnalyticsData() + "}, 50);");
@@ -323,6 +333,51 @@ extension BootpayCallback on _BootpayWebViewState {
         name: 'BootpayDone',
         onMessageReceived: (JavascriptMessage message) {
           if (this.widget.onDone != null) this.widget.onDone!(message.message);
+        });
+  }
+
+  JavascriptChannel onRedirect(BuildContext context) {
+    return JavascriptChannel(
+        name: 'BootpayFlutterWebView', //이벤트 이름은 Android로 하자
+        onMessageReceived: (JavascriptMessage message) {
+          print("redirect: ${message.message}");
+
+          final data = json.decode(message.message);
+          switch(data["event"]) {
+            case "cancel":
+              if (this.widget.onCancel != null) this.widget.onCancel!(message.message);
+              if (this.widget.onClose != null) this.widget.onClose!();
+              break;
+            case "error":
+              if (this.widget.onError != null) this.widget.onError!(message.message);
+              if(this.widget.payload?.extra?.displayErrorResult != true) {
+                if (this.widget.onClose != null) this.widget.onClose!();
+              }
+              break;
+            case "close":
+              if (this.widget.onClose != null) this.widget.onClose!();
+              break;
+            case "issued":
+              if (this.widget.onIssued != null) this.widget.onIssued!(message.message);
+              if(this.widget.payload?.extra?.displaySuccessResult != true) {
+                if (this.widget.onClose != null) this.widget.onClose!();
+              }
+              break;
+            case "confirm":
+              if (this.widget.onConfirm != null) {
+                bool goTransactionConfirm = this.widget.onConfirm!(message.message);
+                if (goTransactionConfirm) {
+                  transactionConfirm();
+                }
+              }
+              break;
+            case "done":
+              if (this.widget.onDone != null) this.widget.onDone!(message.message);
+              if(this.widget.payload?.extra?.displaySuccessResult != true) {
+                if (this.widget.onClose != null) this.widget.onClose!();
+              }
+              break;
+          }
         });
   }
 }

@@ -25,25 +25,24 @@ class WebViewRoute extends StatefulWidget {
 
 class _WebViewRouteState extends State<WebViewRoute> {
   DateTime? currentBackPressTime = DateTime.now();
-  bool showHeaderView = false;
+  // bool showHeaderView = false;
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.webView?.onShowHeader = updateShowHeader;
+    // widget.webView?.onShowHeader = updateShowHeader;
 
   }
 
-  void updateShowHeader(bool showHeader) {
-    if(this.showHeaderView != showHeader) {
-      setState(() {
-        showHeaderView = showHeader;
-      });
-    }
-
-  }
+  // void updateShowHeader(bool showHeader) {
+  //   if(this.showHeaderView != showHeader) {
+  //     setState(() {
+  //       showHeaderView = showHeader;
+  //     });
+  //   }
+  // }
 
   clickCloseButton() {
     if (widget.webView?.onCancel != null)
@@ -59,31 +58,34 @@ class _WebViewRouteState extends State<WebViewRoute> {
     return WillPopScope(
       child: Scaffold(
           body: SafeArea(
-              child: Stack(
-                children: [
-                  Container(
-                      child: widget.webView!
-                  ),
-                  this.showHeaderView == true ? Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      height: 40,
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(child: Container()),
-                          IconButton(
-                            onPressed: () => clickCloseButton(),
-                            icon: Icon(Icons.close, size: 35.0, color: Colors.black54),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ) : Container()
-                ],
-              )
+              child: widget.webView!
           )
+          // body: SafeArea(
+          //     child: Stack(
+          //       children: [
+          //         Container(
+          //             child: widget.webView!
+          //         ),
+          //         this.showHeaderView == true ? Padding(
+          //           padding: const EdgeInsets.all(5.0),
+          //           child: Container(
+          //             height: 40,
+          //             color: Colors.white,
+          //             child: Row(
+          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //               children: [
+          //                 Expanded(child: Container()),
+          //                 IconButton(
+          //                   onPressed: () => clickCloseButton(),
+          //                   icon: Icon(Icons.close, size: 35.0, color: Colors.black54),
+          //                 ),
+          //               ],
+          //             ),
+          //           ),
+          //         ) : Container()
+          //       ],
+          //     )
+          // )
       ),
       onWillPop: () async {
         DateTime now = DateTime.now();

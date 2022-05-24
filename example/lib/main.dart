@@ -56,9 +56,9 @@ class _SecondRouteState extends State<SecondRoute> {
   String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
   String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
 
-  // String webApplicationId = '59a568d3e13f3336c21bf707';
-  // String androidApplicationId = '5a029249b957d73c2b3ae5f5';
-  // String iosApplicationId = '59bfc733e13f337dbd6ca489';
+  // String webApplicationId = '5b9f51264457636ab9a07cdb';
+  // String androidApplicationId = '5b9f51264457636ab9a07cdc';
+  // String iosApplicationId = '5b9f51264457636ab9a07cdd';
 
 
   String get applicationId {
@@ -184,8 +184,8 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.iosApplicationId = iosApplicationId; // ios application id
 
 
-    payload.pg = 'nicepay';
-    payload.method = 'card';
+    payload.pg = '나이스페이';
+    payload.method = '네이버페이';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao'];
     payload.orderName = "테스트 상품"; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
@@ -212,7 +212,7 @@ class _SecondRouteState extends State<SecondRoute> {
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
     extra.cardQuota = '3';
-    extra.openType = 'iframe';
+    // extra.openType = 'popup';
 
     // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
     // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
@@ -272,7 +272,9 @@ class _SecondRouteState extends State<SecondRoute> {
   //버튼클릭시 부트페이 정기결제 요청 실행
   void goBootpaySubscriptionTest(BuildContext context) {
     payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
-    payload.method = "card_rebill";
+    payload.pg = "나이스페이";
+    payload.method = "카드자동";
+
 
     Bootpay().requestSubscription(
       context: context,
@@ -320,8 +322,8 @@ class _SecondRouteState extends State<SecondRoute> {
   }
 
   void goBootpayAuthTest(BuildContext context) {
-    payload.pg = "danal";
-    payload.method = "auth";
+    payload.pg = "다날";
+    payload.method = "본인인증";
     payload.authenticationId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
 
     Bootpay().requestAuthentication(
@@ -333,7 +335,7 @@ class _SecondRouteState extends State<SecondRoute> {
         print('------- onCancel: $data');
       },
       onError: (String data) {
-        print('------- onCancel: $data');
+        print('------- onError: $data');
       },
       onClose: () {
         print('------- onClose');
