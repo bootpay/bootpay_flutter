@@ -1,3 +1,6 @@
+## 4.0.5
+* 통계함수 호출시 버전정보 보내지 않도록(개발사가) 수정 
+
 ## 4.0.4
 * extra openType redirect default 적용
 

@@ -172,9 +172,7 @@ class _SecondRouteState extends State<SecondRoute> {
 
   //통계용 함수
   bootpayAnalyticsPageTrace() async {
-    String? ver;
-    if(kIsWeb) ver = '1.0'; //web 일 경우 버전 지정, 웹이 아닌 android, ios일 경우 package_info 통해 자동으로 생성
-
+    
     StatItem item1 = StatItem();
     item1.itemName = "미키 마우스"; // 주문정보에 담길 상품명
     item1.unique = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키

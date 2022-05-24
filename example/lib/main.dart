@@ -119,8 +119,6 @@ class _SecondRouteState extends State<SecondRoute> {
 
   //통계용 함수
   bootpayAnalyticsUserTrace() async {
-    String? ver;
-    if(kIsWeb) ver = '1.0'; //web 일 경우 버전 지정, 웹이 아닌 android, ios일 경우 package_info 통해 자동으로 생성
 
     await Bootpay().userTrace(
         id: 'user_1234',
@@ -128,15 +126,12 @@ class _SecondRouteState extends State<SecondRoute> {
         gender: -1,
         birth: '19941014',
         area: '서울',
-        applicationId: applicationId,
-        ver: ver
+        applicationId: applicationId
     );
   }
 
   //통계용 함수
   bootpayAnalyticsPageTrace() async {
-    String? ver;
-    if(kIsWeb) ver = '1.0'; //web 일 경우 버전 지정, 웹이 아닌 android, ios일 경우 package_info 통해 자동으로 생성
 
     StatItem item1 = StatItem();
     item1.itemName = "미키 마우스"; // 주문정보에 담길 상품명
@@ -159,8 +154,7 @@ class _SecondRouteState extends State<SecondRoute> {
         pageType: 'sub_page_1234',
         applicationId: applicationId,
         userId: 'user_1234',
-        items: items,
-        ver: ver
+        items: items
     );
   }
 

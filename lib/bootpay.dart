@@ -1,4 +1,6 @@
 
+import 'package:bootpay/config/bootpay_config.dart';
+
 import 'model/stat_item.dart';
 import 'shims/bootpay_platform.dart';
 import 'package:flutter/foundation.dart';
@@ -159,8 +161,7 @@ class Bootpay extends BootpayApi {
     String? birth,
     String? phone,
     String? area,
-    String? applicationId,
-    String? ver,
+    String? applicationId
   }) {
 
     return _platform.userTrace(
@@ -171,7 +172,7 @@ class Bootpay extends BootpayApi {
         phone: phone,
         area: area,
         applicationId: applicationId,
-        ver: ver
+        ver: BootpayConfig.VERSION
     );
   }
 
@@ -183,7 +184,6 @@ class Bootpay extends BootpayApi {
     String? applicationId,
     String? userId,
     List<StatItem>? items,
-    String? ver,
   }) {
 
     return _platform.pageTrace(
@@ -192,7 +192,7 @@ class Bootpay extends BootpayApi {
         userId: userId,
         items: items,
         applicationId: applicationId,
-        ver: ver
+        ver: BootpayConfig.VERSION
     );
   }
 }

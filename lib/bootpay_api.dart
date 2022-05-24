@@ -70,8 +70,7 @@ abstract class BootpayApi {
     String? birth,
     String? phone,
     String? area,
-    String? applicationId,
-    String? ver,
+    String? applicationId
   });
 
   // 페이지 추적 코드
@@ -80,7 +79,6 @@ abstract class BootpayApi {
     String? pageType,
     String? applicationId,
     String? userId,
-    List<StatItem>? items,
-    String? ver,
+    List<StatItem>? items
   });
 }
