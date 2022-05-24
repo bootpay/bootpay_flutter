@@ -7,7 +7,12 @@ class UserInfo {
 
   static Future<String> getBootpayUUID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('uuid') ?? Uuid().v1();
+    String uuid = prefs.getString('uuid') ?? '';
+    if(uuid.isEmpty) {
+      uuid = Uuid().v1();
+      prefs.setString('uuid', uuid);
+    }
+    return uuid;
   }
 
   static Future<String> getBootpaySK() async {
