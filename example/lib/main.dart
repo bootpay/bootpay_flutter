@@ -213,6 +213,7 @@ class _SecondRouteState extends State<SecondRoute> {
 
     payload.user = user;
     payload.extra = extra;
+    payload.extra?.openType = "iframe";
   }
 
 
@@ -231,7 +232,7 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        // Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
       onCloseHardware: () {
@@ -283,7 +284,7 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        // Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
       onCloseHardware: () {
@@ -333,7 +334,7 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        // Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
       onCloseHardware: () {
@@ -370,6 +371,6 @@ class _SecondRouteState extends State<SecondRoute> {
     print('checkQtyFromServer http call: $data');
 
     //재고파악 후 결제를 승인한다. 아래 함수를 호출하지 않으면 결제를 승인하지 않게된다.
-    Bootpay().confirm();
+    Bootpay().transactionConfirm();
   }
 }

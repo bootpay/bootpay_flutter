@@ -14,17 +14,17 @@ import '../bootpay_api.dart';
 import '../model/payload.dart';
 
 @JS()
-external String _jsBeforeLoad();
+external void _jsBeforeLoad();
 @JS()
-external String _requestPayment(String payload);
+external void _requestPayment(String payload);
 @JS()
-external String _requestSubscription(String payload);
+external void _requestSubscription(String payload);
 @JS()
-external String _requestAuthentication(String payload);
+external void _requestAuthentication(String payload);
 @JS()
 external void _removePaymentWindow();
 @JS()
-external void _confirm();
+external void _transactionConfirm();
 @JS()
 external void _addCloseEvent();
 
@@ -189,8 +189,8 @@ class BootpayPlatform extends BootpayApi{
   }
 
   @override
-  void confirm() {
-    _confirm();
+  void transactionConfirm() {
+    _transactionConfirm();
   }
 
   void dismiss(BuildContext context) {
@@ -244,4 +244,5 @@ class BootpayPlatform extends BootpayApi{
         ver: ver
     );
   }
+
 }

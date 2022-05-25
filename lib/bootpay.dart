@@ -138,8 +138,8 @@ class Bootpay extends BootpayApi {
   }
 
   @override
-  void confirm() {
-    _platform.confirm();
+  void transactionConfirm() {
+    _platform.transactionConfirm();
   }
 
   @override

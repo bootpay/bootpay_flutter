@@ -58,7 +58,7 @@ abstract class BootpayApi {
       });
 
   // String applicationId(String webApplicationId, String androidApplicationId, String iosApplicationId);
-  void confirm();
+  void transactionConfirm();
   void removePaymentWindow();
   void dismiss(BuildContext context);
 

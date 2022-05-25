@@ -272,7 +272,7 @@ class BootpayPlatform extends BootpayApi{
   }
 
   @override
-  void confirm() {
+  void transactionConfirm() {
     if(webView != null) webView!.transactionConfirm();
   }
 
