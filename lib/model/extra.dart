@@ -32,6 +32,7 @@ class Extra {
   ExtraCardEasyOption cardEasyOption = ExtraCardEasyOption();
   List<BrowserOpenType>? browserOpenType = [];
   int? useWelcomepayment = 0; //웰컴 재판모듈 진행시 1
+  String? firstSubscriptionComment = "";
 
 
   Extra();
@@ -66,6 +67,7 @@ class Extra {
     displayErrorResult = json["display_error_result"];
     disposableCupDeposit = json["disposable_cup_deposit"];
     useWelcomepayment = json["use_welcomepayment"];
+    firstSubscriptionComment = json["first_subscription_comment"];
   }
 
   Map<String, dynamic> toJson() => {
@@ -95,6 +97,7 @@ class Extra {
     "display_error_result": this.displayErrorResult,
     "disposable_cup_deposit": this.disposableCupDeposit,
     "use_welcomepayment": this.useWelcomepayment,
+    "first_subscription_comment": this.firstSubscriptionComment
   };
 
   // String getQuotas() {
@@ -113,7 +116,7 @@ class Extra {
         "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card: '${reVal(directCard)}', use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
         "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: '${reVal(directAppCard)}', direct_samsungpay: '${reVal(directSamsungpay)}', test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
         "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
-        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment} }";
+        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}' }";
   }
 
   dynamic reVal(dynamic value) {

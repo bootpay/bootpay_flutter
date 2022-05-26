@@ -26,7 +26,7 @@ class FirstRoute extends StatelessWidget {
         title: Text('First Route'),
       ),
       body: Center(
-        child: RaisedButton(
+        child: TextButton(
           child: Text('결제 route로 이동'),
           onPressed: () {
             // 눌렀을 때 두 번째 route로 이동합니다.
@@ -97,8 +97,15 @@ class _SecondRouteState extends State<SecondRoute> {
                 SizedBox(height: 10),
                 Center(
                   child: TextButton(
+                    onPressed: () => goBootpaySubscriptionUITest(context),
+                    child: Text('비인증 정기결제 테스트 (부트페이 UI)'),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Center(
+                  child: TextButton(
                     onPressed: () => goBootpaySubscriptionTest(context),
-                    child: Text('정기결제 테스트'),
+                    child: Text('인증 정기결제 테스트 (PG사 UI)'),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -232,7 +239,7 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        // Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
       onCloseHardware: () {
@@ -267,6 +274,57 @@ class _SecondRouteState extends State<SecondRoute> {
   //버튼클릭시 부트페이 정기결제 요청 실행
   void goBootpaySubscriptionTest(BuildContext context) {
     payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+    payload.pg = "다날";
+    payload.method = "카드정기";
+
+
+    Bootpay().requestSubscription(
+      context: context,
+      payload: payload,
+      showCloseButton: false,
+      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
+      onCancel: (String data) {
+        print('------- onCancel: $data');
+      },
+      onError: (String data) {
+        print('------- onCancel: $data');
+      },
+      onClose: () {
+        print('------- onClose');
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        //TODO - 원하시는 라우터로 페이지 이동
+      },
+      onCloseHardware: () {
+        print('------- onCloseHardware');
+      },
+      onIssued: (String data) {
+        print('------- onIssued: $data');
+      },
+      onConfirm: (String data) {
+        /**
+            1. 바로 승인하고자 할 때
+            return true;
+         **/
+        /***
+            2. 비동기 승인 하고자 할 때
+            checkQtyFromServer(data);
+            return false;
+         ***/
+        /***
+            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
+            return false; 후에 서버에서 결제승인 수행
+         */
+        checkQtyFromServer(data);
+        return false;
+      },
+      onDone: (String data) {
+        print('------- onDone: $data');
+      },
+    );
+  }
+
+  void goBootpaySubscriptionUITest(BuildContext context) {
+    payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
     payload.pg = "나이스페이";
     payload.method = "카드자동";
 
@@ -284,7 +342,7 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        // Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
       onCloseHardware: () {
@@ -334,7 +392,7 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        // Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
       onCloseHardware: () {
