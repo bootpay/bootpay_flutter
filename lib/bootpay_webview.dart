@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:bootpay/config/bootpay_config.dart';
 
+import 'constant/bootpay_constant.dart';
 import 'user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:bootpay_webview_flutter/webview_flutter.dart';
@@ -30,7 +31,7 @@ class BootpayWebView extends WebView {
   ShowHeaderCallback? onShowHeader;
   bool? showCloseButton = false;
   Widget? closeButton;
-  int? requestType = 1; //1: 결제, 2:정기결제, 3: 본인인증
+  int? requestType = BootpayConstant.REQUEST_TYPE_PAYMENT; //1: 결제, 2:정기결제, 3: 본인인증
 
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
@@ -113,7 +114,7 @@ class BootpayWebView extends WebView {
 class _BootpayWebViewState extends State<BootpayWebView> {
 
   // final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.0.6/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.0.8/';
 
   bool isClosed = false;
 
@@ -163,6 +164,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
                   controller.evaluateJavascript(script);
                 }
                 controller.evaluateJavascript(getBootpayJS());
+                // controller.
               });
             }
 
@@ -227,12 +229,32 @@ extension BootpayMethod on _BootpayWebViewState {
     return result;
   }
 
+  // String getJSPasswordPayment() {
+  //   this.widget.payload?.method = "카드간편";
+  //
+  //   String script = "Bootpay.requestPayment(" +
+  //       "${this.widget.payload.toString()}" +
+  //       ")" +
+  //       ".then( function (res) {" +
+  //       widget.confirm() +
+  //       widget.issued() +
+  //       widget.done() +
+  //       "}, function (res) {" +
+  //       widget.error() +
+  //       widget.cancel() +
+  //       "})";
+  //
+  //   return "setTimeout(function() {" + script + "}, 50);";
+  // }
+
   String getBootpayJS() {
     String requestMethod = 'requestPayment';
-    if(widget.requestType == 2) {
+    if(widget.requestType == BootpayConstant.REQUEST_TYPE_SUBSCRIPT) {
       requestMethod = 'requestSubscription';
-    } else if(widget.requestType == 3) {
+    } else if(widget.requestType == BootpayConstant.REQUEST_TYPE_AUTH) {
       requestMethod = 'requestAuthentication';
+    } else if(widget.requestType == BootpayConstant.REQUEST_TYPE_PASSWORD) {
+      this.widget.payload?.method = "카드간편";
     }
 
     String script = "Bootpay.${requestMethod}(" +
@@ -246,6 +268,8 @@ extension BootpayMethod on _BootpayWebViewState {
         widget.error() +
         widget.cancel() +
         "})";
+
+    print(script);
 
     return "setTimeout(function() {" + script + "}, 50);";
   }

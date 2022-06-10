@@ -25,10 +25,10 @@ class Payload {
   String? authenticationId = '';
   // int? useOrderId = 0;
 
-  Map<String, dynamic>? params = {};
+  Map<String, dynamic>? metadata = {};
 
   // String? accountExpireAt = '';
-  bool showAgreeWindow = false;
+  // bool showAgreeWindow = false;
   String? userToken = '';
 
   Extra? extra = Extra();
@@ -53,13 +53,15 @@ class Payload {
     subscriptionId = json["subscription_id"];
     authenticationId = json["authentication_id"];
 
+    userToken = json["userToken"];
 
     // useOrderId = json["use_order_id"];
 
-    params = json["params"];
+    metadata = json["params"];
+
 
     // accountExpireAt = json["account_expire_at"];
-    showAgreeWindow = json["show_agree_window"];
+    // showAgreeWindow = json["show_agree_window"];
     extra = Extra.fromJson(json["extra"]);
   }
 
@@ -76,9 +78,9 @@ class Payload {
       'subscription_id': subscriptionId,
       'authentication_id': authenticationId,
       // 'use_order_id': useOrderId,
-      'params': params,
+      'params': metadata,
       // 'account_expire_at': accountExpireAt,
-      'show_agree_window': showAgreeWindow,
+      // 'show_agree_window': showAgreeWindow,
       'user_token': userToken
     };
     if(this.methods != null && this.methods!.length > 0) {
@@ -109,7 +111,7 @@ class Payload {
 
   //android, ios에서 사용됨
   String toString() {
-    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${methodListString()}, order_name: '${orderName.queryReplace()}', price: $price, tax_free: $taxFree, order_id: '${orderId.queryReplace()}', subscription_id: '${subscriptionId.queryReplace()}', authentication_id: '${authenticationId.queryReplace()}', params: ${getParamsStringAndroid()}, show_agree_window: $showAgreeWindow, user_token: '$userToken', extra: ${extra.toString()}, user: ${user.toString()}, items: ${getItems()}}";
+    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${methodListString()}, order_name: '${orderName.queryReplace()}', price: $price, tax_free: $taxFree, order_id: '${orderId.queryReplace()}', subscription_id: '${subscriptionId.queryReplace()}', authentication_id: '${authenticationId.queryReplace()}', params: ${getParamsStringAndroid()}, user_token: '$userToken', extra: ${extra.toString()}, user: ${user.toString()}, items: ${getItems()}}";
   }
 
   String methodListString() {
@@ -136,13 +138,13 @@ class Payload {
   }
 
   String getParamsStringAndroid() {
-    return reVal(json.encode(params));
+    return reVal(json.encode(metadata));
     // return '{}';
   }
 
   String getParamsString() {
-    if (params != null || params!.isEmpty) return "{}";
-    return reVal(params.toString());
+    if (metadata != null || metadata!.isEmpty) return "{}";
+    return reVal(metadata.toString());
   }
 
   dynamic reVal(dynamic value) {

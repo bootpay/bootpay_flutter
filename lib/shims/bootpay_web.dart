@@ -21,6 +21,7 @@ external void _requestPayment(String payload);
 external void _requestSubscription(String payload);
 @JS()
 external void _requestAuthentication(String payload);
+
 @JS()
 external void _removePaymentWindow();
 @JS()
@@ -180,6 +181,41 @@ class BootpayPlatform extends BootpayApi{
       }
       _jsBeforeLoad();
       _requestAuthentication(jsonEncode(payload.toJson()));
+    }
+  }
+
+  @override
+  void requestPassword(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType
+      }) {
+
+    this._callbackCancel = onCancel;
+    this._callbackError = onError;
+    this._callbackClose = onClose;
+    this._callbackCloseHardware = onCloseHardware;
+    this._callbackIssued = onIssued;
+    this._callbackConfirm = onConfirm;
+    this._callbackDone = onDone;
+
+
+    if(payload != null) {
+      payload.method = "카드간편";
+
+      _jsBeforeLoad();
+      _requestPayment(jsonEncode(payload.toJson()));
     }
   }
 

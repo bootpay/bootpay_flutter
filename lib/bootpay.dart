@@ -137,6 +137,41 @@ class Bootpay extends BootpayApi {
     );
   }
 
+
+  @override
+  void requestPassword(
+      {Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType}) {
+
+    print("payload: ${payload?.toJson()}");
+
+    _platform.requestPassword(
+        context: context,
+        payload: payload,
+        showCloseButton: showCloseButton,
+        closeButton: closeButton,
+        onCancel: onCancel,
+        onError: onError,
+        onClose: onClose,
+        onIssued: onIssued,
+        onCloseHardware: onCloseHardware,
+        onConfirm: onConfirm,
+        onDone: onDone,
+        requestType: requestType
+    );
+  }
+
   @override
   void transactionConfirm() {
     _platform.transactionConfirm();

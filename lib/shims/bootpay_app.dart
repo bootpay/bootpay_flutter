@@ -1,6 +1,7 @@
 
 import 'dart:io';
 import 'package:bootpay/api/bootpay_analytics.dart';
+import 'package:bootpay/constant/bootpay_constant.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +137,7 @@ class BootpayPlatform extends BootpayApi{
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
-        requestType: 1
+        requestType: BootpayConstant.REQUEST_TYPE_PAYMENT
     );
   }
 
@@ -170,7 +171,7 @@ class BootpayPlatform extends BootpayApi{
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
-        requestType: 2
+        requestType: BootpayConstant.REQUEST_TYPE_SUBSCRIPT
     );
   }
 
@@ -204,7 +205,42 @@ class BootpayPlatform extends BootpayApi{
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
-        requestType: 3
+        requestType: BootpayConstant.REQUEST_TYPE_AUTH
+    );
+  }
+
+
+  @override
+  void requestPassword(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayCloseCallback? onCloseHardware,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType
+      }) {
+    goBootpayRequest(
+        key: key,
+        context: context,
+        payload: payload,
+        showCloseButton: showCloseButton,
+        closeButton: closeButton,
+        onCancel: onCancel,
+        onError: onError,
+        onClose: onClose,
+        onCloseHardware: onCloseHardware,
+        onIssued: onIssued,
+        onConfirm: onConfirm,
+        onDone: onDone,
+        requestType: BootpayConstant.REQUEST_TYPE_PASSWORD
     );
   }
 

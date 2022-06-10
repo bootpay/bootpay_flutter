@@ -10,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'deprecated/api_provider.dart';
+
 void main() {
   runApp(MaterialApp(
     title: 'Navigation Basics',
@@ -115,12 +117,104 @@ class _SecondRouteState extends State<SecondRoute> {
                     child: Text('본인인증 테스트'),
                   ),
                 ),
+                SizedBox(height: 10),
+                Center(
+                  child: TextButton(
+                    onPressed: () => goBootpayPassword(context),
+                    child: Text('비밀번호 결제테스트'),
+                  ),
+                ),
               ],
             ),
           ),
         );
       }),
     );
+  }
+
+  ApiProvider _provider = ApiProvider();
+  goBootpayPassword(BuildContext context) async {
+    String userToken = await getUserToken(context);
+    bootpayPasswordTest(context, userToken, generateUser());
+  }
+
+
+  void bootpayPasswordTest(BuildContext context, String userToken, User user) {
+    // Payload payload = getPayload();
+    payload.userToken = userToken;
+    if(kIsWeb) {
+      //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
+      payload.extra?.openType = 'iframe';
+    }
+
+    Bootpay().requestPassword(
+      context: context,
+      payload: payload,
+      showCloseButton: false,
+      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
+      onCancel: (String data) {
+        print('------- onCancel: $data');
+      },
+      onError: (String data) {
+        print('------- onCancel: $data');
+      },
+      onClose: () {
+        print('------- onClose');
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        //TODO - 원하시는 라우터로 페이지 이동
+      },
+      onCloseHardware: () {
+        print('------- onCloseHardware');
+      },
+      onIssued: (String data) {
+        print('------- onIssued: $data');
+      },
+      onConfirm: (String data) {
+        /**
+            1. 바로 승인하고자 할 때
+            return true;
+         **/
+        /***
+            2. 비동기 승인 하고자 할 때
+            checkQtyFromServer(data);
+            return false;
+         ***/
+        /***
+            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
+            return false; 후에 서버에서 결제승인 수행
+         */
+        // checkQtyFromServer(data);
+        return true;
+      },
+      onDone: (String data) {
+        print('------- onDone: $data');
+      },
+    );
+  }
+
+  Future<String> getUserToken(BuildContext context) async {
+    String restApplicationId = "5b8f6a4d396fa665fdc2b5ea";
+    String pk = "rm6EYECr6aroQVG2ntW0A6LpWnkTgP4uQ3H18sDDUYw=";
+    var res = await _provider.getRestToken(restApplicationId, pk);
+
+
+    res = await _provider.getEasyPayUserToken(res.body['access_token'], generateUser());
+    print("res: ${res.body}");
+    // bootpayTest(context, res.body["user_token"], user);
+    return res.body["user_token"];
+  }
+
+
+  User generateUser() {
+    var user = User();
+    user.id = '123411aaaaaaaaaaaabd4ss11';
+    user.gender = 1;
+    user.email = 'test1234@gmail.com';
+    user.phone = '01012345678';
+    user.birth = '19880610';
+    user.username = '홍길동';
+    user.area = '서울';
+    return user;
   }
 
 
@@ -195,7 +289,7 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
 
 
-    payload.params = {
+    payload.metadata = {
       "callbackParam1" : "value12",
       "callbackParam2" : "value34",
       "callbackParam3" : "value56",
@@ -220,12 +314,17 @@ class _SecondRouteState extends State<SecondRoute> {
 
     payload.user = user;
     payload.extra = extra;
-    payload.extra?.openType = "iframe";
+    // payload.extra?.openType = "iframe";
   }
 
 
   //버튼클릭시 부트페이 결제요청 실행
   void goBootpayTest(BuildContext context) {
+    if(kIsWeb) {
+      //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
+      payload.extra?.openType = 'popup';
+    }
+
     Bootpay().requestPayment(
       context: context,
       payload: payload,

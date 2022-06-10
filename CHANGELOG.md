@@ -1,3 +1,6 @@
+## 4.0.8
+* password 결제 지원 
+
 ## 4.0.7
 * flutter web 지원 
 

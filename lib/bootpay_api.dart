@@ -57,6 +57,23 @@ abstract class BootpayApi {
         int? requestType
       });
 
+
+  void requestPassword(
+      {
+        Key? key,
+        BuildContext? context,
+        Payload? payload,
+        bool? showCloseButton,
+        Widget? closeButton,
+        BootpayDefaultCallback? onCancel,
+        BootpayDefaultCallback? onError,
+        BootpayCloseCallback? onClose,
+        BootpayDefaultCallback? onIssued,
+        BootpayConfirmCallback? onConfirm,
+        BootpayDefaultCallback? onDone,
+        int? requestType
+      });
+
   // String applicationId(String webApplicationId, String androidApplicationId, String iosApplicationId);
   void transactionConfirm();
   void removePaymentWindow();
