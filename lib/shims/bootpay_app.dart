@@ -37,10 +37,6 @@ class _WebViewRouteState extends State<WebViewRoute> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    widget.isTablet = true;
-    // widget.webView?.onShowHeader = updateShowHeader;
-
   }
 
   // void updateShowHeader(bool showHeader) {
