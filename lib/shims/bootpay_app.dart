@@ -19,7 +19,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 class WebViewRoute extends StatefulWidget {
 
   BootpayWebView? webView;
-  WebViewRoute(this.webView);
+  bool isTablet;
+  WebViewRoute(this.webView, this.isTablet);
 
   @override
   _WebViewRouteState createState() => _WebViewRouteState();
@@ -30,10 +31,14 @@ class _WebViewRouteState extends State<WebViewRoute> {
   // bool showHeaderView = false;
 
 
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    widget.isTablet = true;
     // widget.webView?.onShowHeader = updateShowHeader;
 
   }
@@ -57,37 +62,19 @@ class _WebViewRouteState extends State<WebViewRoute> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
+    double paddingValue = MediaQuery.of(context).size.width * 0.2;
+
     return WillPopScope(
       child: Scaffold(
           body: SafeArea(
-              child: widget.webView!
+            child: Container(
+              color: Colors.black26,
+              child: widget.isTablet == false ? widget.webView! : Padding(
+                padding: EdgeInsets.all(paddingValue),
+                child: widget.webView!,
+              )
+            ),
           )
-          // body: SafeArea(
-          //     child: Stack(
-          //       children: [
-          //         Container(
-          //             child: widget.webView!
-          //         ),
-          //         this.showHeaderView == true ? Padding(
-          //           padding: const EdgeInsets.all(5.0),
-          //           child: Container(
-          //             height: 40,
-          //             color: Colors.white,
-          //             child: Row(
-          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //               children: [
-          //                 Expanded(child: Container()),
-          //                 IconButton(
-          //                   onPressed: () => clickCloseButton(),
-          //                   icon: Icon(Icons.close, size: 35.0, color: Colors.black54),
-          //                 ),
-          //               ],
-          //             ),
-          //           ),
-          //         ) : Container()
-          //       ],
-          //     )
-          // )
       ),
       onWillPop: () async {
         DateTime now = DateTime.now();
@@ -273,9 +260,10 @@ class BootpayPlatform extends BootpayApi{
         int? requestType
       }) {
 
-    if(isiPad(context)) {
+    if(isTablet(context)) {
       if(userAgent == null) {
-        userAgent = iOSUserAgent;
+        userAgent = defaultOSUserAgent();
+        // userAgent = iOSUserAgent;
       }
     }
 
@@ -299,14 +287,20 @@ class BootpayPlatform extends BootpayApi{
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => WebViewRoute(webView)),
+      MaterialPageRoute(builder: (context) => WebViewRoute(webView, isTablet(context))),
     );
   }
 
-  bool isiPad(BuildContext? context)  {
+  //ipad check
+  bool isTablet(BuildContext? context)  {
     if(context == null) return false;
     if(!Platform.isIOS) return false;
     return MediaQuery.of(context).size.width > 600;
+  }
+
+  //iphone user agent
+  String defaultOSUserAgent() {
+    return iOSUserAgent;
   }
 
   @override
