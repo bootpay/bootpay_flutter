@@ -31,6 +31,7 @@ class BootpayWebView extends WebView {
   ShowHeaderCallback? onShowHeader;
   bool? showCloseButton = false;
   Widget? closeButton;
+  String? userAgent;
   int? requestType = BootpayConstant.REQUEST_TYPE_PAYMENT; //1: 결제, 2:정기결제, 3: 본인인증
 
   final Completer<WebViewController> _controller = Completer<WebViewController>();
@@ -47,6 +48,7 @@ class BootpayWebView extends WebView {
         this.onConfirm,
         this.onDone,
         this.closeButton,
+        this.userAgent,
         this.requestType
       })
       : super(key: key);
@@ -133,6 +135,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
           key: widget.key,
           initialUrl: INAPP_URL,
           javascriptMode: JavascriptMode.unrestricted,
+          userAgent: widget.userAgent ?? null,
           onWebViewCreated: (WebViewController webViewController) {
             widget._controller.complete(webViewController);
           },
@@ -269,7 +272,6 @@ extension BootpayMethod on _BootpayWebViewState {
         widget.cancel() +
         "})";
 
-    print(script);
 
     return "setTimeout(function() {" + script + "}, 50);";
   }
@@ -364,7 +366,7 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayFlutterWebView', //이벤트 이름은 Android로 하자
         onMessageReceived: (JavascriptMessage message) {
-          print("redirect: ${message.message}");
+          BootpayPrint("redirect: ${message.message}");
 
           final data = json.decode(message.message);
           switch(data["event"]) {

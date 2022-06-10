@@ -1,6 +1,7 @@
 
 import 'dart:io';
 import 'package:bootpay/api/bootpay_analytics.dart';
+import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/constant/bootpay_constant.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -104,6 +105,8 @@ class _WebViewRouteState extends State<WebViewRoute> {
 
 class BootpayPlatform extends BootpayApi{
 
+  String get iOSUserAgent => 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
+
   BootpayWebView? webView;
 
   @override
@@ -121,6 +124,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
+        String? userAgent,
         int? requestType
       }) {
 
@@ -137,6 +141,7 @@ class BootpayPlatform extends BootpayApi{
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
+        userAgent: userAgent,
         requestType: BootpayConstant.REQUEST_TYPE_PAYMENT
     );
   }
@@ -156,6 +161,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
+        String? userAgent,
         int? requestType
       }) {
     goBootpayRequest(
@@ -171,6 +177,7 @@ class BootpayPlatform extends BootpayApi{
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
+        userAgent: userAgent,
         requestType: BootpayConstant.REQUEST_TYPE_SUBSCRIPT
     );
   }
@@ -190,6 +197,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
+        String? userAgent,
         int? requestType
       }) {
     goBootpayRequest(
@@ -205,6 +213,7 @@ class BootpayPlatform extends BootpayApi{
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
+        userAgent: userAgent,
         requestType: BootpayConstant.REQUEST_TYPE_AUTH
     );
   }
@@ -225,6 +234,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
+        String? userAgent,
         int? requestType
       }) {
     goBootpayRequest(
@@ -240,6 +250,7 @@ class BootpayPlatform extends BootpayApi{
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
+        userAgent: userAgent,
         requestType: BootpayConstant.REQUEST_TYPE_PASSWORD
     );
   }
@@ -258,8 +269,15 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
+        String? userAgent,
         int? requestType
       }) {
+
+    if(isiPad(context)) {
+      if(userAgent == null) {
+        userAgent = iOSUserAgent;
+      }
+    }
 
     webView = BootpayWebView(
       payload: payload,
@@ -273,6 +291,7 @@ class BootpayPlatform extends BootpayApi{
       onIssued: onIssued,
       onConfirm: onConfirm,
       onDone: onDone,
+      userAgent: userAgent,
       requestType: requestType,
     );
 
@@ -282,6 +301,12 @@ class BootpayPlatform extends BootpayApi{
       context,
       MaterialPageRoute(builder: (context) => WebViewRoute(webView)),
     );
+  }
+
+  bool isiPad(BuildContext? context)  {
+    if(context == null) return false;
+    if(!Platform.isIOS) return false;
+    return MediaQuery.of(context).size.width > 600;
   }
 
   @override

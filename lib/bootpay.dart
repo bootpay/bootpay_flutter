@@ -47,6 +47,7 @@ class Bootpay extends BootpayApi {
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
+        String? userAgent,
         int? requestType}) {
 
     _platform.requestPayment(
@@ -61,6 +62,7 @@ class Bootpay extends BootpayApi {
         onCloseHardware: onCloseHardware,
         onConfirm: onConfirm,
         onDone: onDone,
+
         requestType: requestType
     );
   }
@@ -154,7 +156,6 @@ class Bootpay extends BootpayApi {
         BootpayDefaultCallback? onDone,
         int? requestType}) {
 
-    print("payload: ${payload?.toJson()}");
 
     _platform.requestPassword(
         context: context,
