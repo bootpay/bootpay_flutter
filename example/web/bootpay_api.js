@@ -20,7 +20,7 @@ function _requestPayment(payload) {
 }
 
 function _requestSubscription(payload) {
-    Bootpay._requestSubscription(JSON.parse(payload))
+    Bootpay.requestSubscription(JSON.parse(payload))
     .then(function(res){
         if (res.event === 'confirm') { BootpayConfirm(JSON.stringify(res)); }
         else if (res.event === 'issued') { BootpayIssued(JSON.stringify(res));  }
@@ -32,7 +32,7 @@ function _requestSubscription(payload) {
 }
 
 function _requestAuthentication(payload) {
-    Bootpay._requestAuthentication(JSON.parse(payload))
+    Bootpay.requestAuthentication(JSON.parse(payload))
     .then(function(res){
         if (res.event === 'confirm') { BootpayConfirm(JSON.stringify(res)); }
         else if (res.event === 'issued') { BootpayIssued(JSON.stringify(res));  }
