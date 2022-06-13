@@ -65,7 +65,7 @@ class _WebViewRouteState extends State<WebViewRoute> {
           body: SafeArea(
             child: Container(
               color: Colors.black26,
-              child: widget.isTablet == false ? widget.webView! : Padding(
+              child: widget.isTablet == false ? widget.webView ?? Container() : Padding(
                 padding: EdgeInsets.all(paddingValue),
                 child: widget.webView!,
               )
