@@ -116,7 +116,7 @@ class BootpayWebView extends WebView {
 class _BootpayWebViewState extends State<BootpayWebView> {
 
   // final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.1.0/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.1.2/';
 
   bool isClosed = false;
 
@@ -165,8 +165,10 @@ class _BootpayWebViewState extends State<BootpayWebView> {
               widget._controller.future.then((controller) async {
                 for (String script in await getBootpayJSBeforeContentLoaded()) {
                   controller.evaluateJavascript(script);
+                  BootpayPrint(script);
                 }
                 controller.evaluateJavascript(getBootpayJS());
+                BootpayPrint(getBootpayJS());
                 // controller.
               });
             }

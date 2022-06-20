@@ -1,3 +1,6 @@
+## 4.2.2
+* bootpay js 4.1.2 update, methods 버그 수정 
+
 ## 4.2.1
 * bio와 버전 동기화를 위한 배포 
 

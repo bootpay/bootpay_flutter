@@ -84,8 +84,8 @@ class Payload {
       'user_token': userToken
     };
     if(this.methods != null && this.methods!.length > 0) {
-      if(kIsWeb) result['methods'] = this.methods;
-      else result['methods'] = methodListString();
+      if(kIsWeb) result['method'] = this.methods;
+      else result['method'] = getMethodValue();
     } else if(this.method != null && this.method!.length > 0) {
       result['method'] = this.method;
     }
@@ -111,19 +111,32 @@ class Payload {
 
   //android, ios에서 사용됨
   String toString() {
-    return "{application_id: '${getApplicationId()}', pg: '$pg', method: '$method', methods: ${methodListString()}, order_name: '${orderName.queryReplace()}', price: $price, tax_free: $taxFree, order_id: '${orderId.queryReplace()}', subscription_id: '${subscriptionId.queryReplace()}', authentication_id: '${authenticationId.queryReplace()}', params: ${getParamsStringAndroid()}, user_token: '$userToken', extra: ${extra.toString()}, user: ${user.toString()}, items: ${getItems()}}";
+    return "{application_id: '${getApplicationId()}', pg: '$pg', method: ${getMethodValue()}, order_name: '${orderName.queryReplace()}', price: $price, tax_free: $taxFree, order_id: '${orderId.queryReplace()}', subscription_id: '${subscriptionId.queryReplace()}', authentication_id: '${authenticationId.queryReplace()}', params: ${getParamsStringAndroid()}, user_token: '$userToken', extra: ${extra.toString()}, user: ${user.toString()}, items: ${getItems()}}";
   }
 
-  String methodListString() {
-    List<String> result = [];
-    if(this.method != null) {
+  String getMethodValue() {
+
+    if(this.methods == null || this.methods!.isEmpty) {
+      return "'${this.method ?? ''}'";
+    } else {
+      List<String> result = [];
       for(String method in this.methods!) {
         result.add("\'$method\'");
       }
+      return "[${result.join(",")}]";
     }
-
-    return "[${result.join(",")}]";
   }
+
+  // String methodListString() {
+  //   List<String> result = [];
+  //   if(this.methods != null) {
+  //     for(String method in this.methods!) {
+  //       result.add("\'$method\'");
+  //     }
+  //   }
+  //
+  //   return "[${result.join(",")}]";
+  // }
 
   String getItems() {
     List<String> result = [];
