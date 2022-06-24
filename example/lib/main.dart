@@ -163,9 +163,6 @@ class _SecondRouteState extends State<SecondRoute> {
         Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
-      onCloseHardware: () {
-        print('------- onCloseHardware');
-      },
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
@@ -280,8 +277,8 @@ class _SecondRouteState extends State<SecondRoute> {
 
 
     payload.pg = '나이스페이';
-    // payload.method = '카드';
-    payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
+    payload.method = '카드';
+    // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
 
@@ -341,9 +338,6 @@ class _SecondRouteState extends State<SecondRoute> {
         Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
-      onCloseHardware: () {
-        print('------- onCloseHardware');
-      },
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
@@ -393,9 +387,6 @@ class _SecondRouteState extends State<SecondRoute> {
         Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
-      onCloseHardware: () {
-        print('------- onCloseHardware');
-      },
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
@@ -444,9 +435,6 @@ class _SecondRouteState extends State<SecondRoute> {
         Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
-      onCloseHardware: () {
-        print('------- onCloseHardware');
-      },
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
@@ -493,9 +481,6 @@ class _SecondRouteState extends State<SecondRoute> {
         print('------- onClose');
         Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
-      },
-      onCloseHardware: () {
-        print('------- onCloseHardware');
       },
       onIssued: (String data) {
         print('------- onIssued: $data');

@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:io';
 import 'package:bootpay/api/bootpay_analytics.dart';
 import 'package:bootpay/config/bootpay_config.dart';
@@ -28,6 +29,7 @@ class WebViewRoute extends StatefulWidget {
 
 class _WebViewRouteState extends State<WebViewRoute> {
   DateTime? currentBackPressTime = DateTime.now();
+  bool isBootpayShow = true;
   // bool showHeaderView = false;
 
 
@@ -36,6 +38,7 @@ class _WebViewRouteState extends State<WebViewRoute> {
   @override
   void initState() {
     // TODO: implement initState
+    isBootpayShow = true;
     super.initState();
   }
 
@@ -54,35 +57,67 @@ class _WebViewRouteState extends State<WebViewRoute> {
       widget.webView?.onClose!();
   }
 
+
+  Timer? _debounce;
+  bootpayClose() {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 100), () {
+      isBootpayShow = false;
+      if (this.widget.webView?.onClose != null)
+        this.widget.webView?.onClose!();
+      // do something with query
+    });
+  }
+  @override
+  void dispose() {
+    bootpayClose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    isBootpayShow = true;
 
     double paddingValue = MediaQuery.of(context).size.width * 0.2;
 
-    return WillPopScope(
-      child: Scaffold(
+    if(Platform.isAndroid) {
+      return WillPopScope(
+        child: Scaffold(
+            body: SafeArea(
+              child: Container(
+                  color: Colors.black26,
+                  child: widget.isTablet == false ? widget.webView ?? Container() : Padding(
+                    padding: EdgeInsets.all(paddingValue),
+                    child: widget.webView!,
+                  )
+              ),
+            )
+        ),
+        onWillPop: () async {
+          DateTime now = DateTime.now();
+          if (now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+            currentBackPressTime = now;
+            Fluttertoast.showToast(msg: "\'뒤로\' 버튼을 한번 더 눌러주세요.");
+            return Future.value(false);
+          }
+          // bootpayClose();
+          return Future.value(true);
+        },
+      );
+    } else {
+      return Scaffold(
           body: SafeArea(
             child: Container(
-              color: Colors.black26,
-              child: widget.isTablet == false ? widget.webView ?? Container() : Padding(
-                padding: EdgeInsets.all(paddingValue),
-                child: widget.webView!,
-              )
+                color: Colors.black26,
+                child: widget.isTablet == false ? widget.webView ?? Container() : Padding(
+                  padding: EdgeInsets.all(paddingValue),
+                  child: widget.webView!,
+                )
             ),
           )
-      ),
-      onWillPop: () async {
-        DateTime now = DateTime.now();
-        if (now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
-          currentBackPressTime = now;
-          Fluttertoast.showToast(msg: "\'뒤로\' 버튼을 한번 더 눌러주세요.");
-          return Future.value(false);
-        }
-        if(widget.webView?.onCloseHardware != null) widget.webView?.onCloseHardware!();
-        return Future.value(true);
-      },
-    );
+      );
+    }
   }
 }
 
@@ -91,6 +126,7 @@ class BootpayPlatform extends BootpayApi{
   String get iOSUserAgent => 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
 
   BootpayWebView? webView;
+
 
   @override
   void requestPayment(
@@ -103,7 +139,6 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -120,7 +155,6 @@ class BootpayPlatform extends BootpayApi{
         onCancel: onCancel,
         onError: onError,
         onClose: onClose,
-        onCloseHardware: onCloseHardware,
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
@@ -140,7 +174,6 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -156,7 +189,6 @@ class BootpayPlatform extends BootpayApi{
         onCancel: onCancel,
         onError: onError,
         onClose: onClose,
-        onCloseHardware: onCloseHardware,
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
@@ -176,7 +208,6 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -192,7 +223,6 @@ class BootpayPlatform extends BootpayApi{
         onCancel: onCancel,
         onError: onError,
         onClose: onClose,
-        onCloseHardware: onCloseHardware,
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
@@ -213,7 +243,6 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -229,7 +258,6 @@ class BootpayPlatform extends BootpayApi{
         onCancel: onCancel,
         onError: onError,
         onClose: onClose,
-        onCloseHardware: onCloseHardware,
         onIssued: onIssued,
         onConfirm: onConfirm,
         onDone: onDone,
@@ -238,7 +266,7 @@ class BootpayPlatform extends BootpayApi{
     );
   }
 
-  void goBootpayRequest(
+  Future<void> goBootpayRequest(
       {
         Key? key,
         BuildContext? context,
@@ -248,13 +276,12 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
         String? userAgent,
         int? requestType
-      }) {
+      }) async {
 
     if(isTablet(context)) {
       if(userAgent == null) {
@@ -271,7 +298,6 @@ class BootpayPlatform extends BootpayApi{
       onCancel: onCancel,
       onError: onError,
       onClose: onClose,
-      onCloseHardware: onCloseHardware,
       onIssued: onIssued,
       onConfirm: onConfirm,
       onDone: onDone,
@@ -281,10 +307,11 @@ class BootpayPlatform extends BootpayApi{
 
     if(context == null) return;
 
-    Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => WebViewRoute(webView, isTablet(context))),
     );
+    webView = null;
   }
 
   //ipad check
@@ -315,6 +342,9 @@ class BootpayPlatform extends BootpayApi{
 
   @override
   void dismiss(BuildContext context) {
+
+    // print(ModalRoute.of(context)?.settings.name);
+
 
     if(webView != null) {
       Navigator.of(context).pop();

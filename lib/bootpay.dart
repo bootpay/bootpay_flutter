@@ -43,7 +43,6 @@ class Bootpay extends BootpayApi {
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -59,7 +58,6 @@ class Bootpay extends BootpayApi {
         onError: onError,
         onClose: onClose,
         onIssued: onIssued,
-        onCloseHardware: onCloseHardware,
         onConfirm: onConfirm,
         onDone: onDone,
 
@@ -77,7 +75,6 @@ class Bootpay extends BootpayApi {
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -96,7 +93,6 @@ class Bootpay extends BootpayApi {
         onError: onError,
         onClose: onClose,
         onIssued: onIssued,
-        onCloseHardware: onCloseHardware,
         onConfirm: onConfirm,
         onDone: onDone,
         requestType: requestType
@@ -113,7 +109,6 @@ class Bootpay extends BootpayApi {
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -132,7 +127,6 @@ class Bootpay extends BootpayApi {
         onError: onError,
         onClose: onClose,
         onIssued: onIssued,
-        onCloseHardware: onCloseHardware,
         onConfirm: onConfirm,
         onDone: onDone,
         requestType: requestType
@@ -150,7 +144,6 @@ class Bootpay extends BootpayApi {
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -166,7 +159,6 @@ class Bootpay extends BootpayApi {
         onError: onError,
         onClose: onClose,
         onIssued: onIssued,
-        onCloseHardware: onCloseHardware,
         onConfirm: onConfirm,
         onDone: onDone,
         requestType: requestType

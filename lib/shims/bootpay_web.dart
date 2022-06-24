@@ -58,7 +58,6 @@ class BootpayPlatform extends BootpayApi{
   BootpayDefaultCallback? _callbackCancel;
   BootpayDefaultCallback? _callbackError;
   BootpayCloseCallback? _callbackClose;
-  BootpayCloseCallback? _callbackCloseHardware;
   BootpayDefaultCallback? _callbackIssued;
   BootpayConfirmCallback? _callbackConfirm;
   BootpayDefaultCallback? _callbackDone;
@@ -89,7 +88,6 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -99,7 +97,6 @@ class BootpayPlatform extends BootpayApi{
     this._callbackCancel = onCancel;
     this._callbackError = onError;
     this._callbackClose = onClose;
-    this._callbackCloseHardware = onCloseHardware;
     this._callbackIssued = onIssued;
     this._callbackConfirm = onConfirm;
     this._callbackDone = onDone;
@@ -121,7 +118,6 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -132,7 +128,6 @@ class BootpayPlatform extends BootpayApi{
     this._callbackCancel = onCancel;
     this._callbackError = onError;
     this._callbackClose = onClose;
-    this._callbackCloseHardware = onCloseHardware;
     this._callbackIssued = onIssued;
     this._callbackConfirm = onConfirm;
     this._callbackDone = onDone;
@@ -158,7 +153,6 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -169,7 +163,6 @@ class BootpayPlatform extends BootpayApi{
     this._callbackCancel = onCancel;
     this._callbackError = onError;
     this._callbackClose = onClose;
-    this._callbackCloseHardware = onCloseHardware;
     this._callbackIssued = onIssued;
     this._callbackConfirm = onConfirm;
     this._callbackDone = onDone;
@@ -195,7 +188,6 @@ class BootpayPlatform extends BootpayApi{
         BootpayDefaultCallback? onCancel,
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
-        BootpayCloseCallback? onCloseHardware,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayDefaultCallback? onDone,
@@ -205,7 +197,6 @@ class BootpayPlatform extends BootpayApi{
     this._callbackCancel = onCancel;
     this._callbackError = onError;
     this._callbackClose = onClose;
-    this._callbackCloseHardware = onCloseHardware;
     this._callbackIssued = onIssued;
     this._callbackConfirm = onConfirm;
     this._callbackDone = onDone;

@@ -1,3 +1,8 @@
+## 4.2.3
+* close event debounce 적용
+* closeHardware event 삭제
+* ios swipe back 적용 
+
 ## 4.2.2
 * bootpay js 4.1.2 update, methods 버그 수정 
 

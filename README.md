@@ -275,10 +275,7 @@ class _SecondRouteState extends State<SecondRoute> {
         print('------- onClose');
         Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
-      },
-      onCloseHardware: () {
-        print('------- onCloseHardware');
-      },
+      }, 
       onReady: (String data) {
         print('------- onReady: $data');
       },

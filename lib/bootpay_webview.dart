@@ -24,7 +24,6 @@ class BootpayWebView extends WebView {
   final BootpayDefaultCallback? onCancel;
   final BootpayDefaultCallback? onError;
   final BootpayCloseCallback? onClose;
-  final BootpayCloseCallback? onCloseHardware;
   final BootpayDefaultCallback? onIssued;
   final BootpayConfirmCallback? onConfirm;
   final BootpayDefaultCallback? onDone;
@@ -43,7 +42,6 @@ class BootpayWebView extends WebView {
         this.onCancel,
         this.onError,
         this.onClose,
-        this.onCloseHardware,
         this.onIssued,
         this.onConfirm,
         this.onDone,
@@ -126,6 +124,8 @@ class _BootpayWebViewState extends State<BootpayWebView> {
     super.initState();
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
