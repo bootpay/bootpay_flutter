@@ -10,7 +10,11 @@ function _addCloseEvent() {
 function _requestPayment(payload) {
     Bootpay.requestPayment(JSON.parse(payload))
     .then(function(res){
-        if (res.event === 'confirm') { BootpayConfirm(JSON.stringify(res)); }
+        if (res.event === 'confirm') {
+          if(BootpayConfirm(JSON.stringify(res))) {
+            _transactionConfirm();
+          }
+        }
         else if (res.event === 'issued') { BootpayIssued(JSON.stringify(res));  }
         else if (res.event === 'done') { BootpayDone(JSON.stringify(res));  }
     }, function(res) {

@@ -346,7 +346,7 @@ extension BootpayCallback on _BootpayWebViewState {
   JavascriptChannel onConfirm(BuildContext context) {
     return JavascriptChannel(
         name: 'BootpayConfirm',
-        onMessageReceived: (JavascriptMessage message) async {
+        onMessageReceived: (JavascriptMessage message) async { 
           if (this.widget.onConfirm != null) {
             bool goTransactionConfirm = this.widget.onConfirm!(message.message);
             if (goTransactionConfirm) {
