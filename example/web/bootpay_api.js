@@ -26,7 +26,11 @@ function _requestPayment(payload) {
 function _requestSubscription(payload) {
     Bootpay.requestSubscription(JSON.parse(payload))
     .then(function(res){
-        if (res.event === 'confirm') { BootpayConfirm(JSON.stringify(res)); }
+        if (res.event === 'confirm') {
+          if(BootpayConfirm(JSON.stringify(res))) {
+            _transactionConfirm();
+          }
+        }
         else if (res.event === 'issued') { BootpayIssued(JSON.stringify(res));  }
         else if (res.event === 'done') { BootpayDone(JSON.stringify(res));  }
     }, function(res) {
@@ -38,7 +42,11 @@ function _requestSubscription(payload) {
 function _requestAuthentication(payload) {
     Bootpay.requestAuthentication(JSON.parse(payload))
     .then(function(res){
-        if (res.event === 'confirm') { BootpayConfirm(JSON.stringify(res)); }
+        if (res.event === 'confirm') {
+          if(BootpayConfirm(JSON.stringify(res))) {
+            _transactionConfirm();
+          }
+        }
         else if (res.event === 'issued') { BootpayIssued(JSON.stringify(res));  }
         else if (res.event === 'done') { BootpayDone(JSON.stringify(res));  }
     }, function(res) {
