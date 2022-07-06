@@ -56,7 +56,14 @@ function _requestAuthentication(payload) {
 }
 
 function _transactionConfirm() {
-    Bootpay.confirm();
+    Bootpay.confirm()
+    .then(function(res){
+        if (res.event === 'issued') { BootpayIssued(JSON.stringify(res));  }
+        else if (res.event === 'done') { BootpayDone(JSON.stringify(res));  }
+    }, function(res) {
+        if (res.event === 'error') { BootpayError(JSON.stringify(res)); }
+        else if (res.event === 'cancel') { BootpayCancel(JSON.stringify(res)); }
+    });
 }
 
 function _removePaymentWindow() {
