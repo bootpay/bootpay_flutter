@@ -273,41 +273,41 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.iosApplicationId = iosApplicationId; // ios application id
 
 
-    payload.pg = '다날';
-    payload.method = '카드';
+    payload.pg = '나이스페이';
+    payload.method = '네이버페이';
     // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
-    payload.price = 1000.0; //정기결제시 0 혹은 주석
+    payload.price = 1004.0; //정기결제시 0 혹은 주석
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
 
 
-    payload.metadata = {
-      "callbackParam1" : "value12",
-      "callbackParam2" : "value34",
-      "callbackParam3" : "value56",
-      "callbackParam4" : "value78",
-    }; // 전달할 파라미터, 결제 후 되돌려 주는 값
-    payload.items = itemList; // 상품정보 배열
+    // payload.metadata = {
+    //   "callbackParam1" : "value12",
+    //   "callbackParam2" : "value34",
+    //   "callbackParam3" : "value56",
+    //   "callbackParam4" : "value78",
+    // }; // 전달할 파라미터, 결제 후 되돌려 주는 값
+    // payload.items = itemList; // 상품정보 배열
 
     User user = User(); // 구매자 정보
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
-    user.phone = "010-4033-4678";
-    user.addr = '서울시 동작구 상도로 222';
+    user.phone = "010-0000-0000";
+    user.addr = 'null';
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
-    extra.cardQuota = '3';
+    // extra.cardQuota = '3';
     // extra.openType = 'popup';
 
     // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
     // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
 
     payload.user = user;
-    payload.extra = extra;
+    // payload.extra = extra;
     // payload.extra?.openType = "iframe";
   }
 

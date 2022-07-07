@@ -7,12 +7,14 @@ import 'package:bootpay/constant/bootpay_constant.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 
 import '../bootpay.dart';
 import '../bootpay_api.dart';
 import '../bootpay_webview.dart';
+import '../controller/debounce_close_controller.dart';
 import '../model/payload.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as BottomSheet;
@@ -28,19 +30,20 @@ class WebViewRoute extends StatefulWidget {
 }
 
 class _WebViewRouteState extends State<WebViewRoute> {
+  final DebounceCloseController closeController = Get.find();
   DateTime? currentBackPressTime = DateTime.now();
-  bool isBootpayShow = true;
+  // bool isBootpayShow = true;
   // bool showHeaderView = false;
 
 
 
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    isBootpayShow = true;
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   closeController.isBootpayShow = true;
+  //   super.initState();
+  // }
 
   // void updateShowHeader(bool showHeader) {
   //   if(this.showHeaderView != showHeader) {
@@ -58,15 +61,18 @@ class _WebViewRouteState extends State<WebViewRoute> {
   }
 
 
-  Timer? _debounce;
-  bootpayClose() {
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 100), () {
-      isBootpayShow = false;
-      if (this.widget.webView?.onClose != null)
-        this.widget.webView?.onClose!();
-      // do something with query
-    });
+  // Timer? _debounce;
+  void bootpayClose() {
+    closeController.bootpayClose(this.widget.webView?.onClose);
+    // if (_debounce?.isActive ?? false) _debounce?.cancel();
+    // _debounce = Timer(const Duration(milliseconds: 200), () {
+    //
+    //   if(isBootpayShow == false) return;
+    //   if (this.widget.webView?.onClose != null)
+    //     this.widget.webView?.onClose!();
+    //   isBootpayShow = false;
+    //   // do something with query
+    // });
   }
   @override
   void dispose() {
@@ -77,7 +83,8 @@ class _WebViewRouteState extends State<WebViewRoute> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    isBootpayShow = true;
+    closeController.isBootpayShow = true;
+    // isBootpayShow = true;
 
     double paddingValue = MediaQuery.of(context).size.width * 0.2;
 

@@ -110,11 +110,20 @@ class Extra {
   //   return result;
   // }
 
+  // String toString() {
+  //   return "{card_quota: '${reVal(cardQuota)}', seller_name: '${reVal(sellerName)}', delivery_day: ${reVal(deliveryDay)}, locale: '${reVal(locale)}'," +
+  //       "offer_period: '${reVal(offerPeriod)}', display_cash_receipt: '${reVal(displayCashReceipt)}', deposit_expiration: '${reVal(depositExpiration)}'," +
+  //       "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card: '${reVal(directCard)}', use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
+  //       "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: '${reVal(directAppCard)}', direct_samsungpay: '${reVal(directSamsungpay)}', test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
+  //       "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
+  //       "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}' }";
+  // }
+
   String toString() {
     return "{card_quota: '${reVal(cardQuota)}', seller_name: '${reVal(sellerName)}', delivery_day: ${reVal(deliveryDay)}, locale: '${reVal(locale)}'," +
         "offer_period: '${reVal(offerPeriod)}', display_cash_receipt: '${reVal(displayCashReceipt)}', deposit_expiration: '${reVal(depositExpiration)}'," +
         "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card: '${reVal(directCard)}', use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
-        "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: '${reVal(directAppCard)}', direct_samsungpay: '${reVal(directSamsungpay)}', test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
+        "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: ${directAppCard}, direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
         "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
         "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}' }";
   }

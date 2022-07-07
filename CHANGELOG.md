@@ -1,3 +1,6 @@
+## 4.2.4
+* debounce close 중복호출되는 버그 수정 
+
 ## 4.2.3
 * close event debounce 적용
 * closeHardware event 삭제

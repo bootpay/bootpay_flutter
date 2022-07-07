@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bootpay/config/bootpay_config.dart';
+import 'package:get/get.dart';
 
 import 'constant/bootpay_constant.dart';
+import 'controller/debounce_close_controller.dart';
 import 'user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:bootpay_webview_flutter/webview_flutter.dart';
@@ -33,6 +35,7 @@ class BootpayWebView extends WebView {
   String? userAgent;
   int? requestType = BootpayConstant.REQUEST_TYPE_PAYMENT; //1: 결제, 2:정기결제, 3: 본인인증
 
+  final DebounceCloseController closeController = Get.put(DebounceCloseController());
   final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   BootpayWebView(
@@ -293,8 +296,14 @@ extension BootpayMethod on _BootpayWebViewState {
 
     if (this.widget.onCancel != null)
       this.widget.onCancel!('{"action":"BootpayCancel","status":-100,"message":"사용자에 의한 취소"}');
-    if (this.widget.onClose != null)
-      this.widget.onClose!();
+  }
+
+  void debounceClose() {
+    widget.closeController.bootpayClose(this.widget.onClose);
+    // if (this.widget.debounceClose != null)
+    //   this.widget.debounceClose!();
+    // if (this.widget.onClose != null)
+    //   this.widget.onClose!();
   }
 
   void removePaymentWindow() {
@@ -329,7 +338,8 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayClose',
         onMessageReceived: (JavascriptMessage message) {
-          if (this.widget.onClose != null) this.widget.onClose!();
+          debounceClose();
+          // if (this.widget.onClose != null) this.widget.onClose!();
           // Navigator.of(context).pop();
         });
   }
@@ -374,21 +384,21 @@ extension BootpayCallback on _BootpayWebViewState {
           switch(data["event"]) {
             case "cancel":
               if (this.widget.onCancel != null) this.widget.onCancel!(message.message);
-              if (this.widget.onClose != null) this.widget.onClose!();
+              debounceClose();
               break;
             case "error":
               if (this.widget.onError != null) this.widget.onError!(message.message);
               if(this.widget.payload?.extra?.displayErrorResult != true) {
-                if (this.widget.onClose != null) this.widget.onClose!();
+              debounceClose();
               }
               break;
             case "close":
-              if (this.widget.onClose != null) this.widget.onClose!();
+              debounceClose();
               break;
             case "issued":
               if (this.widget.onIssued != null) this.widget.onIssued!(message.message);
               if(this.widget.payload?.extra?.displaySuccessResult != true) {
-                if (this.widget.onClose != null) this.widget.onClose!();
+                debounceClose();
               }
               break;
             case "confirm":
@@ -402,7 +412,7 @@ extension BootpayCallback on _BootpayWebViewState {
             case "done":
               if (this.widget.onDone != null) this.widget.onDone!(message.message);
               if(this.widget.payload?.extra?.displaySuccessResult != true) {
-                if (this.widget.onClose != null) this.widget.onClose!();
+                debounceClose();
               }
               break;
           }
