@@ -32,18 +32,26 @@ class WebViewRoute extends StatefulWidget {
 class _WebViewRouteState extends State<WebViewRoute> {
   final DebounceCloseController closeController = Get.find();
   DateTime? currentBackPressTime = DateTime.now();
+  bool isProgressShow = false;
   // bool isBootpayShow = true;
   // bool showHeaderView = false;
 
 
 
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   closeController.isBootpayShow = true;
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    // closeController.isBootpayShow = true;
+    super.initState();
+
+
+    widget.webView?.onProgressShow = (isShow) {
+      setState(() {
+        isProgressShow = isShow;
+      });
+    };
+  }
 
   // void updateShowHeader(bool showHeader) {
   //   if(this.showHeaderView != showHeader) {
@@ -115,12 +123,24 @@ class _WebViewRouteState extends State<WebViewRoute> {
     } else {
       return Scaffold(
           body: SafeArea(
-            child: Container(
-                color: Colors.black26,
-                child: widget.isTablet == false ? widget.webView ?? Container() : Padding(
-                  padding: EdgeInsets.all(paddingValue),
-                  child: widget.webView!,
+            child: Stack(
+              children: [
+                Container(
+                    color: Colors.black26,
+                    child: widget.isTablet == false ? widget.webView ?? Container() : Padding(
+                      padding: EdgeInsets.all(paddingValue),
+                      child: widget.webView!,
+                    )
+                ),
+                isProgressShow == false ? Container() : Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    color: Colors.black12,
+                    child: Center(child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ))
                 )
+              ],
             ),
           )
       );

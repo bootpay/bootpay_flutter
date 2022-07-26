@@ -1,3 +1,6 @@
+## 4.2.5
+* js 4.2.0 update, 결제시 progress bar 삽입 
+
 ## 4.2.4
 * debounce close 중복호출되는 버그 수정 
 

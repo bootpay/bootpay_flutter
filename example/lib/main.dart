@@ -277,7 +277,7 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.method = '네이버페이';
     // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
-    payload.price = 1004.0; //정기결제시 0 혹은 주석
+    payload.price = 1000.0; //정기결제시 0 혹은 주석
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -307,6 +307,7 @@ class _SecondRouteState extends State<SecondRoute> {
     // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
 
     payload.user = user;
+    payload.items = itemList;
     // payload.extra = extra;
     // payload.extra?.openType = "iframe";
   }
@@ -328,7 +329,7 @@ class _SecondRouteState extends State<SecondRoute> {
         print('------- onCancel: $data');
       },
       onError: (String data) {
-        print('------- onCancel: $data');
+        print('------- onError: $data');
       },
       onClose: () {
         print('------- onClose');

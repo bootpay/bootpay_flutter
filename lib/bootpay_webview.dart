@@ -29,6 +29,7 @@ class BootpayWebView extends WebView {
   final BootpayDefaultCallback? onIssued;
   final BootpayConfirmCallback? onConfirm;
   final BootpayDefaultCallback? onDone;
+  BootpayProgressBarCallback? onProgressShow;
   ShowHeaderCallback? onShowHeader;
   bool? showCloseButton = false;
   Widget? closeButton;
@@ -117,7 +118,7 @@ class BootpayWebView extends WebView {
 class _BootpayWebViewState extends State<BootpayWebView> {
 
   // final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.1.2/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.2.0/';
 
   bool isClosed = false;
 
@@ -320,6 +321,9 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayCancel',
         onMessageReceived: (JavascriptMessage message) {
+          if(this.widget.onProgressShow != null) {
+            this.widget.onProgressShow!(false);
+          }
           if (this.widget.onCancel != null)
             this.widget.onCancel!(message.message);
         });
@@ -329,6 +333,9 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayError',
         onMessageReceived: (JavascriptMessage message) {
+          if(this.widget.onProgressShow != null) {
+            this.widget.onProgressShow!(false);
+          }
           if (this.widget.onError != null)
             this.widget.onError!(message.message);
         });
@@ -348,6 +355,9 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayIssued',
         onMessageReceived: (JavascriptMessage message) {
+          if(this.widget.onProgressShow != null) {
+            this.widget.onProgressShow!(false);
+          }
           if (this.widget.onIssued != null)
             this.widget.onIssued!(message.message);
         });
@@ -356,7 +366,10 @@ extension BootpayCallback on _BootpayWebViewState {
   JavascriptChannel onConfirm(BuildContext context) {
     return JavascriptChannel(
         name: 'BootpayConfirm',
-        onMessageReceived: (JavascriptMessage message) async { 
+        onMessageReceived: (JavascriptMessage message) async {
+          if(this.widget.onProgressShow != null) {
+            this.widget.onProgressShow!(true);
+          }
           if (this.widget.onConfirm != null) {
             bool goTransactionConfirm = this.widget.onConfirm!(message.message);
             if (goTransactionConfirm) {
@@ -370,6 +383,9 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayDone',
         onMessageReceived: (JavascriptMessage message) {
+          if(this.widget.onProgressShow != null) {
+            this.widget.onProgressShow!(true);
+          }
           if (this.widget.onDone != null) this.widget.onDone!(message.message);
         });
   }
@@ -383,25 +399,40 @@ extension BootpayCallback on _BootpayWebViewState {
           final data = json.decode(message.message);
           switch(data["event"]) {
             case "cancel":
+              if(this.widget.onProgressShow != null) {
+                this.widget.onProgressShow!(false);
+              }
               if (this.widget.onCancel != null) this.widget.onCancel!(message.message);
               debounceClose();
               break;
             case "error":
+              if(this.widget.onProgressShow != null) {
+                this.widget.onProgressShow!(false);
+              }
               if (this.widget.onError != null) this.widget.onError!(message.message);
               if(this.widget.payload?.extra?.displayErrorResult != true) {
               debounceClose();
               }
               break;
             case "close":
+              if(this.widget.onProgressShow != null) {
+                this.widget.onProgressShow!(false);
+              }
               debounceClose();
               break;
             case "issued":
+              if(this.widget.onProgressShow != null) {
+                this.widget.onProgressShow!(false);
+              }
               if (this.widget.onIssued != null) this.widget.onIssued!(message.message);
               if(this.widget.payload?.extra?.displaySuccessResult != true) {
                 debounceClose();
               }
               break;
             case "confirm":
+              if(this.widget.onProgressShow != null) {
+                this.widget.onProgressShow!(true);
+              }
               if (this.widget.onConfirm != null) {
                 bool goTransactionConfirm = this.widget.onConfirm!(message.message);
                 if (goTransactionConfirm) {
@@ -410,6 +441,9 @@ extension BootpayCallback on _BootpayWebViewState {
               }
               break;
             case "done":
+              if(this.widget.onProgressShow != null) {
+                this.widget.onProgressShow!(false);
+              }
               if (this.widget.onDone != null) this.widget.onDone!(message.message);
               if(this.widget.payload?.extra?.displaySuccessResult != true) {
                 debounceClose();
