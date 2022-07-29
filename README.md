@@ -80,7 +80,7 @@ flutter web 빌드하면 web/index.html 파일이 생성됩니다. 해당 파일
 ```
 [bootpay_api](https://github.com/bootpay/bootpay_flutter/blob/main/example/web/bootpay_api.js) 파일을 프로젝트에 추가합니다.
 
-<img src="https://github.com/bootpay/git-open-resources/blob/main/flutter-web-config.png?raw=true" width="640px" height="400px" title="Github_Logo"/>
+<img src="https://github.com/bootpay/git-open-resources/blob/main/flutter-web-config.png?raw=true" width="800px" height="500px" title="Github_Logo"/>
 위 설정을 완료하면 flutter web에서도 동일한 문법으로 bootpay를 사용할 수 있습니다.
 
 ## 결제하기  
