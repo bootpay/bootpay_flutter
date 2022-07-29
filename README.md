@@ -6,6 +6,7 @@
 
 ## Bootpay 버전안내 
 이 모듈은 web, android, ios를 지원합니다.
+android os 16, ios os 9 부터 사용 가능합니다. 
 
 이 모듈의 4.0.0 이상 버전부터는 Bootpay V2 이며,
 그 이하 버전은 Bootpay V1에 해당합니다.
@@ -82,6 +83,7 @@ flutter web 빌드하면 web/index.html 파일이 생성됩니다. 해당 파일
 
 <img src="https://github.com/bootpay/git-open-resources/blob/main/flutter-web-config.png?raw=true" width="840px" height="525px" title="Github_Logo"/>
 위 설정을 완료하면 flutter web에서도 동일한 문법으로 bootpay를 사용할 수 있습니다.
+
 
 ## 결제하기  
 ```dart 
