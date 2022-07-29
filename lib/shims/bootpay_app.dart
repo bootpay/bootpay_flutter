@@ -72,16 +72,8 @@ class _WebViewRouteState extends State<WebViewRoute> {
   // Timer? _debounce;
   void bootpayClose() {
     closeController.bootpayClose(this.widget.webView?.onClose);
-    // if (_debounce?.isActive ?? false) _debounce?.cancel();
-    // _debounce = Timer(const Duration(milliseconds: 200), () {
-    //
-    //   if(isBootpayShow == false) return;
-    //   if (this.widget.webView?.onClose != null)
-    //     this.widget.webView?.onClose!();
-    //   isBootpayShow = false;
-    //   // do something with query
-    // });
   }
+
   @override
   void dispose() {
     bootpayClose();

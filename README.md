@@ -4,6 +4,14 @@
 * PG 결제창 연동은 클라이언트 라이브러리에서 수행됩니다. (Javascript, Android, iOS, React Native, Flutter 등)
 * 결제 검증 및 취소, 빌링키 발급, 본인인증 등의 수행은 서버사이드에서 진행됩니다. (Java, PHP, Python, Ruby, Node.js, Go, ASP.NET 등)
 
+## Bootpay 버전안내 
+이 모듈은 web, android, ios를 지원합니다.
+
+이 모듈의 4.0.0 이상 버전부터는 Bootpay V2 이며,
+그 이하 버전은 Bootpay V1에 해당합니다.
+
+Bootpay V1, V2에 대한 특이점은 [개발매뉴얼](https://docs.bootpay.co.kr/?front=android&backend=nodejs#migration-feature)을 참고해주세요.
+
 ## 기능 
 
 1. web/ios/android 지원 
@@ -62,6 +70,18 @@ dependencies:
 </dict>
 </plist>
 ```
+
+### Web 
+flutter web 빌드하면 web/index.html 파일이 생성됩니다. 해당 파일 header에 아래 script를 추가해주세요.
+```html 
+<!-- bootpay-최신버전-js 를 참조하여 추가합니다 -->
+<script src="https://js.bootpay.co.kr/bootpay-4.2.0.min.js"></script> 
+<script src="bootpay_api.js" defer></script>
+```
+[bootpay_api](https://github.com/bootpay/bootpay_flutter/blob/main/example/web/bootpay_api.js) 파일을 프로젝트에 추가합니다.
+
+<img src="https://github.com/bootpay/git-open-resources/blob/main/flutter-web-config.png?raw=true" width="320px" height="200px" title="Github_Logo"/>
+위 설정을 완료하면 flutter web에서도 동일한 문법으로 bootpay를 사용할 수 있습니다.
 
 ## 결제하기  
 ```dart 
@@ -314,7 +334,7 @@ class _SecondRouteState extends State<SecondRoute> {
 
 ## Documentation
 
-[부트페이 개발매뉴얼](https://bootpay.gitbook.io/docs/)을 참조해주세요
+[부트페이 개발매뉴얼](https://docs.bootpay.co.kr/)을 참조해주세요
 
 ## 기술문의
 

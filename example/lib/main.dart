@@ -54,7 +54,9 @@ class _SecondRouteState extends State<SecondRoute> {
 
   String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
   String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
-  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+  // String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+  String iosApplicationId = '621f3b952701800023f6746a';
+
 
   // String webApplicationId = '5b9f51264457636ab9a07cdb';
   // String androidApplicationId = '5b9f51264457636ab9a07cdc';
@@ -295,7 +297,7 @@ class _SecondRouteState extends State<SecondRoute> {
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
-    user.phone = "010-0000-0000";
+    // user.phone = "010-0000-0000";
     user.addr = 'null';
 
     Extra extra = Extra(); // 결제 옵션
