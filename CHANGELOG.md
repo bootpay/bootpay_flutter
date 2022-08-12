@@ -1,3 +1,6 @@
+## 4.2.6
+* js 4.2.1 update
+
 ## 4.2.5
 * js 4.2.0 update, 결제시 progress bar 삽입 
 

@@ -8,5 +8,5 @@ void BootpayPrint(Object? object) {
 
 class BootpayConfig {
   static const bool DEBUG = false;
-  static const String VERSION = "4.2.2";
+  static const String VERSION = "4.2.6";
 }
