@@ -1,3 +1,7 @@
+## 4.2.7
+* js 4.2.2 update
+* debounce close 중복호출되는 버그 수정
+
 ## 4.2.6
 * js 4.2.1 update
 

@@ -118,7 +118,7 @@ class BootpayWebView extends WebView {
 class _BootpayWebViewState extends State<BootpayWebView> {
 
   // final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.2.1/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.2.2/';
 
   bool isClosed = false;
 
@@ -169,10 +169,10 @@ class _BootpayWebViewState extends State<BootpayWebView> {
               widget._controller.future.then((controller) async {
                 for (String script in await getBootpayJSBeforeContentLoaded()) {
                   controller.evaluateJavascript(script);
-                  BootpayPrint(script);
+                  // BootpayPrint(script);
                 }
                 controller.evaluateJavascript(getBootpayJS());
-                BootpayPrint(getBootpayJS());
+                // BootpayPrint(getBootpayJS());
                 // controller.
               });
             }
@@ -300,6 +300,7 @@ extension BootpayMethod on _BootpayWebViewState {
   }
 
   void debounceClose() {
+    // BootpayPrint("debounceClose call");
     widget.closeController.bootpayClose(this.widget.onClose);
     // if (this.widget.debounceClose != null)
     //   this.widget.debounceClose!();
@@ -394,7 +395,7 @@ extension BootpayCallback on _BootpayWebViewState {
     return JavascriptChannel(
         name: 'BootpayFlutterWebView', //이벤트 이름은 Android로 하자
         onMessageReceived: (JavascriptMessage message) {
-          BootpayPrint("redirect: ${message.message}");
+          // BootpayPrint("redirect: ${mounted}, ${message.message}");
 
           final data = json.decode(message.message);
           switch(data["event"]) {

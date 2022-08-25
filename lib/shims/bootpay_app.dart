@@ -30,7 +30,7 @@ class WebViewRoute extends StatefulWidget {
 }
 
 class _WebViewRouteState extends State<WebViewRoute> {
-  final DebounceCloseController closeController = Get.find();
+  DebounceCloseController closeController = Get.find();
   DateTime? currentBackPressTime = DateTime.now();
   bool isProgressShow = false;
   // bool isBootpayShow = true;
@@ -45,6 +45,8 @@ class _WebViewRouteState extends State<WebViewRoute> {
     // closeController.isBootpayShow = true;
     super.initState();
 
+    closeController.isFireCloseEvent = false;
+    closeController.isDebounceShow = true;
 
     widget.webView?.onProgressShow = (isShow) {
       setState(() {
@@ -52,6 +54,9 @@ class _WebViewRouteState extends State<WebViewRoute> {
       });
     };
   }
+
+
+  // void dis
 
   // void updateShowHeader(bool showHeader) {
   //   if(this.showHeaderView != showHeader) {
@@ -71,7 +76,10 @@ class _WebViewRouteState extends State<WebViewRoute> {
 
   // Timer? _debounce;
   void bootpayClose() {
+    // BootpayPrint("bootpayClose : ${closeController.isFireCloseEvent}");
+    if(closeController.isFireCloseEvent == true) return;
     closeController.bootpayClose(this.widget.webView?.onClose);
+    closeController.isFireCloseEvent = false;
   }
 
   @override
@@ -83,7 +91,6 @@ class _WebViewRouteState extends State<WebViewRoute> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    closeController.isBootpayShow = true;
     // isBootpayShow = true;
 
     double paddingValue = MediaQuery.of(context).size.width * 0.2;

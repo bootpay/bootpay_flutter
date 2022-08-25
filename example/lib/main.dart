@@ -1,6 +1,7 @@
 
 
 import 'package:bootpay/bootpay.dart';
+import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
@@ -55,7 +56,11 @@ class _SecondRouteState extends State<SecondRoute> {
   String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
   String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
   String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
-  
+
+  // String webApplicationId = '5b9f51264457636ab9a07cdb';
+  // String androidApplicationId = '5b9f51264457636ab9a07cdc';
+  // String iosApplicationId = '5b9f51264457636ab9a07cdd';
+
 
 
 
@@ -75,6 +80,7 @@ class _SecondRouteState extends State<SecondRoute> {
     bootpayAnalyticsPageTrace(); //통계용 함수 호출
     bootpayReqeustDataInit(); //결제용 데이터 init
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +182,8 @@ class _SecondRouteState extends State<SecondRoute> {
             return false; 후에 서버에서 결제승인 수행
          */
         // checkQtyFromServer(data);
-        return true;
+        // return true;
+        return false;
       },
       onDone: (String data) {
         print('------- onDone: $data');
@@ -293,11 +300,15 @@ class _SecondRouteState extends State<SecondRoute> {
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
-    // user.phone = "010-0000-0000";
+    user.phone = "010-0000-0000";
     user.addr = 'null';
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
+
+    if(BootpayConfig.DEBUG) {
+      payload.extra?.redirectUrl = 'https://dev-api.bootpay.co.kr/v2';
+    }
     // extra.cardQuota = '3';
     // extra.openType = 'popup';
 
@@ -306,7 +317,7 @@ class _SecondRouteState extends State<SecondRoute> {
 
     payload.user = user;
     payload.items = itemList;
-    // payload.extra = extra;
+    payload.extra = extra;
     // payload.extra?.openType = "iframe";
   }
 
@@ -352,9 +363,9 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        checkQtyFromServer(data);
-        return false;
-        // return true;
+        // checkQtyFromServer(data);
+        // return false;
+        return true;
       },
       onDone: (String data) {
         print('------- onDone: $data');
