@@ -12,10 +12,11 @@ import 'package:http/http.dart' as http;
 
 
 typedef void BootpayProgressBarCallback(bool isShow);
-typedef void BootpayDefaultCallback(String data);
-typedef bool BootpayConfirmCallback(String data);
-typedef void BootpayCloseCallback();
 typedef void ShowHeaderCallback(bool showHeader);
+
+typedef BootpayDefaultCallback = void Function(String data);
+typedef BootpayConfirmCallback = bool Function(String data);
+typedef BootpayCloseCallback = void Function();
 
 class Bootpay extends BootpayApi {
   static final Bootpay _bootpay = Bootpay._internal();

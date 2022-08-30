@@ -1,3 +1,6 @@
+## 4.3.1
+* request 후 event  async 지원  
+
 ## 4.2.7
 * js 4.2.2 update
 * debounce close 중복호출되는 버그 수정

@@ -119,13 +119,13 @@ class _SecondRouteState extends State<SecondRoute> {
                     child: Text('본인인증 테스트'),
                   ),
                 ),
-                SizedBox(height: 10),
-                Center(
-                  child: TextButton(
-                    onPressed: () => goBootpayPassword(context),
-                    child: Text('비밀번호 결제테스트'),
-                  ),
-                ),
+                // SizedBox(height: 10),
+                // Center(
+                //   child: TextButton(
+                //     onPressed: () => goBootpayPassword(context),
+                //     child: Text('비밀번호 결제테스트'),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -135,10 +135,12 @@ class _SecondRouteState extends State<SecondRoute> {
   }
 
   ApiProvider _provider = ApiProvider();
-  goBootpayPassword(BuildContext context) async {
-    String userToken = await getUserToken(context);
-    bootpayPasswordTest(context, userToken, generateUser());
-  }
+
+  //해당 기능은 혼동을 줄 수 있으므로 bio_password 사용을 대체, 그러므로 삭제
+  // goBootpayPassword(BuildContext context) async {
+  //   String userToken = await getUserToken(context);
+  //   bootpayPasswordTest(context, userToken, generateUser());
+  // }
 
 
   void bootpayPasswordTest(BuildContext context, String userToken, User user) {
@@ -148,12 +150,13 @@ class _SecondRouteState extends State<SecondRoute> {
       payload.extra?.openType = 'iframe';
     }
 
+
     Bootpay().requestPassword(
       context: context,
       payload: payload,
       showCloseButton: false,
       // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
-      onCancel: (String data) {
+      onCancel: (String data)  {
         print('------- onCancel: $data');
       },
       onError: (String data) {
@@ -279,8 +282,8 @@ class _SecondRouteState extends State<SecondRoute> {
 
 
     payload.pg = '나이스페이';
-    payload.method = '카드';
-    // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
+    // payload.method = '카드';
+    payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
 
