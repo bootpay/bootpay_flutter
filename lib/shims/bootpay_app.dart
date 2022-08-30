@@ -167,6 +167,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
         int? requestType
@@ -183,6 +184,7 @@ class BootpayPlatform extends BootpayApi{
         onClose: onClose,
         onIssued: onIssued,
         onConfirm: onConfirm,
+        onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         userAgent: userAgent,
         requestType: BootpayConstant.REQUEST_TYPE_PAYMENT
@@ -202,6 +204,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
         int? requestType
@@ -217,6 +220,7 @@ class BootpayPlatform extends BootpayApi{
         onClose: onClose,
         onIssued: onIssued,
         onConfirm: onConfirm,
+        onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         userAgent: userAgent,
         requestType: BootpayConstant.REQUEST_TYPE_SUBSCRIPT
@@ -236,6 +240,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
         int? requestType
@@ -251,6 +256,7 @@ class BootpayPlatform extends BootpayApi{
         onClose: onClose,
         onIssued: onIssued,
         onConfirm: onConfirm,
+        onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         userAgent: userAgent,
         requestType: BootpayConstant.REQUEST_TYPE_AUTH
@@ -271,6 +277,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
         int? requestType
@@ -286,6 +293,7 @@ class BootpayPlatform extends BootpayApi{
         onClose: onClose,
         onIssued: onIssued,
         onConfirm: onConfirm,
+        onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         userAgent: userAgent,
         requestType: BootpayConstant.REQUEST_TYPE_PASSWORD
@@ -304,6 +312,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
         int? requestType
@@ -326,6 +335,7 @@ class BootpayPlatform extends BootpayApi{
       onClose: onClose,
       onIssued: onIssued,
       onConfirm: onConfirm,
+      onConfirmAsync: onConfirmAsync,
       onDone: onDone,
       userAgent: userAgent,
       requestType: requestType,

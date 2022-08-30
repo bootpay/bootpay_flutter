@@ -16,6 +16,7 @@ typedef void ShowHeaderCallback(bool showHeader);
 
 typedef BootpayDefaultCallback = void Function(String data);
 typedef BootpayConfirmCallback = bool Function(String data);
+typedef BootpayAsyncConfirmCallback = Future<bool> Function(String data);
 typedef BootpayCloseCallback = void Function();
 
 class Bootpay extends BootpayApi {
@@ -43,10 +44,12 @@ class Bootpay extends BootpayApi {
         bool? showCloseButton,
         Widget? closeButton,
         BootpayDefaultCallback? onCancel,
+
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
         int? requestType}) {
@@ -61,6 +64,7 @@ class Bootpay extends BootpayApi {
         onClose: onClose,
         onIssued: onIssued,
         onConfirm: onConfirm,
+        onConfirmAsync: onConfirmAsync,
         onDone: onDone,
 
         requestType: requestType
@@ -79,6 +83,7 @@ class Bootpay extends BootpayApi {
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType}) {
 
@@ -96,6 +101,7 @@ class Bootpay extends BootpayApi {
         onClose: onClose,
         onIssued: onIssued,
         onConfirm: onConfirm,
+        onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         requestType: requestType
     );
@@ -113,6 +119,7 @@ class Bootpay extends BootpayApi {
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType}) {
 
@@ -130,6 +137,7 @@ class Bootpay extends BootpayApi {
         onClose: onClose,
         onIssued: onIssued,
         onConfirm: onConfirm,
+        onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         requestType: requestType
     );
@@ -148,6 +156,7 @@ class Bootpay extends BootpayApi {
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType}) {
 
@@ -162,6 +171,7 @@ class Bootpay extends BootpayApi {
         onClose: onClose,
         onIssued: onIssued,
         onConfirm: onConfirm,
+        onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         requestType: requestType
     );

@@ -1,3 +1,8 @@
+## 4.3.2
+* confirm async 지원
+    - confirm이 정의되어있다면 confirm이 수행되고,
+    - confirm이 정의되어있지 않다면, confirmAsync가 수행됨 
+
 ## 4.3.1
 * request 후 event  async 지원  
 

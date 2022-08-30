@@ -283,7 +283,7 @@ class _SecondRouteState extends State<SecondRoute> {
 
     payload.pg = '나이스페이';
     // payload.method = '카드';
-    payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
+    // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
     payload.price = 1000.0; //정기결제시 0 혹은 주석
 
@@ -351,8 +351,14 @@ class _SecondRouteState extends State<SecondRoute> {
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
-      onConfirm: (String data) {
-        print('------- onConfirm: $data');
+      // onConfirm: (String data)  {
+      //
+      //   print('------- onConfirm: $data');
+      //
+      //   return false;
+      // },
+      onConfirmAsync: (String data) async {
+        print('------- onConfirmAsync: $data');
         /**
             1. 바로 승인하고자 할 때
             return true;
@@ -366,9 +372,10 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        // checkQtyFromServer(data);
-        // return false;
-        return true;
+        await checkQtyFromServer(data);
+        // return true;
+        // return true;
+        return false;
       },
       onDone: (String data) {
         print('------- onDone: $data');
