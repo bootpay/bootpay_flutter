@@ -12,7 +12,6 @@ function _requestPayment(payload) {
     .then(async function(res) {
         if (res.event === 'confirm') {
           window.BootpayConfirm(JSON.stringify(res))(function(d) {
-            console.log("d : " + d);
 
             if(d === true) _transactionConfirm();
           });
@@ -29,9 +28,10 @@ function _requestSubscription(payload) {
     Bootpay.requestSubscription(JSON.parse(payload))
     .then(async function(res){
         if (res.event === 'confirm') {
-          if(await BootpayConfirm(JSON.stringify(res))) {
-            _transactionConfirm();
-          }
+          window.BootpayConfirm(JSON.stringify(res))(function(d) {
+
+            if(d === true) _transactionConfirm();
+          });
         }
         else if (res.event === 'issued') { BootpayIssued(JSON.stringify(res));  }
         else if (res.event === 'done') { BootpayDone(JSON.stringify(res));  }
@@ -45,9 +45,10 @@ function _requestAuthentication(payload) {
     Bootpay.requestAuthentication(JSON.parse(payload))
     .then(async function(res){
         if (res.event === 'confirm') {
-          if(await BootpayConfirm(JSON.stringify(res))) {
-            _transactionConfirm();
-          }
+          window.BootpayConfirm(JSON.stringify(res))(function(d) {
+
+            if(d === true) _transactionConfirm();
+          });
         }
         else if (res.event === 'issued') { BootpayIssued(JSON.stringify(res));  }
         else if (res.event === 'done') { BootpayDone(JSON.stringify(res));  }
