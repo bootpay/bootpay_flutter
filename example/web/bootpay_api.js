@@ -9,9 +9,9 @@ function _addCloseEvent() {
 
 function _requestPayment(payload) {
     Bootpay.requestPayment(JSON.parse(payload))
-    .then(function(res){
+    .then(async function(res) {
         if (res.event === 'confirm') {
-          if(BootpayConfirm(JSON.stringify(res))) {
+          if(await BootpayConfirm(JSON.stringify(res))) {
             _transactionConfirm();
           }
         }
@@ -25,9 +25,9 @@ function _requestPayment(payload) {
 
 function _requestSubscription(payload) {
     Bootpay.requestSubscription(JSON.parse(payload))
-    .then(function(res){
+    .then(async function(res){
         if (res.event === 'confirm') {
-          if(BootpayConfirm(JSON.stringify(res))) {
+          if(await BootpayConfirm(JSON.stringify(res))) {
             _transactionConfirm();
           }
         }
@@ -41,9 +41,9 @@ function _requestSubscription(payload) {
 
 function _requestAuthentication(payload) {
     Bootpay.requestAuthentication(JSON.parse(payload))
-    .then(function(res){
+    .then(async function(res){
         if (res.event === 'confirm') {
-          if(BootpayConfirm(JSON.stringify(res))) {
+          if(await BootpayConfirm(JSON.stringify(res))) {
             _transactionConfirm();
           }
         }

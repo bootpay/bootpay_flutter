@@ -2,6 +2,7 @@
 @JS()
 library bootpay_api;
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:bootpay/api/bootpay_analytics.dart';
@@ -48,7 +49,7 @@ external set _BootpayIssued(void Function(String) f);
 @JS()
 external bool BootpayConfirm(String data);
 @JS('BootpayConfirm')
-external set _BootpayConfirm(bool Function(String) f);
+external set _BootpayConfirm(FutureOr<bool> Function(String) f);
 @JS()
 external void BootpayError(String data);
 @JS('BootpayError')
@@ -60,6 +61,7 @@ class BootpayPlatform extends BootpayApi{
   BootpayCloseCallback? _callbackClose;
   BootpayDefaultCallback? _callbackIssued;
   BootpayConfirmCallback? _callbackConfirm;
+  BootpayAsyncConfirmCallback? _callbackConfirmAsync;
   BootpayDefaultCallback? _callbackDone;
 
   BootpayPlatform() {
@@ -90,6 +92,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType
       }) {
@@ -100,6 +103,7 @@ class BootpayPlatform extends BootpayApi{
     this._callbackIssued = onIssued;
     this._callbackConfirm = onConfirm;
     this._callbackDone = onDone;
+    this._callbackConfirmAsync = onConfirmAsync;
 
     if(payload != null) {
       _jsBeforeLoad();
@@ -120,6 +124,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType
       }) {
@@ -130,6 +135,7 @@ class BootpayPlatform extends BootpayApi{
     this._callbackClose = onClose;
     this._callbackIssued = onIssued;
     this._callbackConfirm = onConfirm;
+    this._callbackConfirmAsync = onConfirmAsync;
     this._callbackDone = onDone;
 
 
@@ -155,6 +161,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType
       }) {
@@ -165,6 +172,7 @@ class BootpayPlatform extends BootpayApi{
     this._callbackClose = onClose;
     this._callbackIssued = onIssued;
     this._callbackConfirm = onConfirm;
+    this._callbackConfirmAsync = onConfirmAsync;
     this._callbackDone = onDone;
 
 
@@ -190,6 +198,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType
       }) {
@@ -199,6 +208,7 @@ class BootpayPlatform extends BootpayApi{
     this._callbackClose = onClose;
     this._callbackIssued = onIssued;
     this._callbackConfirm = onConfirm;
+    this._callbackConfirmAsync = onConfirmAsync;
     this._callbackDone = onDone;
 
 
@@ -233,8 +243,9 @@ class BootpayPlatform extends BootpayApi{
   void onIssued(String data) {
     if(this._callbackIssued != null) this._callbackIssued!(data);
   }
-  bool onConfirm(String data) {
+  FutureOr<bool> onConfirm(String data) {
     if(this._callbackConfirm != null) return this._callbackConfirm!(data);
+    if(this._callbackConfirmAsync != null) return this._callbackConfirmAsync!(data);
     return false;
   }
   void onDone(String data) {

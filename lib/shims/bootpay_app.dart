@@ -153,8 +153,6 @@ class BootpayPlatform extends BootpayApi{
 
   BootpayWebView? webView;
 
-
-  @override
   void requestPayment(
       {
         Key? key,
@@ -191,7 +189,6 @@ class BootpayPlatform extends BootpayApi{
     );
   }
 
-  @override
   void requestSubscription(
       {
         Key? key,
@@ -227,7 +224,6 @@ class BootpayPlatform extends BootpayApi{
     );
   }
 
-  @override
   void requestAuthentication(
       {
         Key? key,
@@ -264,7 +260,6 @@ class BootpayPlatform extends BootpayApi{
   }
 
 
-  @override
   void requestPassword(
       {
         Key? key,

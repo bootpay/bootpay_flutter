@@ -4,8 +4,8 @@ function _request(payload) {
     .error(function(data){ BootpayError( JSON.stringify(data) ); })
     .ready(function(data){ BootpayReady( JSON.stringify(data) ); })
     .close(function(data){ BootpayClose(                     ); })
-    .confirm(function(data){
-        var result = BootpayConfirm( JSON.stringify(data) );
+    .confirm(async function(data){
+        var result = await BootpayConfirm( JSON.stringify(data) );
         if(result) {
             BootPay.transactionConfirm(data);
         } else {
