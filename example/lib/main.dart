@@ -21,6 +21,27 @@ void main() {
   // runApp(FirstRoute());
 }
 
+Future<bool> onConfirmAsync(String data) async {
+  print('------- onConfirmAsync: $data');
+  /**
+      1. 바로 승인하고자 할 때
+      return true;
+   **/
+  /***
+      2. 비동기 승인 하고자 할 때
+      checkQtyFromServer(data);
+      return false;
+   ***/
+  /***
+      3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
+      return false; 후에 서버에서 결제승인 수행
+   */
+  //await checkQtyFromServer(data);
+  // return true;
+  // return true;
+  return false;
+}
+
 class FirstRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -53,9 +74,9 @@ class _SecondRouteState extends State<SecondRoute> {
 
   Payload payload = Payload();
 
-  String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
-  String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
-  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+  String webApplicationId = '63441b58cf9f6d001c926a28';
+  String androidApplicationId = '63441b58cf9f6d001c926a29';
+  String iosApplicationId = '63441b58cf9f6d001c926a2a';
 
   // String webApplicationId = '5b9f51264457636ab9a07cdb';
   // String androidApplicationId = '5b9f51264457636ab9a07cdc';
@@ -170,24 +191,7 @@ class _SecondRouteState extends State<SecondRoute> {
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
-      onConfirm: (String data) {
-        /**
-            1. 바로 승인하고자 할 때
-            return true;
-         **/
-        /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
-            return false;
-         ***/
-        /***
-            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-            return false; 후에 서버에서 결제승인 수행
-         */
-        // checkQtyFromServer(data);
-        // return true;
-        return false;
-      },
+      onConfirmAsync: onConfirmAsync,
       onDone: (String data) {
         print('------- onDone: $data');
       },
@@ -267,13 +271,13 @@ class _SecondRouteState extends State<SecondRoute> {
     item1.name = "미키 '마우스"; // 주문정보에 담길 상품명
     item1.qty = 1; // 해당 상품의 주문 수량
     item1.id = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
-    item1.price = 500; // 상품의 가격
+    item1.price = 100; // 상품의 가격
 
     Item item2 = Item();
     item2.name = "키보드"; // 주문정보에 담길 상품명
     item2.qty = 1; // 해당 상품의 주문 수량
     item2.id = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
-    item2.price = 500; // 상품의 가격
+    item2.price = 0; // 상품의 가격
     List<Item> itemList = [item1, item2];
 
     payload.webApplicationId = webApplicationId; // web application id
@@ -285,7 +289,7 @@ class _SecondRouteState extends State<SecondRoute> {
     // payload.method = '카드';
     // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
-    payload.price = 1000.0; //정기결제시 0 혹은 주석
+    payload.price = 100.0; //정기결제시 0 혹은 주석
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -357,26 +361,7 @@ class _SecondRouteState extends State<SecondRoute> {
       //
       //   return false;
       // },
-      onConfirmAsync: (String data) async {
-        print('------- onConfirmAsync: $data');
-        /**
-            1. 바로 승인하고자 할 때
-            return true;
-         **/
-        /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
-            return false;
-         ***/
-        /***
-            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-            return false; 후에 서버에서 결제승인 수행
-         */
-        await checkQtyFromServer(data);
-        // return true;
-        // return true;
-        return false;
-      },
+      onConfirmAsync: onConfirmAsync,
       onDone: (String data) {
         print('------- onDone: $data');
       },
@@ -409,23 +394,7 @@ class _SecondRouteState extends State<SecondRoute> {
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
-      onConfirm: (String data) {
-        /**
-            1. 바로 승인하고자 할 때
-            return true;
-         **/
-        /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
-            return false;
-         ***/
-        /***
-            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-            return false; 후에 서버에서 결제승인 수행
-         */
-        checkQtyFromServer(data);
-        return false;
-      },
+      onConfirmAsync: onConfirmAsync,
       onDone: (String data) {
         print('------- onDone: $data');
       },
@@ -457,23 +426,7 @@ class _SecondRouteState extends State<SecondRoute> {
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
-      onConfirm: (String data) {
-        /**
-            1. 바로 승인하고자 할 때
-            return true;
-         **/
-        /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
-            return false;
-         ***/
-        /***
-            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-            return false; 후에 서버에서 결제승인 수행
-         */
-        checkQtyFromServer(data);
-        return false;
-      },
+      onConfirmAsync: onConfirmAsync,
       onDone: (String data) {
         print('------- onDone: $data');
       },
@@ -504,7 +457,7 @@ class _SecondRouteState extends State<SecondRoute> {
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
-      onConfirm: (String data) {
+      onConfirmAsync: (String data) async {
         /**
             1. 바로 승인하고자 할 때
             return true;

@@ -47,9 +47,9 @@ external void BootpayIssued(String data);
 @JS('BootpayIssued')
 external set _BootpayIssued(void Function(String) f);
 @JS()
-external bool BootpayConfirm(String data);
+external void Function(void Function(bool data)) BootpayConfirm(String data);
 @JS('BootpayConfirm')
-external set _BootpayConfirm(FutureOr<bool> Function(String) f);
+external set _BootpayConfirm(void Function(void Function(bool data)) Function(String) f);
 @JS()
 external void BootpayError(String data);
 @JS('BootpayError')
@@ -243,10 +243,24 @@ class BootpayPlatform extends BootpayApi{
   void onIssued(String data) {
     if(this._callbackIssued != null) this._callbackIssued!(data);
   }
-  FutureOr<bool> onConfirm(String data) {
-    if(this._callbackConfirm != null) return this._callbackConfirm!(data);
-    if(this._callbackConfirmAsync != null) return this._callbackConfirmAsync!(data);
-    return false;
+  void Function(void Function(bool d))  onConfirm(String data) {
+    if(this._callbackConfirm != null) {
+      void a(void Function(bool d) callback) {
+        callback(this._callbackConfirm!(data));
+      }
+      return a;
+    } else if(this._callbackConfirmAsync != null) {
+      Future<void> a(void Function(bool d) callback) async {
+        final rnt = await this._callbackConfirmAsync!(data);
+        callback(rnt);
+      }
+      return a;
+    } else {
+      void a(void Function(bool d) callback) {
+        callback(false);
+      }
+      return a;
+    }
   }
   void onDone(String data) {
     if(this._callbackDone != null) this._callbackDone!(data);
