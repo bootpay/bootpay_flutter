@@ -372,7 +372,7 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        await checkQtyFromServer(data);
+        await checkQtyFromServer(data, context);
         // return true;
         // return true;
         return false;
@@ -423,7 +423,7 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        checkQtyFromServer(data);
+        checkQtyFromServer(data, context);
         return false;
       },
       onDone: (String data) {
@@ -471,7 +471,7 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        checkQtyFromServer(data);
+        checkQtyFromServer(data, context);
         return false;
       },
       onDone: (String data) {
@@ -518,7 +518,7 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        checkQtyFromServer(data);
+        checkQtyFromServer(data, context);
         return false;
       },
       onDone: (String data) {
@@ -527,11 +527,12 @@ class _SecondRouteState extends State<SecondRoute> {
     );
   }
 
-  Future<void> checkQtyFromServer(String data) async {
+  Future<void> checkQtyFromServer(String data, BuildContext context) async {
     //TODO 서버로부터 재고파악을 한다
     print('checkQtyFromServer http call: $data');
 
     //재고파악 후 결제를 승인한다. 아래 함수를 호출하지 않으면 결제를 승인하지 않게된다.
-    Bootpay().transactionConfirm();
+    // Bootpay().transactionConfirm();
+    // Bootpay().dismiss(context);
   }
 }

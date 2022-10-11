@@ -332,7 +332,6 @@ extension BootpayCallback on _BootpayWebViewState {
         transactionConfirm();
       }
     }
-
   }
 
   JavascriptChannel onCancel(BuildContext context) {

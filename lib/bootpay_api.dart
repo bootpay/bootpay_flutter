@@ -21,6 +21,7 @@ abstract class BootpayApi {
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType
       });
@@ -37,6 +38,7 @@ abstract class BootpayApi {
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType
       });
@@ -53,6 +55,7 @@ abstract class BootpayApi {
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType
       });
@@ -70,6 +73,7 @@ abstract class BootpayApi {
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
+        BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         int? requestType
       });

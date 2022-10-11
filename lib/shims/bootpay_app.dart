@@ -151,8 +151,15 @@ class BootpayPlatform extends BootpayApi{
 
   String get iOSUserAgent => 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
 
+  // DebounceCloseController closeController = Get.find();
   BootpayWebView? webView;
 
+  // void bootpayClose() {
+  //   // BootpayPrint("bootpayClose : ${closeController.isFireCloseEvent}");
+  //   if(closeController.isFireCloseEvent == true) return;
+  //   closeController.bootpayClose(this.webView?.onClose);
+  //   closeController.isFireCloseEvent = false;
+  // }
 
   @override
   void requestPayment(
@@ -383,6 +390,7 @@ class BootpayPlatform extends BootpayApi{
 
 
     if(webView != null) {
+      // bootpayClose();
       Navigator.of(context).pop();
       webView = null;
     }
