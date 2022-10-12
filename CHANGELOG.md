@@ -1,3 +1,8 @@
+## 4.3.4
+* confirm async Web 버그 수정
+* js 4.2.5 update 
+* 본인인증 age_limit 추가 
+
 ## 4.3.3
 * confirm async Web 지원
 

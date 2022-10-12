@@ -36,7 +36,7 @@ class Extra {
   List<String>? exceptCardCompanies = []; // 제외할 카드사 리스트 ( enable_card_companies가 우선순위를 갖는다 )
   List<String>? enableEasyPayments = []; // 노출될 간편결제 리스트
   int? confirmGraceSeconds = 10; // 결제승인 유예시간 ( 승인 요청을 여러번하더라도 승인 이후 특정 시간동안 계속해서 결제 response_data 를 리턴한다 )
-
+  int? ageLimit;
 
   Extra();
 
@@ -74,6 +74,7 @@ class Extra {
     exceptCardCompanies = json["except_card_companies"];
     enableEasyPayments = json["enable_easy_payments"];
     confirmGraceSeconds = json["confirm_grace_seconds"];
+    ageLimit = json["age_limit"];
   }
 
   Map<String, dynamic> toJson() => {
@@ -107,6 +108,7 @@ class Extra {
     "except_card_companies": this.exceptCardCompanies,
     "enable_easy_payments": this.enableEasyPayments,
     "confirm_grace_seconds": this.confirmGraceSeconds,
+    "age_limit": this.ageLimit,
   };
 
   // String getQuotas() {
@@ -135,7 +137,7 @@ class Extra {
         "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: ${directAppCard}, direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
         "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
         "first_subscription_comment: '${reVal(firstSubscriptionComment)}', except_card_companies: [${(exceptCardCompanies ?? []).join(",")}], enable_easy_payments: [${(enableEasyPayments ?? []).join(",")}], confirm_grace_seconds: ${confirmGraceSeconds}," +
-        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}' }";
+        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}' }";
   }
 
   dynamic reVal(dynamic value) {

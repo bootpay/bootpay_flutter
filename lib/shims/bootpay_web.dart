@@ -13,6 +13,12 @@ import '../bootpay.dart';
 import '../bootpay_api.dart';
 import '../model/payload.dart';
 
+@JS('Promise')
+class Promise<T> {
+  external Promise (void executor(void resolve(T result), Function reject));
+  external Promise then (void onFulfilled(T result), [Function onRejected]);
+}
+
 @JS()
 external void _jsBeforeLoad();
 @JS()
@@ -29,32 +35,24 @@ external void _transactionConfirm();
 @JS()
 external void _addCloseEvent();
 
-@JS()
-external void BootpayClose();
 @JS('BootpayClose')
 external set _BootpayClose(void Function() f);
-@JS()
-external void BootpayCancel(String data);
+
 @JS('BootpayCancel')
 external set _BootpayCancel(void Function(String) f);
-@JS()
-external void BootpayDone(String data);
+
 @JS('BootpayDone')
 external set _BootpayDone(void Function(String) f);
-@JS()
-external void BootpayIssued(String data);
+
 @JS('BootpayIssued')
 external set _BootpayIssued(void Function(String) f);
-@JS()
-external bool BootpayConfirm(String data);
+
 @JS('BootpayConfirm')
 external set _BootpayConfirm(bool Function(String) f);
-@JS()
-external Future<bool> BootpayAsyncConfirm(String data);
-@JS('BootpayConfirm')
-external set _BootpayAsyncConfirm(Future<bool> Function(String) f);
-@JS()
-external void BootpayError(String data);
+
+@JS('BootpayAsyncConfirm')
+external set _BootpayAsyncConfirm(Promise Function(String) f);
+
 @JS('BootpayError')
 external set _BootpayError(void Function(String) f);
 
@@ -73,7 +71,7 @@ class BootpayPlatform extends BootpayApi{
     _BootpayDone = allowInterop(onDone);
     _BootpayIssued = allowInterop(onIssued);
     _BootpayConfirm = allowInterop(onConfirm);
-    _BootpayAsyncConfirm = allowInterop(onConfirmAsync);
+    _BootpayAsyncConfirm = allowInterop(onConfirmAsync); //js에서 BootpayAsyncConfirm 호출시 onConfirmAsync 수행
     _BootpayError = allowInterop(onError);
   }
 
@@ -248,14 +246,49 @@ class BootpayPlatform extends BootpayApi{
     if(this._callbackIssued != null) this._callbackIssued!(data);
   }
   bool onConfirm(String data) {
+    print("onConfirm : $data");
     if(this._callbackConfirm != null) return this._callbackConfirm!(data);
     return false;
   }
 
-  Future<bool> onConfirmAsync(String data) async {
-    if(this._callbackAsyncConfirm != null) return this._callbackAsyncConfirm!(data);
-    return false;
+  Promise onConfirmAsync(String data)  {
+
+    return Promise<bool>(allowInterop((resolve, reject) async {
+      if(this._callbackAsyncConfirm != null) {
+
+        bool result = await this._callbackAsyncConfirm!(data);
+        resolve(result);
+      } else {
+        resolve(false);
+      }
+
+      // var tmp = Future.delayed(Duration(seconds: 1), () {
+      //   return 'test';
+      // });
+      // tmp.then(resolve, onError: reject);
+    }));
   }
+
+  // Future<bool> onConfirmAsync(String data) async {
+  //   if(this._callbackAsyncConfirm != null) {
+  //   //   // Future<bool> promise = this._callbackAsyncConfirm!(data);
+  //   //   // // if(promise != null) Future.r;
+  //   //   //
+  //   //   // print("22onConfirmAsync : $data, $promise");
+  //   //   //
+  //   //   // return await promiseToFuture(promise);
+  //
+  //     // Future<bool> promise = this._callbackAsyncConfirm!(data);
+  //     // return promiseToFuture(promise);
+  //
+  //     // return this._callbackAsyncConfirm!(data);
+  //
+  //     return Future.value(true);
+  //
+  //   } else {
+  //     return Future.value(false);
+  //   }
+  // }
 
   void onDone(String data) {
     if(this._callbackDone != null) this._callbackDone!(data);

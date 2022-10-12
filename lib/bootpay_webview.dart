@@ -120,7 +120,7 @@ class BootpayWebView extends WebView {
 class _BootpayWebViewState extends State<BootpayWebView> {
 
   // final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.2.2/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.2.5/';
 
   bool isClosed = false;
 

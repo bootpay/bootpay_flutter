@@ -312,6 +312,7 @@ class _SecondRouteState extends State<SecondRoute> {
     if(BootpayConfig.DEBUG) {
       payload.extra?.redirectUrl = 'https://dev-api.bootpay.co.kr/v2';
     }
+
     // extra.cardQuota = '3';
     // extra.openType = 'popup';
 
@@ -353,12 +354,15 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       // onConfirm: (String data)  {
       //
+      //   checkQtyFromServer(data, context).then((value) => print(1243));
+      //   // await check
+      //
       //   print('------- onConfirm: $data');
       //
       //   return false;
       // },
       onConfirmAsync: (String data) async {
-        print('------- onConfirmAsync: $data');
+        print('------- onConfirmAsync11: $data');
         /**
             1. 바로 승인하고자 할 때
             return true;
@@ -372,10 +376,12 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        await checkQtyFromServer(data, context);
+
+        await checkQtyFromServer(data);
+        print('------- onConfirmAsync22: $data');
         // return true;
         // return true;
-        return false;
+        return true;
       },
       onDone: (String data) {
         print('------- onDone: $data');
@@ -423,7 +429,7 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        checkQtyFromServer(data, context);
+        checkQtyFromServer(data);
         return false;
       },
       onDone: (String data) {
@@ -471,7 +477,8 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        checkQtyFromServer(data, context);
+
+        checkQtyFromServer(data);
         return false;
       },
       onDone: (String data) {
@@ -484,6 +491,8 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.pg = "다날";
     payload.method = "본인인증";
     payload.authenticationId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+    // payload.extra?.ageLimit = 40;
+
 
     Bootpay().requestAuthentication(
       context: context,
@@ -518,7 +527,7 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
-        checkQtyFromServer(data, context);
+        checkQtyFromServer(data);
         return false;
       },
       onDone: (String data) {
@@ -527,12 +536,15 @@ class _SecondRouteState extends State<SecondRoute> {
     );
   }
 
-  Future<void> checkQtyFromServer(String data, BuildContext context) async {
-    //TODO 서버로부터 재고파악을 한다
-    print('checkQtyFromServer http call: $data');
 
-    //재고파악 후 결제를 승인한다. 아래 함수를 호출하지 않으면 결제를 승인하지 않게된다.
-    // Bootpay().transactionConfirm();
-    // Bootpay().dismiss(context);
+
+  Future<void> checkQtyFromServer(String data) async {
+    //TODO 서버로부터 재고파악을 한다
+    print('checkQtyFromServer start: $data');
+    return Future.delayed(Duration(seconds: 1), () {
+      print('checkQtyFromServer end: $data');
+
+      return true;
+    });
   }
 }

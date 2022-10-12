@@ -13,6 +13,14 @@ function _requestPayment(payload) {
         if (res.event === 'confirm') {
           if(BootpayConfirm(JSON.stringify(res))) {
             _transactionConfirm();
+          } else {
+            BootpayAsyncConfirm(JSON.stringify(res))
+            .then(function(res){
+              if(res) {
+                _transactionConfirm();
+              }
+            }, function(res) {
+            });
           }
         }
         else if (res.event === 'issued') { BootpayIssued(JSON.stringify(res));  }
