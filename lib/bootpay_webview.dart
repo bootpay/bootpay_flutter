@@ -174,8 +174,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
                   // BootpayPrint(script);
                 }
                 controller.evaluateJavascript(getBootpayJS());
-                // BootpayPrint(getBootpayJS());
-                // controller.
+                // controller.runJavascript('');
               });
             }
 
