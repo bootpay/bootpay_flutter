@@ -35,14 +35,35 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "4.3.5"
+    version: "4.4.0"
   bootpay_webview_flutter:
     dependency: transitive
     description:
       name: bootpay_webview_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.21"
+    version: "3.2.44"
+  bootpay_webview_flutter_android:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter_android
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.10.44"
+  bootpay_webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.9.51"
+  bootpay_webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: bootpay_webview_flutter_wkwebview
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.9.51"
   characters:
     dependency: transitive
     description:
@@ -393,5 +414,5 @@ packages:
     source: hosted
     version: "0.2.0"
 sdks:
-  dart: ">=2.17.0-0 <3.0.0"
-  flutter: ">=2.5.0"
+  dart: ">=2.17.0 <3.0.0"
+  flutter: ">=3.0.0"

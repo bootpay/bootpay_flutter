@@ -1,5 +1,5 @@
 PODS:
-  - bootpay_webview_flutter (0.0.1):
+  - bootpay_webview_flutter_wkwebview (0.0.1):
     - Flutter
   - Flutter (1.0.0)
   - fluttertoast (0.0.2):
@@ -12,7 +12,7 @@ PODS:
   - Toast (4.0.0)
 
 DEPENDENCIES:
-  - bootpay_webview_flutter (from `.symlinks/plugins/bootpay_webview_flutter/ios`)
+  - bootpay_webview_flutter_wkwebview (from `.symlinks/plugins/bootpay_webview_flutter_wkwebview/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -23,8 +23,8 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
-  bootpay_webview_flutter:
-    :path: ".symlinks/plugins/bootpay_webview_flutter/ios"
+  bootpay_webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/bootpay_webview_flutter_wkwebview/ios"
   Flutter:
     :path: Flutter
   fluttertoast:
@@ -35,7 +35,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
 
 SPEC CHECKSUMS:
-  bootpay_webview_flutter: b136b15869e909a7bb729081d73276c855a9926c
+  bootpay_webview_flutter_wkwebview: baf2884591d215ae8bf446f97f1acc282f9527a6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62

@@ -9,7 +9,7 @@ import 'constant/bootpay_constant.dart';
 import 'controller/debounce_close_controller.dart';
 import 'user_info.dart';
 import 'package:flutter/material.dart';
-import 'package:bootpay_webview_flutter/webview_flutter.dart';
+import 'package:bootpay_webview_flutter/bootpay_webview_flutter.dart';
 
 import 'bootpay.dart';
 import 'model/payload.dart';
@@ -73,15 +73,21 @@ class BootpayWebView extends WebView {
 
 
     _controller.future.then((controller) {
-      controller.evaluateJavascript(
-          "setTimeout(function() { $script }, 30);"
+      // controller.evaluateJavascript(
+      //     "setTimeout(function() { $script }, 30);"
+      // );
+      controller.runJavascript(
+          script
       );
     });
   }
 
   void removePaymentWindow() {
     _controller.future.then((controller) {
-      controller.evaluateJavascript(
+      // controller.evaluateJavascript(
+      //     "Bootpay.removePaymentWindow();"
+      // );
+      controller.runJavascript(
           "Bootpay.removePaymentWindow();"
       );
       // controller.
@@ -155,25 +161,32 @@ class _BootpayWebViewState extends State<BootpayWebView> {
             onRedirect(context)
           ].toSet(),
           navigationDelegate: (NavigationRequest request) {
-
-
             if(widget.onShowHeader != null) {
               widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
             }
-
-            if(Platform.isAndroid)  return NavigationDecision.prevent;
-            else return NavigationDecision.navigate;
+            // print('allowing navigation to $request');
+            return NavigationDecision.navigate;
           },
+          // navigationDelegate: (NavigationRequest request) {
+          //
+          //
+          //   if(widget.onShowHeader != null) {
+          //     widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
+          //   }
+          //
+          //   if(Platform.isAndroid)  return NavigationDecision.prevent;
+          //   else return NavigationDecision.navigate;
+          // },
 
           onPageFinished: (String url) {
 
             if (url.startsWith(INAPP_URL)) {
               widget._controller.future.then((controller) async {
                 for (String script in await getBootpayJSBeforeContentLoaded()) {
-                  controller.evaluateJavascript(script);
+                  controller.runJavascript(script);
                   // BootpayPrint(script);
                 }
-                controller.evaluateJavascript(getBootpayJS());
+                controller.runJavascript(getBootpayJS());
                 // controller.runJavascript('');
               });
             }
@@ -229,7 +242,8 @@ extension BootpayMethod on _BootpayWebViewState {
       result.add("Bootpay.setEnvironmentMode('development');");
     }
     // result.add("Bootpay.setEnvironmentMode('development');");
-    result.add( "setTimeout(function() {" + await getAnalyticsData() + "}, 50);");
+    // result.add( "setTimeout(function() {" + await getAnalyticsData() + "}, 50);");
+    result.add(await getAnalyticsData());
     result.add(widget.close());
 
     // if (this.widget.payload?.extra?.quickPopup == 1 &&
@@ -280,14 +294,16 @@ extension BootpayMethod on _BootpayWebViewState {
         "})";
 
 
-    return "setTimeout(function() {" + script + "}, 50);";
+    // return "setTimeout(function() {" + script + "}, 50);";
+    return script;
   }
 
 
 
   Future<String> getAnalyticsData() async {
     UserInfo.updateInfo();
-    return "Bootpay.setAnalyticsData({uuid:'${await UserInfo.getBootpayUUID()}',sk:'${await UserInfo.getBootpaySK()}',sk_time:'${await UserInfo.getBootpayLastTime()}',time:'${DateTime.now().millisecondsSinceEpoch - await UserInfo.getBootpayLastTime()}'});";
+    // return "Bootpay.setAnalyticsData({uuid:'${await UserInfo.getBootpayUUID()}',sk:'${await UserInfo.getBootpaySK()}',sk_time:'${await UserInfo.getBootpayLastTime()}',time:'${DateTime.now().millisecondsSinceEpoch - await UserInfo.getBootpayLastTime()}'});";
+    return "window.Bootpay.\$analytics.setAnalyticsData({uuid:'${await UserInfo.getBootpayUUID()}',sk:'${await UserInfo.getBootpaySK()}',sk_time:'${await UserInfo.getBootpayLastTime()}',time:'${DateTime.now().millisecondsSinceEpoch - await UserInfo.getBootpayLastTime()}'});";
   }
 
   void transactionConfirm() {

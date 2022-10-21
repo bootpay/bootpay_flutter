@@ -1,7 +1,7 @@
 name: bootpay
 description: A Bootpay plugin that provides payment api on Android, iOS and Web.
 
-version: 4.3.5
+version: 4.4.0
 
 homepage: https://www.bootpay.co.kr
 repository: https://github.com/bootpay/bootpay_flutter.git
@@ -22,7 +22,8 @@ dependencies:
 #  package_info: ^2.0.2
 #  encrypt: ^5.0.1
 
-  bootpay_webview_flutter: 3.2.21
+#  bootpay_webview_flutter: 3.2.21
+  bootpay_webview_flutter: 3.2.44
   uuid: ^3.0.6
   shared_preferences: ^2.0.15
   js: ^0.6.4
