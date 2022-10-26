@@ -28,6 +28,7 @@ class Extra {
   String? redirectUrl = 'https://api.bootpay.co.kr/v2'; //open_type이 redirect일 경우 페이지 이동할 URL (  오류 및 결제 완료 모두 수신 가능 )
   bool? displaySuccessResult = false; // 결제 완료되면 부트페이가 제공하는 완료창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
   bool? displayErrorResult = true; // 결제 실패되면 부트페이가 제공하는 실패창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
+  bool? subscribeTestPayment = true; //100원 결제 후 취소
   double? disposableCupDeposit = 0; // 배달대행 플랫폼을 위한 컵 보증급 가격
   ExtraCardEasyOption cardEasyOption = ExtraCardEasyOption();
   List<BrowserOpenType>? browserOpenType = [];
@@ -37,6 +38,7 @@ class Extra {
   List<String>? enableEasyPayments = []; // 노출될 간편결제 리스트
   int? confirmGraceSeconds = 10; // 결제승인 유예시간 ( 승인 요청을 여러번하더라도 승인 이후 특정 시간동안 계속해서 결제 response_data 를 리턴한다 )
   int? ageLimit;
+
 
   Extra();
 
@@ -75,6 +77,7 @@ class Extra {
     enableEasyPayments = json["enable_easy_payments"];
     confirmGraceSeconds = json["confirm_grace_seconds"];
     ageLimit = json["age_limit"];
+    subscribeTestPayment = json["subscribe_test_payment"];
   }
 
   Map<String, dynamic> toJson() => {
@@ -109,6 +112,7 @@ class Extra {
     "enable_easy_payments": this.enableEasyPayments,
     "confirm_grace_seconds": this.confirmGraceSeconds,
     "age_limit": this.ageLimit,
+    "subscribe_test_payment": this.subscribeTestPayment
   };
 
   // String getQuotas() {
@@ -137,7 +141,7 @@ class Extra {
         "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: ${directAppCard}, direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
         "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
         "first_subscription_comment: '${reVal(firstSubscriptionComment)}', except_card_companies: [${(exceptCardCompanies ?? []).join(",")}], enable_easy_payments: [${(enableEasyPayments ?? []).join(",")}], confirm_grace_seconds: ${confirmGraceSeconds}," +
-        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}' }";
+        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}', subscribe_test_payment: ${subscribeTestPayment} }";
   }
 
   dynamic reVal(dynamic value) {

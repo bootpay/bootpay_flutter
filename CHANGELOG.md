@@ -1,3 +1,6 @@
+## 4.4.1
+* 카드자동결제 요청시 100원 결제 옵션 extra.subscribe_test_payment 추가 
+
 ## 4.4.0
 * bootpay_webview_flutter 3.x 버전으로 fork 후 적용 
 * 통계 버그 수정 

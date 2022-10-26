@@ -285,7 +285,7 @@ class _SecondRouteState extends State<SecondRoute> {
     // payload.method = '카드';
     // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
-    payload.price = 1000.0; //정기결제시 0 혹은 주석
+    // payload.price = 1000.0; //정기결제시 0 혹은 주석
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -392,8 +392,9 @@ class _SecondRouteState extends State<SecondRoute> {
   //버튼클릭시 부트페이 정기결제 요청 실행
   void goBootpaySubscriptionTest(BuildContext context) {
     payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
-    payload.pg = "다날";
-    payload.method = "카드정기";
+    payload.pg = "나이스페이";
+    payload.method = "카드자동";
+    // payload.extra?.subscribeTestPayment = false;
 
 
     Bootpay().requestSubscription(
@@ -442,6 +443,9 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
     payload.pg = "나이스페이";
     payload.method = "카드자동";
+
+    // payload.method = "간편카드";
+    payload.extra?.subscribeTestPayment = false;
 
 
     Bootpay().requestSubscription(
@@ -527,6 +531,7 @@ class _SecondRouteState extends State<SecondRoute> {
             3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
             return false; 후에 서버에서 결제승인 수행
          */
+
         checkQtyFromServer(data);
         return false;
       },
