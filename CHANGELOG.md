@@ -1,3 +1,6 @@
+## 4.4.2
+* 본인인증 age_limit default 값 0 으로 셋팅  
+
 ## 4.4.1
 * 카드자동결제 요청시 100원 결제 옵션 extra.subscribe_test_payment 추가 
 

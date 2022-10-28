@@ -37,7 +37,7 @@ class Extra {
   List<String>? exceptCardCompanies = []; // 제외할 카드사 리스트 ( enable_card_companies가 우선순위를 갖는다 )
   List<String>? enableEasyPayments = []; // 노출될 간편결제 리스트
   int? confirmGraceSeconds = 10; // 결제승인 유예시간 ( 승인 요청을 여러번하더라도 승인 이후 특정 시간동안 계속해서 결제 response_data 를 리턴한다 )
-  int? ageLimit;
+  int? ageLimit = 0;
 
 
   Extra();

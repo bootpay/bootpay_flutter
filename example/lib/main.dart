@@ -303,7 +303,7 @@ class _SecondRouteState extends State<SecondRoute> {
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
-    user.phone = "010-0000-0000";
+    // user.phone = "010-0000-0000";
     user.addr = 'null';
 
     Extra extra = Extra(); // 결제 옵션
