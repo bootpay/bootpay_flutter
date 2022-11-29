@@ -39,6 +39,8 @@ class Extra {
   int? confirmGraceSeconds = 10; // 결제승인 유예시간 ( 승인 요청을 여러번하더라도 승인 이후 특정 시간동안 계속해서 결제 response_data 를 리턴한다 )
   int? ageLimit = 0;
 
+  int? timeout = 30;
+
 
   Extra();
 
@@ -78,6 +80,7 @@ class Extra {
     confirmGraceSeconds = json["confirm_grace_seconds"];
     ageLimit = json["age_limit"];
     subscribeTestPayment = json["subscribe_test_payment"];
+    timeout = json["timeout"];
   }
 
   Map<String, dynamic> toJson() => {
@@ -112,7 +115,8 @@ class Extra {
     "enable_easy_payments": this.enableEasyPayments,
     "confirm_grace_seconds": this.confirmGraceSeconds,
     "age_limit": this.ageLimit,
-    "subscribe_test_payment": this.subscribeTestPayment
+    "subscribe_test_payment": this.subscribeTestPayment,
+    "timeout": this.timeout,
   };
 
   // String getQuotas() {
@@ -141,7 +145,7 @@ class Extra {
         "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: ${directAppCard}, direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
         "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
         "first_subscription_comment: '${reVal(firstSubscriptionComment)}', except_card_companies: [${(exceptCardCompanies ?? []).join(",")}], enable_easy_payments: [${(enableEasyPayments ?? []).join(",")}], confirm_grace_seconds: ${confirmGraceSeconds}," +
-        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}', subscribe_test_payment: ${subscribeTestPayment} }";
+        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}', subscribe_test_payment: ${subscribeTestPayment}, timeout: $timeout }";
   }
 
   dynamic reVal(dynamic value) {

@@ -1,3 +1,27 @@
+function _bootpayEventExample() {
+
+function _requestPayment(payload) {
+    Bootpay.requestPayment(JSON.parse(payload))
+    .then(function(res){
+        if (res.event === 'confirm') {
+              Bootpay.confirm()
+              .then(function(confirmRes) {
+                    BootpayDone(JSON.stringify(res));
+              }, function(confirmRes) {
+               if (res.event === 'error') { BootpayError(JSON.stringify(res)); }
+               else if (res.event === 'cancel') { BootpayCancel(JSON.stringify(res)); }
+              })
+
+        }
+        else if (res.event === 'issued') { BootpayIssued(JSON.stringify(res));  }
+        else if (res.event === 'done') { BootpayDone(JSON.stringify(res));  }
+    }, function(res) {
+        if (res.event === 'error') { BootpayError(JSON.stringify(res)); }
+        else if (res.event === 'cancel') { BootpayCancel(JSON.stringify(res)); }
+    });
+}}
+
+
 function _jsBeforeLoad() {
     _addCloseEvent();
 //  alert(1243);

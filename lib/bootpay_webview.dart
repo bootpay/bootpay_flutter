@@ -486,6 +486,11 @@ extension BootpayCallback on _BootpayWebViewState {
               if (this.widget.onDone != null) this.widget.onDone!(message.message);
               if(this.widget.payload?.extra?.displaySuccessResult != true) {
                 debounceClose();
+              } else {
+                final content = json.decode(data["data"]);
+                if(content["method_origin_symbol"] == "card_rebill_rest") {
+                  debounceClose();
+                }
               }
               break;
           }
