@@ -57,7 +57,7 @@ class Payload {
 
     // useOrderId = json["use_order_id"];
 
-    metadata = json["params"];
+    metadata = json["metadata"];
 
 
     // accountExpireAt = json["account_expire_at"];
@@ -78,7 +78,7 @@ class Payload {
       'subscription_id': subscriptionId,
       'authentication_id': authenticationId,
       // 'use_order_id': useOrderId,
-      'params': metadata,
+      'metadata': metadata,
       // 'account_expire_at': accountExpireAt,
       // 'show_agree_window': showAgreeWindow,
       'user_token': userToken
@@ -111,7 +111,7 @@ class Payload {
 
   //android, ios에서 사용됨
   String toString() {
-    return "{application_id: '${getApplicationId()}', pg: '$pg', method: ${getMethodValue()}, order_name: '${orderName.queryReplace()}', price: $price, tax_free: $taxFree, order_id: '${orderId.queryReplace()}', subscription_id: '${subscriptionId.queryReplace()}', authentication_id: '${authenticationId.queryReplace()}', params: ${getParamsStringAndroid()}, user_token: '$userToken', extra: ${extra.toString()}, user: ${user.toString()}, items: ${getItems()}}";
+    return "{application_id: '${getApplicationId()}', pg: '$pg', method: ${getMethodValue()}, order_name: '${orderName.queryReplace()}', price: $price, tax_free: $taxFree, order_id: '${orderId.queryReplace()}', subscription_id: '${subscriptionId.queryReplace()}', authentication_id: '${authenticationId.queryReplace()}', metadata: ${getMetadataStringAndroid()}, user_token: '$userToken', extra: ${extra.toString()}, user: ${user.toString()}, items: ${getItems()}}";
   }
 
   String getMethodValue() {
@@ -150,12 +150,12 @@ class Payload {
     return "[${result.join(",")}]";
   }
 
-  String getParamsStringAndroid() {
+  String getMetadataStringAndroid() {
     return reVal(json.encode(metadata));
     // return '{}';
   }
 
-  String getParamsString() {
+  String getMetadataString() {
     if (metadata != null || metadata!.isEmpty) return "{}";
     return reVal(metadata.toString());
   }
