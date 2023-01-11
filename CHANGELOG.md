@@ -1,3 +1,6 @@
+## 4.4.5
+* bootpay.confirm() 후 then 문법 적용시 발생했던 js error 로그 나오지 않도록 개선 
+
 ## 4.4.4
 * params -> metadata 필드데이터 변경, metadata 전송안되는 현상 개선 
 

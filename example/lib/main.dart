@@ -332,8 +332,8 @@ class _SecondRouteState extends State<SecondRoute> {
       //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
       payload.extra?.openType = 'iframe';
     }
-    payload.pg = '나이스페이';
-    payload.method = "네이버페이";
+    payload.pg = 'kcp';
+    payload.method = "카드";
 
     Bootpay().requestPayment(
       context: context,
@@ -354,37 +354,37 @@ class _SecondRouteState extends State<SecondRoute> {
       onIssued: (String data) {
         print('------- onIssued: $data');
       },
-      // onConfirm: (String data)  {
-      //
-      //   checkQtyFromServer(data, context).then((value) => print(1243));
-      //   // await check
-      //
-      //   print('------- onConfirm: $data');
-      //
-      //   return false;
-      // },
-      onConfirmAsync: (String data) async {
-        print('------- onConfirmAsync11: $data');
-        /**
-            1. 바로 승인하고자 할 때
-            return true;
-         **/
-        /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
-            return false;
-         ***/
-        /***
-            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-            return false; 후에 서버에서 결제승인 수행
-         */
+      onConfirm: (String data)  {
 
-        await checkQtyFromServer(data);
-        print('------- onConfirmAsync22: $data');
-        // return true;
-        // return true;
+        // checkQtyFromServer(data, context).then((value) => print(1243));
+        // await check
+
+        print('------- onConfirm: $data');
+
         return true;
       },
+      // onConfirmAsync: (String data) async {
+      //   print('------- onConfirmAsync11: $data');
+      //   /**
+      //       1. 바로 승인하고자 할 때
+      //       return true;
+      //    **/
+      //   /***
+      //       2. 비동기 승인 하고자 할 때
+      //       checkQtyFromServer(data);
+      //       return false;
+      //    ***/
+      //   /***
+      //       3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
+      //       return false; 후에 서버에서 결제승인 수행
+      //    */
+      //
+      //   await checkQtyFromServer(data);
+      //   print('------- onConfirmAsync22: $data');
+      //   // return true;
+      //   // return true;
+      //   return true;
+      // },
       onDone: (String data) {
         print('------- onDone: $data');
       },

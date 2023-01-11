@@ -6,10 +6,10 @@ function _requestPayment(payload) {
         if (res.event === 'confirm') {
               Bootpay.confirm()
               .then(function(confirmRes) {
-                    BootpayDone(JSON.stringify(res));
+                    BootpayDone(JSON.stringify(confirmRes));
               }, function(confirmRes) {
-               if (res.event === 'error') { BootpayError(JSON.stringify(res)); }
-               else if (res.event === 'cancel') { BootpayCancel(JSON.stringify(res)); }
+               if (confirmRes.event === 'error') { BootpayError(JSON.stringify(confirmRes)); }
+               else if (confirmRes.event === 'cancel') { BootpayCancel(JSON.stringify(confirmRes)); }
               })
 
         }

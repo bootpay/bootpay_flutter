@@ -61,16 +61,18 @@ class BootpayWebView extends WebView {
   State<StatefulWidget> createState() => _BootpayWebViewState();
 
   void transactionConfirm() {
-    String script = "Bootpay.confirm()" +
-        ".then( function (res) {" +
-        confirm() +
-        issued() +
-        done() +
-        "}, function (res) {" +
-        error() +
-        cancel() +
-        "});";
+    // String script = "Bootpay.confirm()" +
+    //     ".then( function (res) {" +
+    //     confirm() +
+    //     issued() +
+    //     done() +
+    //     "}, function (res) {" +
+    //     error() +
+    //     cancel() +
+    //     "});";
 
+    // String script = "Bootpay.confirm().then(function(confirmRes) { BootpayDone(JSON.stringify(res)); }, function(confirmRes) { if (res.event === 'error') { BootpayError(JSON.stringify(res)); } else if (res.event === 'cancel') { BootpayCancel(JSON.stringify(res)); } })";
+    String script = "Bootpay.confirm();";
 
     _controller.future.then((controller) {
       // controller.evaluateJavascript(
