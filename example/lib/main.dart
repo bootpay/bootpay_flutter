@@ -332,8 +332,8 @@ class _SecondRouteState extends State<SecondRoute> {
       //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
       payload.extra?.openType = 'iframe';
     }
-    payload.pg = 'kcp';
-    payload.method = "카드";
+    payload.pg = '나이스페이';
+    payload.method = "네이버페이";
 
     Bootpay().requestPayment(
       context: context,

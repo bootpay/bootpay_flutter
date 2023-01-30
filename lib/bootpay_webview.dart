@@ -9,7 +9,10 @@ import 'constant/bootpay_constant.dart';
 import 'controller/debounce_close_controller.dart';
 import 'user_info.dart';
 import 'package:flutter/material.dart';
+
 import 'package:bootpay_webview_flutter/bootpay_webview_flutter.dart';
+import 'package:bootpay_webview_flutter_android/bootpay_webview_flutter_android.dart';
+import 'package:bootpay_webview_flutter_wkwebview/bootpay_webview_flutter_wkwebview.dart';
 
 import 'bootpay.dart';
 import 'model/payload.dart';
@@ -17,7 +20,7 @@ import 'model/payload.dart';
 
 // 1. 웹앱을 대체하는 뷰를 활용한 샘플
 // 2. api 역할
-class BootpayWebView extends WebView {
+class BootpayWebView extends StatefulWidget {
   // Payload;
   // Event
   // controller
@@ -31,17 +34,19 @@ class BootpayWebView extends WebView {
   final BootpayAsyncConfirmCallback? onConfirmAsync;
   final BootpayDefaultCallback? onDone;
   BootpayProgressBarCallback? onProgressShow;
-  ShowHeaderCallback? onShowHeader;
+  // ShowHeaderCallback? onShowHeader;
   bool? showCloseButton = false;
   Widget? closeButton;
   String? userAgent;
   int? requestType = BootpayConstant.REQUEST_TYPE_PAYMENT; //1: 결제, 2:정기결제, 3: 본인인증
 
   final DebounceCloseController closeController = Get.put(DebounceCloseController());
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
+  late final WebViewController _controller;
+  // final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   BootpayWebView(
       {this.key,
+        // this._controller,
         this.payload,
         this.showCloseButton,
         this.onCancel,
@@ -74,26 +79,13 @@ class BootpayWebView extends WebView {
     // String script = "Bootpay.confirm().then(function(confirmRes) { BootpayDone(JSON.stringify(res)); }, function(confirmRes) { if (res.event === 'error') { BootpayError(JSON.stringify(res)); } else if (res.event === 'cancel') { BootpayCancel(JSON.stringify(res)); } })";
     String script = "Bootpay.confirm();";
 
-    _controller.future.then((controller) {
-      // controller.evaluateJavascript(
-      //     "setTimeout(function() { $script }, 30);"
-      // );
-      controller.runJavascript(
-          script
-      );
-    });
+    _controller.runJavaScript(script);
   }
 
   void removePaymentWindow() {
-    _controller.future.then((controller) {
-      // controller.evaluateJavascript(
-      //     "Bootpay.removePaymentWindow();"
-      // );
-      controller.runJavascript(
-          "Bootpay.removePaymentWindow();"
-      );
-      // controller.
-    });
+    _controller.runJavaScript(
+        "Bootpay.removePaymentWindow();"
+    );
   }
 
 
@@ -128,7 +120,7 @@ class BootpayWebView extends WebView {
 class _BootpayWebViewState extends State<BootpayWebView> {
 
   // final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.2.5/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.2.7/';
 
   bool isClosed = false;
 
@@ -136,7 +128,106 @@ class _BootpayWebViewState extends State<BootpayWebView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    // if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    late final PlatformWebViewControllerCreationParams params;
+    if (WebViewPlatform.instance is BTWebKitWebViewPlatform) {
+      params = WebKitWebViewControllerCreationParams(
+        allowsInlineMediaPlayback: true,
+        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
+      );
+    } else {
+      params = const PlatformWebViewControllerCreationParams();
+    }
+
+    final WebViewController controller =
+    WebViewController.fromPlatformCreationParams(params);
+    // #enddocregion platform_features
+
+    controller
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // debugPrint('WebView is loading (progress : $progress%)');
+          },
+          onPageStarted: (String url) {
+            // debugPrint('Page started loading: $url');
+          },
+          onPageFinished: (String url) async {
+            // debugPrint('Page finished loading: $url');
+            if (url.startsWith(INAPP_URL)) {
+
+              for (String script in await getBootpayJSBeforeContentLoaded()) {
+                // widget._controller.runJavaScript(javaScript)
+                widget._controller.runJavaScript(script);
+            // BootpayPrint(script);
+              }
+              widget._controller.runJavaScript(getBootpayJS());
+
+            }
+
+          },
+          // onNavi
+          onWebResourceError: (WebResourceError error) {
+            debugPrint('''
+            Page resource error:
+            code: ${error.errorCode}
+            description: ${error.description}
+            errorType: ${error.errorType}
+            isForMainFrame: ${error.isForMainFrame}
+                    ''');
+          },
+          onNavigationRequest: (NavigationRequest request) {
+            // if(widget.onShowHeader != null) {
+            //   widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
+            // }
+            // print('allowing navigation to $request');
+            return NavigationDecision.navigate;
+          },
+          // Navigation
+
+        ),
+      )
+      ..addJavaScriptChannel(
+        'BootpayCancel',
+        onMessageReceived: onCancel,
+      )
+      ..addJavaScriptChannel(
+        'BootpayError',
+        onMessageReceived: onError,
+      )
+      ..addJavaScriptChannel(
+        'BootpayClose',
+        onMessageReceived: onClose,
+      )
+      ..addJavaScriptChannel(
+        'BootpayIssued',
+        onMessageReceived: onIssued,
+      )
+      ..addJavaScriptChannel(
+        'BootpayConfirm',
+        onMessageReceived: onConfirm,
+      )
+      ..addJavaScriptChannel(
+        'BootpayDone',
+        onMessageReceived: onDone,
+      )
+      ..addJavaScriptChannel(
+        'BootpayFlutterWebView',
+        onMessageReceived: onRedirect,
+      )
+      ..loadRequest(Uri.parse(INAPP_URL));
+
+    // #docregion platform_features
+    if (controller.platform is AndroidWebViewController) {
+      AndroidWebViewController.enableDebugging(true);
+      (controller.platform as AndroidWebViewController)
+          .setMediaPlaybackRequiresUserGesture(false);
+    }
+    // #enddocregion platform_features
+
+    widget._controller = controller;
   }
 
 
@@ -145,63 +236,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
     // TODO: implement build
     return Stack(
       children: [
-        isClosed == false ? WebView(
-          key: widget.key,
-          initialUrl: INAPP_URL,
-          javascriptMode: JavascriptMode.unrestricted,
-          userAgent: widget.userAgent ?? null,
-          onWebViewCreated: (WebViewController webViewController) {
-            widget._controller.complete(webViewController);
-          },
-          javascriptChannels: <JavascriptChannel>[
-            onCancel(context),
-            onError(context),
-            onClose(context),
-            onIssued(context),
-            onConfirm(context),
-            onDone(context),
-            onRedirect(context)
-          ].toSet(),
-          navigationDelegate: (NavigationRequest request) {
-            if(widget.onShowHeader != null) {
-              widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
-            }
-            // print('allowing navigation to $request');
-            return NavigationDecision.navigate;
-          },
-          // navigationDelegate: (NavigationRequest request) {
-          //
-          //
-          //   if(widget.onShowHeader != null) {
-          //     widget.onShowHeader!(request.url.contains("https://nid.naver.com") || request.url.contains("naversearchthirdlogin://"));
-          //   }
-          //
-          //   if(Platform.isAndroid)  return NavigationDecision.prevent;
-          //   else return NavigationDecision.navigate;
-          // },
-
-          onPageFinished: (String url) {
-
-            if (url.startsWith(INAPP_URL)) {
-              widget._controller.future.then((controller) async {
-                for (String script in await getBootpayJSBeforeContentLoaded()) {
-                  controller.runJavascript(script);
-                  // BootpayPrint(script);
-                }
-                controller.runJavascript(getBootpayJS());
-                // controller.runJavascript('');
-              });
-            }
-
-            //네이버페이 일 경우 뒤로가기 버튼 제거 - 그러나 작동하지 않는다 (아마 팝업이라)
-            // if(url.startsWith("https://nid.naver.com/nidlogin.login")) {
-            //   widget._controller.future.then((controller) async {
-            //     controller.evaluateJavascript('window.document.getElementById("back").remove();');
-            //   });
-            // }
-          },
-          gestureNavigationEnabled: true,
-        ) : Container(),
+        isClosed == false ? WebViewWidget(controller: widget._controller) : Container(),
         widget.showCloseButton == false ?
         Container() :
         widget.closeButton != null ?
@@ -336,6 +371,126 @@ extension BootpayMethod on _BootpayWebViewState {
   }
 }
 
+extension BootpayCallback on _BootpayWebViewState {
+  Future<void> goConfirmEvent(JavaScriptMessage message) async {
+    if (this.widget.onConfirm != null) {
+      bool goTransactionConfirm = this.widget.onConfirm!(message.message);
+      if (goTransactionConfirm) {
+        transactionConfirm();
+      }
+    } else if(this.widget.onConfirmAsync != null) {
+      bool goTransactionConfirm = await this.widget.onConfirmAsync!(message.message);
+      if (goTransactionConfirm) {
+        transactionConfirm();
+      }
+    }
+  }
+
+  Future<void> onCancel(JavaScriptMessage message) async {
+    if(this.widget.onProgressShow != null) {
+      this.widget.onProgressShow!(false);
+    }
+    if (this.widget.onCancel != null)
+      this.widget.onCancel!(message.message);
+  }
+
+  Future<void> onError(JavaScriptMessage message) async {
+    if(this.widget.onProgressShow != null) {
+      this.widget.onProgressShow!(false);
+    }
+    if (this.widget.onError != null)
+      this.widget.onError!(message.message);
+  }
+
+  Future<void> onClose(JavaScriptMessage message) async {
+    debounceClose();
+    // if (this.widget.onClose != null) this.widget.onClose!();
+    // Navigator.of(context).pop();
+  }
+
+  Future<void> onIssued(JavaScriptMessage message) async {
+    if(this.widget.onProgressShow != null) {
+      this.widget.onProgressShow!(false);
+    }
+    if (this.widget.onIssued != null)
+      this.widget.onIssued!(message.message);
+  }
+
+
+  Future<void> onConfirm(JavaScriptMessage message) async {
+    if(this.widget.onProgressShow != null) {
+      this.widget.onProgressShow!(true);
+    }
+    await goConfirmEvent(message);
+  }
+
+
+  Future<void> onDone(JavaScriptMessage message) async {
+    if(this.widget.onProgressShow != null) {
+      this.widget.onProgressShow!(true);
+    }
+    if (this.widget.onDone != null) this.widget.onDone!(message.message);
+  }
+
+  Future<void> onRedirect(JavaScriptMessage message) async {
+    final data = json.decode(message.message);
+    switch(data["event"]) {
+      case "cancel":
+        if(this.widget.onProgressShow != null) {
+          this.widget.onProgressShow!(false);
+        }
+        if (this.widget.onCancel != null) this.widget.onCancel!(message.message);
+        debounceClose();
+        break;
+      case "error":
+        if(this.widget.onProgressShow != null) {
+          this.widget.onProgressShow!(false);
+        }
+        if (this.widget.onError != null) this.widget.onError!(message.message);
+        if(this.widget.payload?.extra?.displayErrorResult != true) {
+          debounceClose();
+        }
+        break;
+      case "close":
+        if(this.widget.onProgressShow != null) {
+          this.widget.onProgressShow!(false);
+        }
+        debounceClose();
+        break;
+      case "issued":
+        if(this.widget.onProgressShow != null) {
+          this.widget.onProgressShow!(false);
+        }
+        if (this.widget.onIssued != null) this.widget.onIssued!(message.message);
+        if(this.widget.payload?.extra?.displaySuccessResult != true) {
+          debounceClose();
+        }
+        break;
+      case "confirm":
+        if(this.widget.onProgressShow != null) {
+          this.widget.onProgressShow!(true);
+        }
+        await goConfirmEvent(message);
+        break;
+      case "done":
+        if(this.widget.onProgressShow != null) {
+          this.widget.onProgressShow!(false);
+        }
+        if (this.widget.onDone != null) this.widget.onDone!(message.message);
+        if(this.widget.payload?.extra?.displaySuccessResult != true) {
+          debounceClose();
+        } else {
+          final content = json.decode(data["data"]);
+          if(content["method_origin_symbol"] == "card_rebill_rest") {
+            debounceClose();
+          }
+        }
+        break;
+    }
+  }
+}
+
+/*
 extension BootpayCallback on _BootpayWebViewState {
   Future<void> goConfirmEvent(JavascriptMessage message) async {
     if (this.widget.onConfirm != null) {
@@ -499,3 +654,4 @@ extension BootpayCallback on _BootpayWebViewState {
         });
   }
 }
+*/

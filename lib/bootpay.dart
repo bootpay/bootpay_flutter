@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 
 
 typedef void BootpayProgressBarCallback(bool isShow);
-typedef void ShowHeaderCallback(bool showHeader);
+// typedef void ShowHeaderCallback(bool showHeader);
 
 typedef BootpayDefaultCallback = void Function(String data);
 typedef BootpayConfirmCallback = bool Function(String data);
