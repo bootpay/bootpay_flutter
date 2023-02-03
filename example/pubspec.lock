@@ -42,14 +42,14 @@ packages:
       name: bootpay_webview_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.27"
+    version: "4.0.28"
   bootpay_webview_flutter_android:
     dependency: transitive
     description:
       name: bootpay_webview_flutter_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.12"
+    version: "3.2.13"
   bootpay_webview_flutter_platform_interface:
     dependency: transitive
     description:
