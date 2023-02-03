@@ -27,7 +27,7 @@ dependencies:
   bootpay_webview_flutter_wkwebview: 3.0.25
   uuid: 3.0.7
   shared_preferences: 2.0.17
-#  js: 0.6.5
+  js: 0.6.5
   fluttertoast: 8.1.2
   http: 0.13.5
   package_info_plus: 3.0.2
@@ -44,7 +44,7 @@ dev_dependencies:
 # The following section is specific to Flutter.
 
 dependency_overrides:
-  js: 0.6.7 # 버전 충돌나는 패키지에 대해 강제로 버전 지정
+  js: 0.6.5 # 버전 충돌나는 패키지에 대해 강제로 버전 지정
 
 
 flutter:
