@@ -1,3 +1,6 @@
+## 4.5.2
+* iframe 일때 onDone이 호출되지 않는 버그 개선 
+
 ## 4.5.1
 * webview version update 
 

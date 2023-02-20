@@ -332,8 +332,8 @@ class _SecondRouteState extends State<SecondRoute> {
       //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
       payload.extra?.openType = 'iframe';
     }
-    payload.pg = '나이스페이';
-    payload.method = "카카오페이";
+    payload.pg = '다날';
+    payload.method = "휴대폰";
 
     Bootpay().requestPayment(
       context: context,
@@ -361,6 +361,7 @@ class _SecondRouteState extends State<SecondRoute> {
 
         print('------- onConfirm: $data');
 
+        // checkQtyFromServer(data);
         return true;
       },
       // onConfirmAsync: (String data) async {
@@ -497,6 +498,7 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.pg = "다날";
     payload.method = "본인인증";
     payload.authenticationId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+    // payload.extra?.show
     // payload.extra?.ageLimit = 40;
 
 
@@ -551,6 +553,7 @@ class _SecondRouteState extends State<SecondRoute> {
     return Future.delayed(Duration(seconds: 1), () {
       print('checkQtyFromServer end: $data');
 
+      Bootpay().transactionConfirm();
       return true;
     });
   }

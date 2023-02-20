@@ -77,8 +77,11 @@ class BootpayWebView extends StatefulWidget {
     //     cancel() +
     //     "});";
 
-    // String script = "Bootpay.confirm().then(function(confirmRes) { BootpayDone(JSON.stringify(res)); }, function(confirmRes) { if (res.event === 'error') { BootpayError(JSON.stringify(res)); } else if (res.event === 'cancel') { BootpayCancel(JSON.stringify(res)); } })";
-    String script = "Bootpay.confirm();";
+    String script = "Bootpay.confirm().then(function(confirmRes) { BootpayDone.postMessage(JSON.stringify(confirmRes)); }, function(confirmRes) { if (confirmRes.event === 'error') { BootpayError.postMessage(JSON.stringify(confirmRes)); } else if (confirmRes.event === 'cancel') { BootpayCancel.postMessage(JSON.stringify(confirmRes)); } })";
+    if(payload?.extra?.openType == 'redirect') {
+      script = "Bootpay.confirm();";
+    }
+
 
     _controller.runJavaScript(script);
   }
@@ -427,6 +430,9 @@ extension BootpayCallback on _BootpayWebViewState {
 
 
   Future<void> onDone(JavaScriptMessage message) async {
+    final data = json.decode(message.message);
+    print(data);
+
     if(this.widget.onProgressShow != null) {
       this.widget.onProgressShow!(true);
     }
@@ -435,6 +441,10 @@ extension BootpayCallback on _BootpayWebViewState {
 
   Future<void> onRedirect(JavaScriptMessage message) async {
     final data = json.decode(message.message);
+
+    print('redirect');
+    print(data);
+
     switch(data["event"]) {
       case "cancel":
         if(this.widget.onProgressShow != null) {
