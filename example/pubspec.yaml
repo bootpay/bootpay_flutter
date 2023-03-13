@@ -6,7 +6,8 @@ description: Demonstrates how to use the bootpay_flutter plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=3.0.0"
 
 dependencies:
   flutter:
@@ -20,8 +21,8 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
-  bootpay_webview_flutter_android: 3.2.13
-  bootpay_webview_flutter_wkwebview: 3.0.25
+#  bootpay_webview_flutter_android: 3.2.13
+#  bootpay_webview_flutter_wkwebview: 3.0.25
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -37,7 +38,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  bootpay_webview_flutter_platform_interface: ^2.0.0
+#  bootpay_webview_flutter_platform_interface: 2.0.16
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
