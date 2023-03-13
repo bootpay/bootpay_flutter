@@ -1,13 +1,13 @@
 name: bootpay
 description: A Bootpay plugin that provides payment api on Android, iOS and Web.
 
-version: 4.5.51
+version: 4.5.23
 
 homepage: https://www.bootpay.co.kr
 repository: https://github.com/bootpay/bootpay_flutter.git
 environment:
-  sdk: ">=2.17.0 <3.0.0"
-  flutter: ">=3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=2.0.0"
 
 dependencies:
   flutter:
@@ -24,16 +24,19 @@ dependencies:
 
 #  bootpay_webview_flutter: 3.2.21
   bootpay_webview_flutter: 4.0.28
-#  bootpay_webview_flutter_android: 3.2.13
-#  bootpay_webview_flutter_wkwebview: 3.0.25
+#  webview_flutter: 4.0.6
+
+
+  bootpay_webview_flutter_android: 3.2.13
+  bootpay_webview_flutter_wkwebview: 3.0.25
   uuid: 3.0.7
   shared_preferences: 2.0.17
-  js: 0.6.4
-  fluttertoast: 8.2.1
-  http: 0.13.5
-  package_info_plus: 3.0.2
-  encrypt: 5.0.1
-  get: 4.6.5
+  js: ^0.6.4
+  fluttertoast: ^8.2.1
+  http: ^0.13.5
+  package_info_plus: ^3.0.2
+  encrypt: ^5.0.1
+  get: ^4.6.5
 
 dev_dependencies:
   build_runner: ^2.1.5
@@ -47,6 +50,15 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+
+  plugin:
+    platforms:
+      android:
+        default_package: bootpay_webview_flutter_android
+      ios:
+        default_package: bootpay_webview_flutter_wkwebview
+      web:
+
   # This section identifies this Flutter project as a plugin project.
   # The 'pluginClass' and Android 'package' identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when

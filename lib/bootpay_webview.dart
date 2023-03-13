@@ -11,7 +11,6 @@ import 'user_info.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bootpay_webview_flutter/bootpay_webview_flutter.dart';
-
 import 'package:bootpay_webview_flutter_android/bootpay_webview_flutter_android.dart';
 import 'package:bootpay_webview_flutter_wkwebview/bootpay_webview_flutter_wkwebview.dart';
 
@@ -134,6 +133,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
     super.initState();
     // if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
     late final PlatformWebViewControllerCreationParams params;
+
     if (WebViewPlatform.instance is BTWebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
         allowsInlineMediaPlayback: true,
