@@ -12,7 +12,7 @@ class Extra {
   bool? displayCashReceipt = true; // 현금영수증 보일지 말지.. 가상계좌 KCP 옵션
   String? depositExpiration = ""; //가상계좌 입금 만료일자 설정
   String? appScheme;  //모바일 앱에서 결제 완료 후 돌아오는 옵션 ( 아이폰만 적용 )
-  bool? useCardPoint = true; //카드 포인트 사용 여부 (토스만 가능)
+  bool? useCardPoint = false; //카드 포인트 사용 여부 (토스만 가능)
   String? directCard = ""; //해당 카드로 바로 결제창 (토스만 가능)
   bool? useOrderId = false; //가맹점 order_id로 PG로 전송
   bool? internationalCardOnly = false; //해외 결제카드 선택 여부 (토스만 가능)

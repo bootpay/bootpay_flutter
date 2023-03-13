@@ -1,3 +1,6 @@
+## 4.5.3
+* update for pub.dev/score
+
 ## 4.5.2
 * iframe 일때 onDone이 호출되지 않는 버그 개선 
 
@@ -27,7 +30,7 @@
 * 통계 버그 수정 
 
 ## 4.3.5
-* ㅅㅐ로운 웹뷰버전이 아닌 기존 웹뷰버전으로 고정 
+* 새로운 웹뷰버전이 아닌 기존 웹뷰버전으로 고정 
 
 ## 4.3.4
 * confirm async Web 버그 수정
@@ -39,8 +42,8 @@
 
 ## 4.3.2
 * confirm async 지원
-    - confirm이 정의되어있다면 confirm이 수행되고,
-    - confirm이 정의되어있지 않다면, confirmAsync가 수행됨 
+* confirm이 정의되어있다면 confirm이 수행되고,
+* confirm이 정의되어있지 않다면, confirmAsync가 수행됨 
 
 ## 4.3.1
 * request 후 event  async 지원  
