@@ -13,5 +13,5 @@ class BootpayConfig {
   static const int ENV_STAGE = -2;
   static const int ENV_PROMOTION = 1;
 
-  static const String VERSION = "4.5.6";
+  static const String VERSION = "4.6.0";
 }

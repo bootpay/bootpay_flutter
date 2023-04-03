@@ -1,4 +1,4 @@
-## 4.5.6
+## 4.6.0
 * Transmitting staged metadata in a specific scenario
 
 ## 4.5.23
