@@ -82,6 +82,7 @@ class BootpayWebView extends StatefulWidget {
     }
 
 
+
     _controller.runJavaScript(script);
   }
 
@@ -122,8 +123,7 @@ class BootpayWebView extends StatefulWidget {
 
 class _BootpayWebViewState extends State<BootpayWebView> {
 
-  // final String INAPP_URL = 'https://inapp.bootpay.co.kr/3.3.3/production.html';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.2.7/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/4.2.9/';
 
   bool isClosed = false;
 
@@ -165,10 +165,10 @@ class _BootpayWebViewState extends State<BootpayWebView> {
               for (String script in await getBootpayJSBeforeContentLoaded()) {
                 // widget._controller.runJavaScript(javaScript)
                 widget._controller.runJavaScript(script);
-            // BootpayPrint(script);
+
               }
               widget._controller.runJavaScript(getBootpayJS());
-
+              // BootpayPrint(getBootpayJS());
             }
 
           },
@@ -279,9 +279,13 @@ extension BootpayMethod on _BootpayWebViewState {
       result.add("Bootpay.setDevice('IOS');");
       result.add("Bootpay.setVersion('" + BootpayConfig.VERSION + "', 'ios_flutter')");
     }
-    if (BootpayConfig.DEBUG) {
+    if (BootpayConfig.ENV == BootpayConfig.ENV_DEBUG) {
       result.add("Bootpay.setEnvironmentMode('development');");
+    } else if (BootpayConfig.ENV == BootpayConfig.ENV_STAGE) {
+      result.add("Bootpay.setEnvironmentMode('stage');");
     }
+
+
     // result.add("Bootpay.setEnvironmentMode('development');");
     // result.add( "setTimeout(function() {" + await getAnalyticsData() + "}, 50);");
     result.add(await getAnalyticsData());
@@ -390,18 +394,27 @@ extension BootpayCallback on _BootpayWebViewState {
     }
   }
 
-  Future<void> onCancel(JavaScriptMessage message) async {
-    if(this.widget.onProgressShow != null) {
-      this.widget.onProgressShow!(false);
+  void onProgressShow(bool isShow) {
+    if(this.widget.payload?.extra?.openType != 'redirect' && isShow) {
+
+    } else {
+      if(this.widget.onProgressShow != null) {
+        this.widget.onProgressShow!(isShow);
+      }
     }
+  }
+
+
+  Future<void> onCancel(JavaScriptMessage message) async {
+    onProgressShow(false);
+
     if (this.widget.onCancel != null)
       this.widget.onCancel!(message.message);
   }
 
   Future<void> onError(JavaScriptMessage message) async {
-    if(this.widget.onProgressShow != null) {
-      this.widget.onProgressShow!(false);
-    }
+    onProgressShow(false);
+
     if (this.widget.onError != null)
       this.widget.onError!(message.message);
   }
@@ -413,18 +426,16 @@ extension BootpayCallback on _BootpayWebViewState {
   }
 
   Future<void> onIssued(JavaScriptMessage message) async {
-    if(this.widget.onProgressShow != null) {
-      this.widget.onProgressShow!(false);
-    }
+    onProgressShow(false);
+
     if (this.widget.onIssued != null)
       this.widget.onIssued!(message.message);
   }
 
 
   Future<void> onConfirm(JavaScriptMessage message) async {
-    if(this.widget.onProgressShow != null) {
-      this.widget.onProgressShow!(true);
-    }
+    onProgressShow(true);
+
     await goConfirmEvent(message);
   }
 
@@ -433,60 +444,51 @@ extension BootpayCallback on _BootpayWebViewState {
     final data = json.decode(message.message);
     print(data);
 
-    if(this.widget.onProgressShow != null) {
-      this.widget.onProgressShow!(true);
-    }
+    onProgressShow(false);
+
     if (this.widget.onDone != null) this.widget.onDone!(message.message);
   }
 
   Future<void> onRedirect(JavaScriptMessage message) async {
     final data = json.decode(message.message);
 
-    print('redirect');
-    print(data);
 
     switch(data["event"]) {
       case "cancel":
-        if(this.widget.onProgressShow != null) {
-          this.widget.onProgressShow!(false);
-        }
+        onProgressShow(false);
+
         if (this.widget.onCancel != null) this.widget.onCancel!(message.message);
         debounceClose();
         break;
       case "error":
-        if(this.widget.onProgressShow != null) {
-          this.widget.onProgressShow!(false);
-        }
+        onProgressShow(false);
+
         if (this.widget.onError != null) this.widget.onError!(message.message);
         if(this.widget.payload?.extra?.displayErrorResult != true) {
           debounceClose();
         }
         break;
       case "close":
-        if(this.widget.onProgressShow != null) {
-          this.widget.onProgressShow!(false);
-        }
+        onProgressShow(false);
+
         debounceClose();
         break;
       case "issued":
-        if(this.widget.onProgressShow != null) {
-          this.widget.onProgressShow!(false);
-        }
+        onProgressShow(false);
+
         if (this.widget.onIssued != null) this.widget.onIssued!(message.message);
         if(this.widget.payload?.extra?.displaySuccessResult != true) {
           debounceClose();
         }
         break;
       case "confirm":
-        if(this.widget.onProgressShow != null) {
-          this.widget.onProgressShow!(true);
-        }
+        onProgressShow(true);
+
         await goConfirmEvent(message);
         break;
       case "done":
-        if(this.widget.onProgressShow != null) {
-          this.widget.onProgressShow!(false);
-        }
+        onProgressShow(false);
+
         if (this.widget.onDone != null) this.widget.onDone!(message.message);
         if(this.widget.payload?.extra?.displaySuccessResult != true) {
           debounceClose();

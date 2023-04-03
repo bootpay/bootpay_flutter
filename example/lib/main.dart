@@ -309,8 +309,12 @@ class _SecondRouteState extends State<SecondRoute> {
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
 
-    if(BootpayConfig.DEBUG) {
+    if(BootpayConfig.ENV == -1) {
       payload.extra?.redirectUrl = 'https://dev-api.bootpay.co.kr/v2';
+    } else if(BootpayConfig.ENV == -2) {
+      payload.extra?.redirectUrl = 'https://stage-api.bootpay.co.kr/v2';
+    }  else {
+      payload.extra?.redirectUrl = 'https://api.bootpay.co.kr/v2';
     }
 
     // extra.cardQuota = '3';
@@ -332,8 +336,11 @@ class _SecondRouteState extends State<SecondRoute> {
       //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
       payload.extra?.openType = 'iframe';
     }
-    payload.pg = '다날';
-    payload.method = "휴대폰";
+    // print('popup');
+    // payload.extra?.openType = 'popup';
+
+    payload.pg = '나이스페이';
+    payload.method = "네이버페이";
 
     Bootpay().requestPayment(
       context: context,
@@ -341,7 +348,7 @@ class _SecondRouteState extends State<SecondRoute> {
       showCloseButton: false,
       // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data) {
-        print('------- onCancel: $data');
+        print('------- onCancel 1 : $data');
       },
       onError: (String data) {
         print('------- onError: $data');
@@ -406,10 +413,10 @@ class _SecondRouteState extends State<SecondRoute> {
       showCloseButton: false,
       // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data) {
-        print('------- onCancel: $data');
+        print('------- onCancel 2: $data');
       },
       onError: (String data) {
-        print('------- onCancel: $data');
+        print('------- onError 2: $data');
       },
       onClose: () {
         print('------- onClose');
@@ -451,16 +458,24 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.extra?.subscribeTestPayment = false;
 
 
+    payload.metadata = {
+      "callbackParam1" : "value12",
+      "callbackParam2" : "value34",
+      "callbackParam3" : "value56",
+      "callbackParam4" : "value78",
+    }; // 전달할 파라미터, 결제 후 되돌려 주는 값
+
     Bootpay().requestSubscription(
       context: context,
       payload: payload,
       showCloseButton: false,
       // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data) {
-        print('------- onCancel: $data');
+        print('------- onCancel 3: $data');
       },
       onError: (String data) {
-        print('------- onCancel: $data');
+        print('------- onError 3: $data');
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
       },
       onClose: () {
         print('------- onClose');

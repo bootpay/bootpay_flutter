@@ -7,6 +7,11 @@ void BootpayPrint(Object? object) {
 }
 
 class BootpayConfig {
-  static const bool DEBUG = false;
-  static const String VERSION = "4.5.51";
+  static const int ENV = ENV_PROMOTION; //-1: debug, -2: stage, 0보다 크면 실서버
+
+  static const int ENV_DEBUG = -1;
+  static const int ENV_STAGE = -2;
+  static const int ENV_PROMOTION = 1;
+
+  static const String VERSION = "4.5.6";
 }

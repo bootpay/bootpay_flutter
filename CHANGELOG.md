@@ -1,3 +1,6 @@
+## 4.5.6
+* Transmitting staged metadata in a specific scenario
+
 ## 4.5.23
 * Update pub.dev/score
 
