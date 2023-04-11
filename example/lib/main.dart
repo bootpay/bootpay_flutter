@@ -340,7 +340,7 @@ class _SecondRouteState extends State<SecondRoute> {
     // payload.extra?.openType = 'popup';
 
     payload.pg = '나이스페이';
-    payload.method = "네이버페이";
+    payload.method = "카드";
 
     Bootpay().requestPayment(
       context: context,

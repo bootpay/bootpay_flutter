@@ -124,6 +124,9 @@ class BootpayWebView extends StatefulWidget {
 class _BootpayWebViewState extends State<BootpayWebView> {
 
   final String INAPP_URL = 'https://webview.bootpay.co.kr/4.2.9/';
+  // final String INAPP_URL = 'https://staging-webview.bootpay.co.kr/4.2.9/';
+
+
 
   bool isClosed = false;
 
@@ -168,7 +171,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
 
               }
               widget._controller.runJavaScript(getBootpayJS());
-              // BootpayPrint(getBootpayJS());
+              BootpayPrint(getBootpayJS());
             }
 
           },
