@@ -68,34 +68,34 @@ packages:
     dependency: transitive
     description:
       name: bootpay_webview_flutter
-      sha256: "170d622e12e89e97acd110e2b620041589986e9c048f7d314563e628e45122b1"
+      sha256: "0a89d3bb869b856238d9775ada926ad9537fb4a927bf8155e89876eb575dfcd1"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.28"
+    version: "4.2.1"
   bootpay_webview_flutter_android:
     dependency: transitive
     description:
       name: bootpay_webview_flutter_android
-      sha256: "31f4c66074a0a030d79981ce243a0dc0b72a3249355049ac834eef227a8b5177"
+      sha256: "5b60e7d02df8986ae297458dc0e771e4496d8fafcd56c50246904e85c9a4a37b"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.13"
+    version: "3.6.1"
   bootpay_webview_flutter_platform_interface:
     dependency: transitive
     description:
       name: bootpay_webview_flutter_platform_interface
-      sha256: "3a50a1d84a3ce528c49267997540931c880623aeefec6db56095e73b2c3e5fff"
+      sha256: "109fbac439b78d1c129985ab8880b64fd746884b338ed42b51e5428b1b21be78"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.3.0"
   bootpay_webview_flutter_wkwebview:
     dependency: transitive
     description:
       name: bootpay_webview_flutter_wkwebview
-      sha256: aa892041d99ddd80568aa228826b63df648f8a6d31821783eed117d7a375bcfd
+      sha256: "03e271a0c8e6dd6c6fb594f27e72dc54852f873a1bab57acc76b80cf44c25379"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.25"
+    version: "3.4.1"
   build:
     dependency: transitive
     description:
@@ -781,4 +781,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.18.0 <3.0.0"
-  flutter: ">=3.0.0"
+  flutter: ">=3.3.0"

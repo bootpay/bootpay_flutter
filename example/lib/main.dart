@@ -273,7 +273,7 @@ class _SecondRouteState extends State<SecondRoute> {
     item2.name = "키보드"; // 주문정보에 담길 상품명
     item2.qty = 1; // 해당 상품의 주문 수량
     item2.id = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
-    item2.price = 500; // 상품의 가격
+    item2.price = 500.50; // 상품의 가격
     List<Item> itemList = [item1, item2];
 
     payload.webApplicationId = webApplicationId; // web application id
@@ -281,11 +281,12 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.iosApplicationId = iosApplicationId; // ios application id
 
 
-    payload.pg = '나이스페이';
-    payload.method = '네이버페이';
+    payload.pg = '다날';
+    payload.method = '카드';
+    // payload.method = '네이버페이';
     // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
-    payload.price = 1000.0; //정기결제시 0 혹은 주석
+    payload.price = 1000.50; //정기결제시 0 혹은 주석
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -299,15 +300,17 @@ class _SecondRouteState extends State<SecondRoute> {
     }; // 전달할 파라미터, 결제 후 되돌려 주는 값
     payload.items = itemList; // 상품정보 배열
 
+
     User user = User(); // 구매자 정보
+    user.id = "12341234";
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
-    // user.phone = "010-0000-0000";
+    user.phone = "010-0000-0000";
     user.addr = 'null';
 
     Extra extra = Extra(); // 결제 옵션
-    extra.appScheme = 'bootpayFlutterExample';
+    extra.appScheme = 'goodpinApp';
 
     if(BootpayConfig.ENV == -1) {
       payload.extra?.redirectUrl = 'https://dev-api.bootpay.co.kr/v2';
@@ -340,7 +343,11 @@ class _SecondRouteState extends State<SecondRoute> {
     // payload.extra?.openType = 'popup';
 
     payload.pg = '나이스페이';
-    payload.method = "카드";
+    payload.method = "카카오";
+
+
+    // payload.extra.us = "010123412343";
+
 
     Bootpay().requestPayment(
       context: context,
@@ -355,7 +362,15 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        Future.delayed(Duration(seconds: 0)).then((value) {
+
+          if (mounted) {
+            print('Bootpay().dismiss');
+            Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+          }
+        });
+
+        // Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
       },
       onIssued: (String data) {
@@ -402,8 +417,8 @@ class _SecondRouteState extends State<SecondRoute> {
   //버튼클릭시 부트페이 정기결제 요청 실행
   void goBootpaySubscriptionTest(BuildContext context) {
     payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
-    payload.pg = "나이스페이";
-    payload.method = "카드자동";
+    // payload.pg = "토스";
+    // payload.method = "카드정기";
     // payload.extra?.subscribeTestPayment = false;
 
 
@@ -451,8 +466,8 @@ class _SecondRouteState extends State<SecondRoute> {
 
   void goBootpaySubscriptionUITest(BuildContext context) {
     payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
-    payload.pg = "나이스페이";
-    payload.method = "카드자동";
+    payload.pg = 'kakao';
+    payload.method = 'easy_rebill';
 
     // payload.method = "간편카드";
     payload.extra?.subscribeTestPayment = false;

@@ -23,12 +23,12 @@ dependencies:
 #  encrypt: ^5.0.1
 
 #  bootpay_webview_flutter: 3.2.21
-  bootpay_webview_flutter: 4.0.28
+  bootpay_webview_flutter: ^4.2.1
 #  webview_flutter: 4.0.6
 
 
-  bootpay_webview_flutter_android: 3.2.13
-  bootpay_webview_flutter_wkwebview: 3.0.25
+  bootpay_webview_flutter_android: ^3.6.1
+  bootpay_webview_flutter_wkwebview: ^3.4.1
   uuid: 3.0.7
   shared_preferences: 2.0.17
   js: ^0.6.4

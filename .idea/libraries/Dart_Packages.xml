@@ -54,28 +54,28 @@
         <entry key="bootpay_webview_flutter">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter-4.0.28/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter-4.2.1/lib" />
             </list>
           </value>
         </entry>
         <entry key="bootpay_webview_flutter_android">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_android-3.2.13/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_android-3.6.1/lib" />
             </list>
           </value>
         </entry>
         <entry key="bootpay_webview_flutter_platform_interface">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_platform_interface-2.0.1/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_platform_interface-2.3.0/lib" />
             </list>
           </value>
         </entry>
         <entry key="bootpay_webview_flutter_wkwebview">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_wkwebview-3.0.25/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_wkwebview-3.4.1/lib" />
             </list>
           </value>
         </entry>
@@ -720,10 +720,10 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/asn1lib-1.4.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/async-2.10.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/boolean_selector-2.1.1/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter-4.0.28/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_android-3.2.13/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_platform_interface-2.0.1/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_wkwebview-3.0.25/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter-4.2.1/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_android-3.6.1/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_platform_interface-2.3.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_wkwebview-3.4.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/build-2.3.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/build_config-1.1.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/build_daemon-3.1.1/lib" />
