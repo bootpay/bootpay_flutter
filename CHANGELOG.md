@@ -1,3 +1,6 @@
+## 4.6.3
+* Bootpay.setLocale 기능 버그 수정 
+
 ## 4.6.2
 * webview version update
 * 결제 후 원래앱으로 돌아와서 결제되지 않는 현상 개선(Could not find specified service) 

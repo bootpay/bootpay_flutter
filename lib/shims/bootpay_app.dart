@@ -452,4 +452,10 @@ class BootpayPlatform extends BootpayApi{
         ver: ver
     );
   }
+
+  @override
+  void setLocale(String locale) {
+    // TODO: implement setLocale
+    if(webView != null) webView!.setLocale(locale);
+  }
 }

@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 
 import 'deprecated/api_provider.dart';
 
+import 'package:intl/intl.dart';
+
 void main() {
   runApp(MaterialApp(
     title: 'Navigation Basics',
@@ -52,7 +54,7 @@ class SecondRoute extends StatefulWidget {
 class _SecondRouteState extends State<SecondRoute> {
 
   Payload payload = Payload();
-
+  //
   String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
   String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
   String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
@@ -281,8 +283,8 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.iosApplicationId = iosApplicationId; // ios application id
 
 
-    payload.pg = '다날';
-    payload.method = '카드';
+    // payload.pg = '다날';
+    // payload.method = '카드';
     // payload.method = '네이버페이';
     // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
@@ -310,7 +312,8 @@ class _SecondRouteState extends State<SecondRoute> {
     user.addr = 'null';
 
     Extra extra = Extra(); // 결제 옵션
-    extra.appScheme = 'goodpinApp';
+    extra.appScheme = 'bootpayFlutter';
+
 
     if(BootpayConfig.ENV == -1) {
       payload.extra?.redirectUrl = 'https://dev-api.bootpay.co.kr/v2';
@@ -342,12 +345,12 @@ class _SecondRouteState extends State<SecondRoute> {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = '나이스페이';
-    payload.method = "카카오";
+    payload.pg = 'kcp';
+    payload.method = "카드";
+    // payload.extra?.locale = 'en'; //app locale
+    // Bootpay().setLocale('en'); //web locale
 
-
-    // payload.extra.us = "010123412343";
-
+    // payload.extra?.depositExpiration = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().add(const Duration(days: 7)));
 
     Bootpay().requestPayment(
       context: context,
@@ -470,7 +473,7 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.method = 'easy_rebill';
 
     // payload.method = "간편카드";
-    payload.extra?.subscribeTestPayment = false;
+    // payload.extra?.subscribeTestPayment = false;
 
 
     payload.metadata = {

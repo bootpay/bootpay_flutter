@@ -235,4 +235,10 @@ class Bootpay extends BootpayApi {
         ver: BootpayConfig.VERSION
     );
   }
+
+  @override
+  void setLocale(String locale) {
+    // TODO: implement setLocale
+    _platform.setLocale(locale);
+  }
 }

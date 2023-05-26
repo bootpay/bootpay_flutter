@@ -9,6 +9,8 @@ import 'model/stat_item.dart';
 
 abstract class BootpayApi {
 
+  void setLocale(String locale);
+
   void requestPayment(
       {
         Key? key,

@@ -65,6 +65,11 @@ class BootpayWebView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _BootpayWebViewState();
 
+  void setLocale(String locale) {
+
+    _controller.runJavaScript("Bootpay.setLocale('$locale')");
+  }
+
   void transactionConfirm() {
     // String script = "Bootpay.confirm()" +
     //     ".then( function (res) {" +
@@ -81,8 +86,6 @@ class BootpayWebView extends StatefulWidget {
       script = "Bootpay.confirm();";
     }
 
-
-
     _controller.runJavaScript(script);
   }
 
@@ -90,6 +93,8 @@ class BootpayWebView extends StatefulWidget {
     _controller.runJavaScript(
         "Bootpay.removePaymentWindow();"
     );
+    // _controller.
+    // _controller.
   }
 
 
@@ -287,6 +292,11 @@ extension BootpayMethod on _BootpayWebViewState {
     } else if (BootpayConfig.ENV == BootpayConfig.ENV_STAGE) {
       result.add("Bootpay.setEnvironmentMode('stage');");
     }
+    String locale = widget.payload?.extra?.locale ?? "";
+    if(locale.length > 0) {
+      result.add("Bootpay.setLocale('$locale');");
+    }
+
 
 
     // result.add("Bootpay.setEnvironmentMode('development');");
@@ -357,6 +367,8 @@ extension BootpayMethod on _BootpayWebViewState {
   void transactionConfirm() {
     widget.transactionConfirm();
   }
+
+
 
   void clickCloseButton() {
 

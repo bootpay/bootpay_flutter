@@ -24,7 +24,10 @@ function _requestPayment(payload) {
 
 function _jsBeforeLoad() {
     _addCloseEvent();
-//  alert(1243);
+}
+
+function _setLocale(locale) {
+    Bootpay.setLocale(locale)
 }
 
 function _addCloseEvent() {
