@@ -6,8 +6,8 @@ version: 4.6.3
 homepage: https://www.bootpay.co.kr
 repository: https://github.com/bootpay/bootpay_flutter.git
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=2.0.0"
+  sdk: ">=2.18.0 <4.0.0"
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:
@@ -23,18 +23,18 @@ dependencies:
 #  encrypt: ^5.0.1
 
 #  bootpay_webview_flutter: 3.2.21
-  bootpay_webview_flutter: ^4.2.1
+  bootpay_webview_flutter: ^4.2.3
 #  webview_flutter: 4.0.6
 
 
-  bootpay_webview_flutter_android: ^3.6.1
+  bootpay_webview_flutter_android: ^3.6.2
   bootpay_webview_flutter_wkwebview: ^3.4.1
   uuid: 3.0.7
-  shared_preferences: 2.0.17
+  shared_preferences: 2.1.1
   js: ^0.6.4
-  fluttertoast: ^8.2.1
+  fluttertoast: 8.2.1
   http: ^0.13.5
-  package_info_plus: ^3.0.2
+  package_info_plus: ^4.0.2
   encrypt: ^5.0.1
   get: ^4.6.5
   intl: 0.18.1

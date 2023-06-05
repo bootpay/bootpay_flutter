@@ -139,6 +139,7 @@ class _SecondRouteState extends State<SecondRoute> {
   ApiProvider _provider = ApiProvider();
 
   //해당 기능은 혼동을 줄 수 있으므로 bio_password 사용을 대체, 그러므로 삭제
+  // @deprecated
   // goBootpayPassword(BuildContext context) async {
   //   String userToken = await getUserToken(context);
   //   bootpayPasswordTest(context, userToken, generateUser());
