@@ -1,3 +1,6 @@
+## 4.6.4
+* webview version update
+
 ## 4.6.3
 * Bootpay.setLocale 기능 버그 수정 
 

@@ -1,4 +1,4 @@
-function _bootpayEventExample() {
+
 
 function _requestPayment(payload) {
     Bootpay.requestPayment(JSON.parse(payload))
@@ -19,7 +19,7 @@ function _requestPayment(payload) {
         if (res.event === 'error') { BootpayError(JSON.stringify(res)); }
         else if (res.event === 'cancel') { BootpayCancel(JSON.stringify(res)); }
     });
-}}
+}
 
 
 function _jsBeforeLoad() {
