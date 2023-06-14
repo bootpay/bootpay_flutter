@@ -348,6 +348,7 @@ class _SecondRouteState extends State<SecondRoute> {
 
     payload.pg = 'kcp';
     payload.method = "카드";
+    // payload.extra?.escrow = true;
     // payload.extra?.locale = 'en'; //app locale
     // Bootpay().setLocale('en'); //web locale
 
