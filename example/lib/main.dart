@@ -346,8 +346,8 @@ class _SecondRouteState extends State<SecondRoute> {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = 'kcp';
-    payload.method = "카드";
+    payload.pg = '나이스페이';
+    payload.method = "네이버페이";
     // payload.extra?.escrow = true;
     // payload.extra?.locale = 'en'; //app locale
     // Bootpay().setLocale('en'); //web locale
@@ -471,10 +471,11 @@ class _SecondRouteState extends State<SecondRoute> {
 
   void goBootpaySubscriptionUITest(BuildContext context) {
     payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
-    payload.pg = 'kakao';
-    payload.method = 'easy_rebill';
+    // payload.pg = 'kakao';
+    // payload.method = 'easy_rebill';
 
-    // payload.method = "간편카드";
+    payload.pg = "나이스페이";
+    payload.method = "카드자동";
     // payload.extra?.subscribeTestPayment = false;
 
 
