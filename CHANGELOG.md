@@ -1,4 +1,4 @@
-## 4.6.7 
+## 4.6.8 
 * browser_open_type option added 
 
 ## 4.6.6

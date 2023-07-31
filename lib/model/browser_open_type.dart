@@ -14,4 +14,8 @@ class BrowserOpenType {
     "browser": this.browser,
     "open_type": this.openType,
   };
+
+  String toString() {
+    return "{browser: '$browser', open_type: '$openType'}";
+  }
 }

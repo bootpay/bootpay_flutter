@@ -148,7 +148,7 @@ class Extra {
         "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card: '${reVal(directCard)}', use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
         "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: ${directAppCard}, direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
         "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
-        "first_subscription_comment: '${reVal(firstSubscriptionComment)}', browser_open_type: [${(browserOpenType ?? []).join(",")}]  except_card_companies: [${(exceptCardCompanies ?? []).join(",")}], enable_easy_payments: [${(enableEasyPayments ?? []).join(",")}], confirm_grace_seconds: ${confirmGraceSeconds}," +
+        "first_subscription_comment: '${reVal(firstSubscriptionComment)}', browser_open_type: [${(browserOpenType ?? []).map((obj) => obj.toString()).join(',')}], except_card_companies: [${(exceptCardCompanies ?? []).join(",")}], enable_easy_payments: [${(enableEasyPayments ?? []).join(",")}], confirm_grace_seconds: ${confirmGraceSeconds}," +
         "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}', subscribe_test_payment: ${subscribeTestPayment}, timeout: $timeout }";
   }
 
