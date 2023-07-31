@@ -2,6 +2,7 @@
 
 import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/config/bootpay_config.dart';
+import 'package:bootpay/model/browser_open_type.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
@@ -59,6 +60,8 @@ class _SecondRouteState extends State<SecondRoute> {
   String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
   String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
 
+   
+  // extra.browserOpenType = [];
   // String webApplicationId = '5b9f51264457636ab9a07cdb';
   // String androidApplicationId = '5b9f51264457636ab9a07cdc';
   // String iosApplicationId = '5b9f51264457636ab9a07cdd';
@@ -152,7 +155,6 @@ class _SecondRouteState extends State<SecondRoute> {
       //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
       payload.extra?.openType = 'iframe';
     }
-
 
     Bootpay().requestPassword(
       context: context,
@@ -343,11 +345,17 @@ class _SecondRouteState extends State<SecondRoute> {
       //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
       payload.extra?.openType = 'iframe';
     }
+    payload.extra?.browserOpenType = [
+      BrowserOpenType.fromJson({"browser": "naver", "open_type": 'popup'}),
+    ];
+
     // print('popup');
     // payload.extra?.openType = 'popup';
 
     payload.pg = '나이스페이';
-    payload.method = "네이버페이";
+    payload.method = "가상계좌";
+
+    payload.extra?.displayCashReceipt = false;
     // payload.extra?.escrow = true;
     // payload.extra?.locale = 'en'; //app locale
     // Bootpay().setLocale('en'); //web locale
