@@ -539,9 +539,15 @@ class _SecondRouteState extends State<SecondRoute> {
   }
 
   void goBootpayAuthTest(BuildContext context) {
+
+
     payload.pg = "다날";
     payload.method = "본인인증";
     payload.authenticationId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+    payload.extra = Extra();
+    payload.extra?.openType = 'iframe';
+
+    payload.extra?.showCloseButton = true;
     // payload.extra?.show
     // payload.extra?.ageLimit = 40;
 

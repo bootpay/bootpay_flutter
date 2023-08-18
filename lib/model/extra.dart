@@ -39,6 +39,7 @@ class Extra {
   int? confirmGraceSeconds = 10; // 결제승인 유예시간 ( 승인 요청을 여러번하더라도 승인 이후 특정 시간동안 계속해서 결제 response_data 를 리턴한다 )
   int? ageLimit = 0;
   bool? escrow = false;
+  bool? showCloseButton = false;
 
   int? timeout = 30;
 
@@ -83,6 +84,7 @@ class Extra {
     subscribeTestPayment = json["subscribe_test_payment"];
     timeout = json["timeout"];
     escrow = json["escrow"];
+    showCloseButton = json["show_close_button"];
   }
 
   Map<String, dynamic> toJson() => {
@@ -120,7 +122,8 @@ class Extra {
     "age_limit": this.ageLimit,
     "subscribe_test_payment": this.subscribeTestPayment,
     "timeout": this.timeout,
-    "escrow": this.escrow
+    "escrow": this.escrow,
+    "show_close_button": this.showCloseButton,
   };
 
   // String getQuotas() {
@@ -144,7 +147,7 @@ class Extra {
 
   String toString() {
     return "{card_quota: '${reVal(cardQuota)}', seller_name: '${reVal(sellerName)}', delivery_day: ${reVal(deliveryDay)}, locale: '${reVal(locale)}', escrow: ${escrow}," +
-        "offer_period: '${reVal(offerPeriod)}', display_cash_receipt: '${reVal(displayCashReceipt)}', deposit_expiration: '${reVal(depositExpiration)}'," +
+        "offer_period: '${reVal(offerPeriod)}', display_cash_receipt: '${reVal(displayCashReceipt)}', deposit_expiration: '${reVal(depositExpiration)}', show_close_button: ${showCloseButton}" +
         "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card: '${reVal(directCard)}', use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
         "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: ${directAppCard}, direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
         "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
