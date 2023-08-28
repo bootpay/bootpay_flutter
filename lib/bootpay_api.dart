@@ -82,7 +82,7 @@ abstract class BootpayApi {
 
   // String applicationId(String webApplicationId, String androidApplicationId, String iosApplicationId);
   void transactionConfirm();
-  void removePaymentWindow();
+  // void removePaymentWindow();
   void dismiss(BuildContext context);
 
   // 회원 추적 코드

@@ -1,3 +1,6 @@
+## 4.7.0
+* flutter web을 위한 Bootpay.dismiss(); 기능 추가 
+
 ## 4.6.9
 * flutter web을 위한 show_close_button 옵션 추가 
 

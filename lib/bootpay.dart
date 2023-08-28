@@ -182,10 +182,10 @@ class Bootpay extends BootpayApi {
     _platform.transactionConfirm();
   }
 
-  @override
-  void removePaymentWindow() {
-    _platform.removePaymentWindow();
-  }
+  // @override
+  // void removePaymentWindow() {
+  //   _platform.removePaymentWindow();
+  // }
 
   @override
   void dismiss(BuildContext context) {

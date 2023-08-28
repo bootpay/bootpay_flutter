@@ -31,7 +31,7 @@ external void _requestAuthentication(String payload);
 external void _setLocale(String locale);
 
 @JS()
-external void _removePaymentWindow();
+external void _dismiss(BuildContext context);
 @JS()
 external void _transactionConfirm();
 @JS()
@@ -224,10 +224,6 @@ class BootpayPlatform extends BootpayApi{
     }
   }
 
-  @override
-  void removePaymentWindow() {
-    // _removePaymentWindow();
-  }
 
   @override
   void transactionConfirm() {
@@ -235,7 +231,8 @@ class BootpayPlatform extends BootpayApi{
   }
 
   void dismiss(BuildContext context) {
-    // _removePaymentWindow();
+    _dismiss(context);
+    Navigator.of(context).pop();
   }
 
   void onClose() {
@@ -248,7 +245,6 @@ class BootpayPlatform extends BootpayApi{
     if(this._callbackIssued != null) this._callbackIssued!(data);
   }
   bool onConfirm(String data) {
-    print("onConfirm : $data");
     if(this._callbackConfirm != null) return this._callbackConfirm!(data);
     return false;
   }

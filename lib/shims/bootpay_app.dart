@@ -390,7 +390,6 @@ class BootpayPlatform extends BootpayApi{
 
 
     if(webView != null) {
-      // bootpayClose();
       Navigator.of(context).pop();
       webView = null;
     }

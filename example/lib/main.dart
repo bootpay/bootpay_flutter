@@ -353,7 +353,7 @@ class _SecondRouteState extends State<SecondRoute> {
     // payload.extra?.openType = 'popup';
 
     payload.pg = '나이스페이';
-    payload.method = "가상계좌";
+    payload.method = "네이버페이";
 
     payload.extra?.displayCashReceipt = false;
     // payload.extra?.escrow = true;
@@ -396,8 +396,9 @@ class _SecondRouteState extends State<SecondRoute> {
 
         print('------- onConfirm: $data');
 
+        Bootpay().dismiss(context);
         // checkQtyFromServer(data);
-        return true;
+        return false;
       },
       // onConfirmAsync: (String data) async {
       //   print('------- onConfirmAsync11: $data');
@@ -546,7 +547,6 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.authenticationId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
     payload.extra = Extra();
     payload.extra?.openType = 'iframe';
-
     payload.extra?.showCloseButton = true;
     // payload.extra?.show
     // payload.extra?.ageLimit = 40;
@@ -586,8 +586,9 @@ class _SecondRouteState extends State<SecondRoute> {
             return false; 후에 서버에서 결제승인 수행
          */
 
-        checkQtyFromServer(data);
-        return false;
+        // Bootpay().dismiss(context);
+        // return false;
+        return true;
       },
       onDone: (String data) {
         print('------- onDone: $data');

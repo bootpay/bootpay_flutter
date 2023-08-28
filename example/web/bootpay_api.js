@@ -101,6 +101,6 @@ function _transactionConfirm() {
     });
 }
 
-function _removePaymentWindow() {
-    Bootpay.dismiss();
+function _dismiss(context) {
+    Bootpay.destroy();
 }
