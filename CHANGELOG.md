@@ -1,3 +1,6 @@
+## 4.7.1
+* 4.6.9 버전 핫 픽스 
+
 ## 4.7.0
 * flutter web을 위한 Bootpay.dismiss(); 기능 추가 
 
