@@ -34,6 +34,7 @@ class Extra {
   List<BrowserOpenType>? browserOpenType = [];
   int? useWelcomepayment = 0; //웰컴 재판모듈 진행시 1
   String? firstSubscriptionComment = ""; // 자동결제 price > 0 조건일 때 첫 결제 관련 메세지
+  List<String>? enableCardCompanies = []; // https://developers.nicepay.co.kr/manual-code-partner.php '01,02,03,04,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,40,41,42'
   List<String>? exceptCardCompanies = []; // 제외할 카드사 리스트 ( enable_card_companies가 우선순위를 갖는다 )
   List<String>? enableEasyPayments = []; // 노출될 간편결제 리스트
   int? confirmGraceSeconds = 10; // 결제승인 유예시간 ( 승인 요청을 여러번하더라도 승인 이후 특정 시간동안 계속해서 결제 response_data 를 리턴한다 )
@@ -42,11 +43,26 @@ class Extra {
   bool? showCloseButton = false;
 
   int? timeout = 30;
-
+  bool? commonEventWebhook = false; //창닫기, 결제만료 웹훅 추가
 
   Extra();
 
   Extra.fromJson(Map<String, dynamic> json) {
+    List<String> enableCardCompanies = [];
+    if(json['enableCardCompanies'] is List<dynamic>) {
+      enableCardCompanies = List<String>.from(json['enableCardCompanies']);
+    }
+
+    List<String> exceptCardCompanies = [];
+    if(json['exceptCardCompanies'] is List<dynamic>) {
+      exceptCardCompanies = List<String>.from(json['exceptCardCompanies']);
+    }
+
+    List<String> enableEasyPayments = [];
+    if(json['enableEasyPayments'] is List<dynamic>) {
+      enableEasyPayments = List<String>.from(json['enableEasyPayments']);
+    }
+
     cardQuota = json["card_quota"];
     sellerName = json["seller_name"];
 
@@ -77,14 +93,16 @@ class Extra {
     disposableCupDeposit = json["disposable_cup_deposit"];
     useWelcomepayment = json["use_welcomepayment"];
     firstSubscriptionComment = json["first_subscription_comment"];
-    exceptCardCompanies = json["except_card_companies"];
-    enableEasyPayments = json["enable_easy_payments"];
+    enableCardCompanies = enableCardCompanies;
+    exceptCardCompanies = exceptCardCompanies;
+    enableEasyPayments = enableEasyPayments;
     confirmGraceSeconds = json["confirm_grace_seconds"];
     ageLimit = json["age_limit"];
     subscribeTestPayment = json["subscribe_test_payment"];
     timeout = json["timeout"];
     escrow = json["escrow"];
     showCloseButton = json["show_close_button"];
+    commonEventWebhook = json["common_event_webhook"];
   }
 
   Map<String, dynamic> toJson() => {
@@ -151,8 +169,8 @@ class Extra {
         "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card: '${reVal(directCard)}', use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
         "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: ${directAppCard}, direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
         "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
-        "first_subscription_comment: '${reVal(firstSubscriptionComment)}', browser_open_type: [${(browserOpenType ?? []).map((obj) => obj.toString()).join(',')}], except_card_companies: [${(exceptCardCompanies ?? []).join(",")}], enable_easy_payments: [${(enableEasyPayments ?? []).join(",")}], confirm_grace_seconds: ${confirmGraceSeconds}," +
-        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}', subscribe_test_payment: ${subscribeTestPayment}, timeout: $timeout }";
+        "first_subscription_comment: '${reVal(firstSubscriptionComment)}', browser_open_type: [${(browserOpenType ?? []).map((obj) => obj.toString()).join(',')}], enable_card_companies: [${(enableCardCompanies ?? []).join(",")}], except_card_companies: [${(exceptCardCompanies ?? []).join(",")}], enable_easy_payments: [${(enableEasyPayments ?? []).join(",")}], confirm_grace_seconds: ${confirmGraceSeconds}," +
+        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}', subscribe_test_payment: ${subscribeTestPayment}, timeout: $timeout, common_event_webhook: ${commonEventWebhook} }";
   }
 
   dynamic reVal(dynamic value) {
