@@ -8,6 +8,7 @@ import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:bootpay/model/user.dart';
+import 'package:bootpay_flutter_example/webapp_payment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -122,6 +123,12 @@ class _SecondRouteState extends State<SecondRoute> {
                   child: TextButton(
                     onPressed: () => goBootpayAuthTest(context),
                     child: Text('본인인증 테스트'),
+                  ),
+                ),
+                Center(
+                  child: TextButton(
+                    onPressed: () => goBootpayWebapp(context),
+                    child: Text('웹앱 테스트'),
                   ),
                 ),
                 // SizedBox(height: 10),
@@ -537,6 +544,11 @@ class _SecondRouteState extends State<SecondRoute> {
         print('------- onDone: $data');
       },
     );
+  }
+
+  void goBootpayWebapp(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => WebAppPayment()));
+
   }
 
   void goBootpayAuthTest(BuildContext context) {

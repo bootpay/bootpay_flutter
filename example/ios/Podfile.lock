@@ -43,7 +43,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   bootpay_webview_flutter_wkwebview: baf2884591d215ae8bf446f97f1acc282f9527a6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  fluttertoast: eb263d302cc92e04176c053d2385237e9f43fad0
+  fluttertoast: 48c57db1b71b0ce9e6bba9f31c940ff4b001293c
   integration_test: 13825b8a9334a850581300559b8839134b124670
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
@@ -51,4 +51,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: bb6172a45f7f6f7cf816f7d9a9bb59238fdb3ad6
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0
