@@ -93,9 +93,9 @@ class Extra {
     disposableCupDeposit = json["disposable_cup_deposit"];
     useWelcomepayment = json["use_welcomepayment"];
     firstSubscriptionComment = json["first_subscription_comment"];
-    enableCardCompanies = enableCardCompanies;
-    exceptCardCompanies = exceptCardCompanies;
-    enableEasyPayments = enableEasyPayments;
+    this.enableCardCompanies = enableCardCompanies;
+    this.exceptCardCompanies = exceptCardCompanies;
+    this.enableEasyPayments = enableEasyPayments;
     confirmGraceSeconds = json["confirm_grace_seconds"];
     ageLimit = json["age_limit"];
     subscribeTestPayment = json["subscribe_test_payment"];
