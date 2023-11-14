@@ -192,7 +192,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
           onNavigationRequest: (NavigationRequest request) {
             if(request.url.contains("https://nid.naver.com")) {
               widget._controller.runJavaScript("document.getElementById('back').remove()");
-            }
+            } 
             return NavigationDecision.navigate;
           },
           // Navigation

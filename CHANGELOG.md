@@ -1,3 +1,6 @@
+## 4.7.4
+* inicis android scheme bug fixed
+
 ## 4.7.3
 * 4.7.2 업데이트 픽스 
 * 
