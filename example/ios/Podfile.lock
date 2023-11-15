@@ -45,10 +45,10 @@ SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   fluttertoast: 48c57db1b71b0ce9e6bba9f31c940ff4b001293c
   integration_test: 13825b8a9334a850581300559b8839134b124670
-  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
-  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
+  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
 PODFILE CHECKSUM: bb6172a45f7f6f7cf816f7d9a9bb59238fdb3ad6
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.14.2
