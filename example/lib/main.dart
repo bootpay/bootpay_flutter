@@ -359,7 +359,7 @@ class _SecondRouteState extends State<SecondRoute> {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = '이니시스';
+    payload.pg = '키움페이';
     payload.method = "카드";
 
     payload.extra?.displayCashReceipt = false;

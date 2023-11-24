@@ -3,7 +3,6 @@
     <CLASSES>
       <root url="file://$PROJECT_DIR$" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences-2.1.1" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_wkwebview-3.4.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/fluttertoast-8.2.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.3.4" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.3.2" />
@@ -14,7 +13,8 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.3.2" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_android-3.6.31" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter-4.2.41" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter-4.2.42" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/bootpay_webview_flutter_wkwebview-3.4.2" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
