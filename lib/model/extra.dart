@@ -118,6 +118,7 @@ class Extra {
     "app_scheme": this.appScheme,
     "use_card_point": this.useCardPoint,
     "direct_card_company": this.directCardCompany,
+    "direct_card_quota": this.directCardQuota,
     "use_order_id": this.useOrderId,
     "international_card_only": this.internationalCardOnly,
     "phone_carrier": this.phoneCarrier,

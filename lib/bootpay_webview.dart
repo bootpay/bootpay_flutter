@@ -349,7 +349,7 @@ extension BootpayMethod on _BootpayWebViewState {
         widget.cancel() +
         "})";
 
-    print(script);
+    // print(script);
 
 
     // return "setTimeout(function() {" + script + "}, 50);";
