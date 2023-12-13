@@ -1,4 +1,4 @@
-## 4.8.1
+## 4.8.2
 * direct card option added
 
 ## 4.8.0
