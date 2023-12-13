@@ -323,6 +323,8 @@ class _SecondRouteState extends State<SecondRoute> {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutter';
+    // extra.directCardCompany = "국민";
+    // extra.directCardQuota = '00'; //directCardCompany 일 경우 할부정보는 필수
 
 
     if(BootpayConfig.ENV == -1) {
@@ -333,7 +335,6 @@ class _SecondRouteState extends State<SecondRoute> {
       payload.extra?.redirectUrl = 'https://api.bootpay.co.kr/v2';
     }
 
-    // extra.cardQuota = '3';
     // extra.openType = 'popup';
 
     // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
@@ -359,7 +360,7 @@ class _SecondRouteState extends State<SecondRoute> {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = '키움페이';
+    payload.pg = '나이스페이';
     payload.method = "카드";
 
     payload.extra?.displayCashReceipt = false;

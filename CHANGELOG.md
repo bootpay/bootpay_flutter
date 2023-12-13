@@ -1,3 +1,6 @@
+## 4.8.1
+* direct card option added
+
 ## 4.8.0
 * andorid gradle version 8 support
 

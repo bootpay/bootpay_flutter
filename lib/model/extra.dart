@@ -13,11 +13,14 @@ class Extra {
   String? depositExpiration = ""; //가상계좌 입금 만료일자 설정
   String? appScheme;  //모바일 앱에서 결제 완료 후 돌아오는 옵션 ( 아이폰만 적용 )
   bool? useCardPoint = false; //카드 포인트 사용 여부 (토스만 가능)
-  String? directCard = ""; //해당 카드로 바로 결제창 (토스만 가능)
+  String? directCardCompany = ""; //해당 카드로 바로 결제창
+  String? directCardQuota = ""; //다이렉트 카드시 할부 정보는 필수 00, 02, 03
+
+
   bool? useOrderId = false; //가맹점 order_id로 PG로 전송
   bool? internationalCardOnly = false; //해외 결제카드 선택 여부 (토스만 가능)
   String? phoneCarrier = ""; // //본인인증 시 고정할 통신사명, SKT,KT,LGT 중 1개만 가능
-  bool? directAppCard = false; //카드사앱으로 direct 호출
+  // bool? directAppCard = false; //카드사앱으로 direct 호출
   bool? directSamsungpay = false; //삼성페이 바로 띄우기
   bool? testDeposit = false; //가상계좌 모의 입금
   bool? enableErrorWebhook = false; //결제 오류시 Feedback URL로 webhook
@@ -75,11 +78,10 @@ class Extra {
     appScheme = json["app_scheme"];
 
     useCardPoint = json["use_card_point"];
-    directCard = json["direct_card"];
+    directCardCompany = json["direct_card_company"];
     useOrderId = json["use_order_id"];
     internationalCardOnly = json["international_card_only"];
     phoneCarrier = json["phone_carrier"];
-    directAppCard = json["direct_app_card"];
     directSamsungpay = json["direct_samsungpay"];
     testDeposit = json["test_deposit"];
     enableErrorWebhook = json["enable_error_webhook"];
@@ -115,11 +117,10 @@ class Extra {
     "deposit_expiration": this.depositExpiration,
     "app_scheme": this.appScheme,
     "use_card_point": this.useCardPoint,
-    "direct_card": this.directCard,
+    "direct_card_company": this.directCardCompany,
     "use_order_id": this.useOrderId,
     "international_card_only": this.internationalCardOnly,
     "phone_carrier": this.phoneCarrier,
-    "direct_app_card": this.directAppCard,
     "direct_samsungpay": this.directSamsungpay,
     "test_deposit": this.testDeposit,
     "enable_error_webhook": this.enableErrorWebhook,
@@ -166,8 +167,8 @@ class Extra {
   String toString() {
     return "{card_quota: '${reVal(cardQuota)}', seller_name: '${reVal(sellerName)}', delivery_day: ${reVal(deliveryDay)}, locale: '${reVal(locale)}', escrow: ${escrow}," +
         "offer_period: '${reVal(offerPeriod)}', display_cash_receipt: '${reVal(displayCashReceipt)}', deposit_expiration: '${reVal(depositExpiration)}', show_close_button: ${showCloseButton}," +
-        "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card: '${reVal(directCard)}', use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
-        "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: ${directAppCard}, direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
+        "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card_company: '${reVal(directCardCompany)}',direct_card_quota: '${reVal(directCardQuota)}',  use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
+        "phone_carrier: '${reVal(phoneCarrier)}', direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
         "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
         "first_subscription_comment: '${reVal(firstSubscriptionComment)}', browser_open_type: [${(browserOpenType ?? []).map((obj) => obj.toString()).join(',')}], enable_card_companies: [${(enableCardCompanies ?? []).join(",")}], except_card_companies: [${(exceptCardCompanies ?? []).join(",")}], enable_easy_payments: [${(enableEasyPayments ?? []).join(",")}], confirm_grace_seconds: ${confirmGraceSeconds}," +
         "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}', subscribe_test_payment: ${subscribeTestPayment}, timeout: $timeout, common_event_webhook: ${commonEventWebhook} }";
