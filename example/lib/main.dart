@@ -131,7 +131,7 @@ class _SecondRouteState extends State<SecondRoute> {
                     child: Text('웹앱 테스트'),
                   ),
                 ),
-                // SizedBox(height: 10),
+                SizedBox(height: 10),
                 // Center(
                 //   child: TextButton(
                 //     onPressed: () => goBootpayPassword(context),
@@ -323,8 +323,8 @@ class _SecondRouteState extends State<SecondRoute> {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutter';
-    // extra.directCardCompany = "국민";
-    // extra.directCardQuota = '00'; //directCardCompany 일 경우 할부정보는 필수
+    extra.directCardCompany = "국민";
+    extra.directCardQuota = '00'; //directCardCompany 일 경우 할부정보는 필수
 
 
     if(BootpayConfig.ENV == -1) {
@@ -353,6 +353,7 @@ class _SecondRouteState extends State<SecondRoute> {
       //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
       payload.extra?.openType = 'iframe';
     }
+    // payload.extra?.openType = 'iframe';
     payload.extra?.browserOpenType = [
       BrowserOpenType.fromJson({"browser": "naver", "open_type": 'popup'}),
     ];
@@ -361,9 +362,10 @@ class _SecondRouteState extends State<SecondRoute> {
     // payload.extra?.openType = 'popup';
 
     payload.pg = '나이스페이';
-    payload.method = "카드";
+    payload.method = "네이버페이";
 
-    payload.extra?.displayCashReceipt = false;
+    // payload.extra?.displayCashReceipt = false;
+    // payload.extra?.exceptCardCompanies = ['하나'];
     // payload.extra?.escrow = true;
     // payload.extra?.locale = 'en'; //app locale
     // Bootpay().setLocale('en'); //web locale
@@ -383,13 +385,9 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        Future.delayed(Duration(seconds: 0)).then((value) {
-
-          if (mounted) {
-            print('Bootpay().dismiss');
-            Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-          }
-        });
+        if (mounted) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
 
         // Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         //TODO - 원하시는 라우터로 페이지 이동
@@ -404,9 +402,8 @@ class _SecondRouteState extends State<SecondRoute> {
 
         print('------- onConfirm: $data');
 
-        Bootpay().dismiss(context);
         // checkQtyFromServer(data);
-        return false;
+        return true;
       },
       // onConfirmAsync: (String data) async {
       //   print('------- onConfirmAsync11: $data');
@@ -457,7 +454,10 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        if (mounted) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
+
         //TODO - 원하시는 라우터로 페이지 이동
       },
       onIssued: (String data) {
@@ -517,7 +517,10 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        if (mounted) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
+
         //TODO - 원하시는 라우터로 페이지 이동
       },
       onIssued: (String data) {
@@ -578,8 +581,9 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        //TODO - 원하시는 라우터로 페이지 이동
+        if(mounted) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
       },
       onIssued: (String data) {
         print('------- onIssued: $data');

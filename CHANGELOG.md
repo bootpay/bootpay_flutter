@@ -1,3 +1,7 @@
+## 4.8.3
+* js version update
+* 카드지정, 제외카드 지정 버그 수정 
+
 ## 4.8.2
 * direct card option added
 
