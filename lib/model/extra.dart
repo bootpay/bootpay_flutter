@@ -8,7 +8,7 @@ class Extra {
   String? sellerName = '';  //노출되는 판매자명 설정
   int? deliveryDay = 1; //배송일자
   String? locale = 'ko'; //결제창 언어지원
-  String? offerPeriod = ''; //결제창 제공기간에 해당하는 string 값, 지원하는 PG만 적용됨
+  String? offerPeriod = ''; //결제창 제공기간에 해당하는 string 값, 지원하는 PG만 적용됨, 네이버페이 - 비쇼핑 기준 이용완료일 (정산시 필요)
   bool? displayCashReceipt = true; // 현금영수증 보일지 말지.. 가상계좌 KCP 옵션
   String? depositExpiration = ""; //가상계좌 입금 만료일자 설정
   String? appScheme;  //모바일 앱에서 결제 완료 후 돌아오는 옵션 ( 아이폰만 적용 )
@@ -47,6 +47,9 @@ class Extra {
 
   int? timeout = 30;
   bool? commonEventWebhook = false; //창닫기, 결제만료 웹훅 추가
+
+  double? deliveryPrice = 0; //배송료, 상품이 과세면 배송료도 과세, 면세면 배송료도 면세
+  bool? useExtraDeduction = false; //문화비 소득 공제 대상 가맹점은 true
 
   Extra();
 
@@ -105,6 +108,8 @@ class Extra {
     escrow = json["escrow"];
     showCloseButton = json["show_close_button"];
     commonEventWebhook = json["common_event_webhook"];
+    deliveryPrice = json["delivery_price"];
+    useExtraDeduction = json["use_extra_deduction"];
   }
 
   Map<String, dynamic> toJson() => {
@@ -144,6 +149,9 @@ class Extra {
     "timeout": this.timeout,
     "escrow": this.escrow,
     "show_close_button": this.showCloseButton,
+    "common_event_webhook": this.commonEventWebhook,
+    "delivery_price": this.deliveryPrice,
+    "use_extra_deduction": this.useExtraDeduction,
   };
 
   // String getQuotas() {
@@ -156,33 +164,97 @@ class Extra {
   //   return result;
   // }
 
-  // String toString() {
-  //   return "{card_quota: '${reVal(cardQuota)}', seller_name: '${reVal(sellerName)}', delivery_day: ${reVal(deliveryDay)}, locale: '${reVal(locale)}'," +
-  //       "offer_period: '${reVal(offerPeriod)}', display_cash_receipt: '${reVal(displayCashReceipt)}', deposit_expiration: '${reVal(depositExpiration)}'," +
-  //       "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card: '${reVal(directCard)}', use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
-  //       "phone_carrier: '${reVal(phoneCarrier)}', direct_app_card: '${reVal(directAppCard)}', direct_samsungpay: '${reVal(directSamsungpay)}', test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
-  //       "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
-  //       "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}' }";
-  // }
 
   String toString() {
-    return "{card_quota: '${reVal(cardQuota)}', seller_name: '${reVal(sellerName)}', delivery_day: ${reVal(deliveryDay)}, locale: '${reVal(locale)}', escrow: ${escrow}," +
-        "offer_period: '${reVal(offerPeriod)}', display_cash_receipt: '${reVal(displayCashReceipt)}', deposit_expiration: '${reVal(depositExpiration)}', show_close_button: ${showCloseButton}," +
-        "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card_company: '${reVal(directCardCompany)}',direct_card_quota: '${reVal(directCardQuota)}',  use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
-        "phone_carrier: '${reVal(phoneCarrier)}', direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
-        "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
-        "first_subscription_comment: '${reVal(firstSubscriptionComment)}', browser_open_type: [${(browserOpenType ?? []).map((obj) => obj.toString()).join(',')}], enable_card_companies: [${(enableCardCompanies ?? []).map((e) => "\'$e\'").join(",")}], except_card_companies: [${(exceptCardCompanies ?? []).map((e) => "\'$e\'").join(",")}], enable_easy_payments: [${(enableEasyPayments ?? []).map((e) => "\'$e\'").join(",")}], confirm_grace_seconds: ${confirmGraceSeconds}," +
-        "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}', subscribe_test_payment: ${subscribeTestPayment}, timeout: $timeout, common_event_webhook: ${commonEventWebhook} }";
+
+    List<String> parts = [];
+
+    void addPart(String key, dynamic value) {
+      if (value != null) {
+        String formattedValue = value is String ? "'${value.replaceAll("'", "\\'")}'" : value.toString();
+        parts.add("$key: $formattedValue");
+      }
+    }
+
+    void addPartList(String key, List<dynamic>? value) {
+      if (value == null) return;
+      if (value.isEmpty) return;
+      if (value is List<String>) {
+        String formattedValue = value.map((e) => "'$e'").join(",");
+        parts.add("$key: [$formattedValue]");
+      } else if (value is List<BrowserOpenType>) {
+        String formattedValue = value.map((e) => e.toString()).join(",");
+        parts.add("$key: [$formattedValue]");
+      }
+    }
+
+    addPart('card_quota', cardQuota);
+    addPart('seller_name', sellerName);
+    addPart('delivery_day', deliveryDay);
+    addPart('locale', locale);
+    addPart('offer_period', offerPeriod);
+    addPart('display_cash_receipt', displayCashReceipt);
+    addPart('deposit_expiration', depositExpiration);
+    addPart('app_scheme', appScheme);
+    addPart('use_card_point', useCardPoint);
+    addPart('direct_card_company', directCardCompany);
+    addPart('direct_card_quota', directCardQuota);
+    addPart('use_order_id', useOrderId);
+    addPart('international_card_only', internationalCardOnly);
+    addPart('phone_carrier', phoneCarrier);
+
+    addPart('direct_samsungpay', directSamsungpay);
+    addPart('test_deposit', testDeposit);
+    addPart('enable_error_webhook', enableErrorWebhook);
+    addPart('separately_confirmed', separatelyConfirmed);
+    addPart('confirm_only_rest_api', confirmOnlyRestApi);
+    addPart('open_type', openType);
+    addPart('use_bootpay_inapp_sdk', useBootpayInappSdk);
+    addPart('redirect_url', redirectUrl);
+    addPart('display_success_result', displaySuccessResult);
+    addPart('display_error_result', displayErrorResult);
+    addPart('disposable_cup_deposit', disposableCupDeposit);
+    addPart('use_welcomepayment', useWelcomepayment);
+    addPart('first_subscription_comment', firstSubscriptionComment);
+
+    addPartList('browser_open_type', browserOpenType);
+    addPartList('enable_card_companies', enableCardCompanies);
+    addPartList('enable_easy_payments', enableEasyPayments);
+    addPartList('except_card_companies', exceptCardCompanies);
+
+
+
+    addPart('confirm_grace_seconds', confirmGraceSeconds);
+    addPart('age_limit', ageLimit);
+    addPart('subscribe_test_payment', subscribeTestPayment);
+    addPart('timeout', timeout);
+    addPart('escrow', escrow);
+    addPart('show_close_button', showCloseButton);
+    addPart('common_event_webhook', commonEventWebhook);
+    addPart('delivery_price', deliveryPrice);
+    addPart('use_extra_deduction', useExtraDeduction);
+    return "{${parts.join(',')}}";
   }
 
-  dynamic reVal(dynamic value) {
-    if (value is String) {
-      if (value.isEmpty) {
-        return '';
-      }
-      return value.replaceAll("\"", "'").replaceAll("'", "\\'");
-    } else {
-      return value.toString();
-    }
-  }
+
+  // String toString() {
+  //   return "{card_quota: '${reVal(cardQuota)}', seller_name: '${reVal(sellerName)}', delivery_day: ${reVal(deliveryDay)}, locale: '${reVal(locale)}', escrow: ${escrow}," +
+  //       "offer_period: '${reVal(offerPeriod)}', display_cash_receipt: '${reVal(displayCashReceipt)}', deposit_expiration: '${reVal(depositExpiration)}', show_close_button: ${showCloseButton}," +
+  //       "app_scheme: '${reVal(appScheme)}', use_card_point: ${useCardPoint}, direct_card_company: '${reVal(directCardCompany)}',direct_card_quota: '${reVal(directCardQuota)}',  use_order_id: ${useOrderId}, international_card_only: ${internationalCardOnly}," +
+  //       "phone_carrier: '${reVal(phoneCarrier)}', direct_samsungpay: ${directSamsungpay}, test_deposit: ${reVal(testDeposit)}, enable_error_webhook: ${enableErrorWebhook}, separately_confirmed: ${separatelyConfirmed}," +
+  //       "confirm_only_rest_api: ${confirmOnlyRestApi}, open_type: '${reVal(openType)}', redirect_url: '${reVal(redirectUrl)}', display_success_result: ${displaySuccessResult}, display_error_result: ${displayErrorResult}, disposable_cup_deposit: ${disposableCupDeposit}," +
+  //       "first_subscription_comment: '${reVal(firstSubscriptionComment)}', browser_open_type: [${(browserOpenType ?? []).map((obj) => obj.toString()).join(',')}], enable_card_companies: [${(enableCardCompanies ?? []).map((e) => "\'$e\'").join(",")}], except_card_companies: [${(exceptCardCompanies ?? []).map((e) => "\'$e\'").join(",")}], enable_easy_payments: [${(enableEasyPayments ?? []).map((e) => "\'$e\'").join(",")}], confirm_grace_seconds: ${confirmGraceSeconds}," +
+  //       "use_bootpay_inapp_sdk: ${useBootpayInappSdk}, use_welcomepayment: ${useWelcomepayment}, first_subscription_comment: '${reVal(firstSubscriptionComment)}', age_limit: '${reVal(ageLimit)}', subscribe_test_payment: ${subscribeTestPayment}, timeout: $timeout, common_event_webhook: ${commonEventWebhook} }";
+  // }
+  //
+  // dynamic reVal(dynamic value) {
+  //   if (value is String) {
+  //     if (value.isEmpty) {
+  //       return '';
+  //     }
+  //     return value.replaceAll("\"", "'").replaceAll("'", "\\'");
+  //   } else {
+  //     return value.toString();
+  //   }
+  // }
 }

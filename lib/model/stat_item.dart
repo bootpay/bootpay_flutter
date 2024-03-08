@@ -30,3 +30,4 @@ class StatItem {
     'cat3': cat3,
   };
 }
+ 

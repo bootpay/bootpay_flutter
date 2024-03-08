@@ -176,7 +176,7 @@ class _BootpayWebViewState extends State<BootpayWebView> {
 
               }
               widget._controller.runJavaScript(getBootpayJS());
-              BootpayPrint(getBootpayJS());
+              debugPrint(getBootpayJS());
             }
 
           },
@@ -459,7 +459,6 @@ extension BootpayCallback on _BootpayWebViewState {
   Future<void> onDone(JavaScriptMessage message) async {
     print("onDone here");
     final data = json.decode(message.message);
-    print(data);
 
     onProgressShow(false);
 

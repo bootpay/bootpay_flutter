@@ -110,9 +110,46 @@ class Payload {
   }
 
   //android, ios에서 사용됨
+  // String toString() {
+  //   return "{application_id: '${getApplicationId()}', pg: '$pg', method: ${getMethodValue()}, order_name: '${orderName.queryReplace()}', price: $price, tax_free: $taxFree,order_id: '${orderId.queryReplace()}', subscription_id: '${subscriptionId.queryReplace()}', authentication_id: '${authenticationId.queryReplace()}', metadata: ${getMetadataStringAndroid()},user_token: '$userToken', extra: ${extra.toString()}, user: ${user.toString()}, items: ${getItems()}}";
+  // }
+
   String toString() {
-    return "{application_id: '${getApplicationId()}', pg: '$pg', method: ${getMethodValue()}, order_name: '${orderName.queryReplace()}', price: $price, tax_free: $taxFree, order_id: '${orderId.queryReplace()}', subscription_id: '${subscriptionId.queryReplace()}', authentication_id: '${authenticationId.queryReplace()}', metadata: ${getMetadataStringAndroid()}, user_token: '$userToken', extra: ${extra.toString()}, user: ${user.toString()}, items: ${getItems()}}";
+    List<String> parts = [];
+
+    void addPart(String key, dynamic value, {bool? isOriginal}) {
+      if (value != null) {
+        if(isOriginal == true) {
+          parts.add("$key: $value");
+        } else {
+          // String formattedValue = value is String ? "'${value.replaceAll("'", "\\'")}'" : value.toString(
+          String formattedValue = value is String ? "'${value.queryReplace()}'" : value.toString();
+          parts.add("$key: $formattedValue");
+        }
+      }
+    }
+
+    addPart('application_id', getApplicationId());
+    addPart('pg', pg);
+    addPart('method', getMethodValue(), isOriginal: true);
+    addPart('order_name', orderName);
+    addPart('price', price);
+    addPart('tax_free', taxFree);
+
+    addPart('order_id', orderId);
+    addPart('subscription_id', subscriptionId);
+    addPart('authentication_id', authenticationId);
+    addPart('metadata', getMetadataStringAndroid(), isOriginal: true);
+
+    addPart('user_token', userToken);
+    addPart('extra', extra.toString(), isOriginal: true);
+    addPart('user', user.toString(), isOriginal: true);
+    addPart('items', getItems(), isOriginal: true);
+
+
+    return "{${parts.join(", ")}}";
   }
+
 
   String getMethodValue() {
 

@@ -217,7 +217,6 @@ class _SecondRouteState extends State<SecondRoute> {
 
 
     res = await _provider.getEasyPayUserToken(res.body['access_token'], generateUser());
-    print("res: ${res.body}");
     // bootpayTest(context, res.body["user_token"], user);
     return res.body["user_token"];
   }
@@ -329,8 +328,8 @@ class _SecondRouteState extends State<SecondRoute> {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutter';
-    // extra.directCardCompany = "국민";
-    // extra.directCardQuota = '00'; //directCardCompany 일 경우 할부정보는 필수
+    extra.directCardCompany = "국민";
+    extra.directCardQuota = '00'; //directCardCompany 일 경우 할부정보는 필수
 
 
     if(BootpayConfig.ENV == -1) {
@@ -370,7 +369,7 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.method = "카드";
 
     // payload.extra?.displayCashReceipt = false;
-    payload.extra?.exceptCardCompanies = ['하나', 'BC', '현대'];
+    // payload.extra?.exceptCardCompanies = ['하나', 'BC', '현대'];
     // payload.extra?.escrow = true;
     // payload.extra?.locale = 'en'; //app locale
     // Bootpay().setLocale('en'); //web locale
