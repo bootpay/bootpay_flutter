@@ -51,7 +51,48 @@ class Extra {
   double? deliveryPrice = 0; //배송료, 상품이 과세면 배송료도 과세, 면세면 배송료도 면세
   bool? useExtraDeduction = false; //문화비 소득 공제 대상 가맹점은 true
 
-  Extra();
+  Extra({
+    this.cardQuota,
+    this.sellerName,
+    this.deliveryDay,
+    this.locale,
+    this.offerPeriod,
+    this.displayCashReceipt,
+    this.depositExpiration,
+    this.appScheme,
+    this.useCardPoint,
+    this.directCardCompany,
+    this.directCardQuota,
+    this.useOrderId,
+    this.internationalCardOnly,
+    this.phoneCarrier,
+    this.directSamsungpay,
+    this.testDeposit,
+    this.enableErrorWebhook,
+    this.separatelyConfirmed,
+    this.confirmOnlyRestApi,
+    this.openType,
+    this.useBootpayInappSdk,
+    this.redirectUrl,
+    this.displaySuccessResult,
+    this.displayErrorResult,
+    this.subscribeTestPayment,
+    this.disposableCupDeposit,
+    this.browserOpenType,
+    this.useWelcomepayment,
+    this.firstSubscriptionComment,
+    this.enableCardCompanies,
+    this.exceptCardCompanies,
+    this.enableEasyPayments,
+    this.confirmGraceSeconds,
+    this.ageLimit,
+    this.escrow,
+    this.showCloseButton,
+    this.timeout,
+    this.commonEventWebhook,
+    this.deliveryPrice,
+    this.useExtraDeduction,
+  });
 
   Extra.fromJson(Map<String, dynamic> json) {
     List<String> enableCardCompanies = [];

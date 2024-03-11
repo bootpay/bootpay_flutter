@@ -35,7 +35,26 @@ class Payload {
   User? user = User();
   List<Item>? items = [];
 
-  Payload();
+  // Payload();
+  Payload({
+    this.webApplicationId,
+    this.androidApplicationId,
+    this.iosApplicationId,
+    this.pg,
+    this.method,
+    this.methods,
+    this.orderName,
+    this.price,
+    this.taxFree,
+    this.orderId,
+    this.subscriptionId,
+    this.authenticationId,
+    this.metadata,
+    this.userToken,
+    this.extra,
+    this.user,
+    this.items,
+  });
 
   Payload.fromJson(Map<String, dynamic> json) {
     androidApplicationId = json["android_application_id"];

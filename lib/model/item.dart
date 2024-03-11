@@ -11,7 +11,19 @@ class Item {
   String? startDate;
   String? endDate;
 
-  Item();
+  Item({
+    this.name,
+    this.qty,
+    this.id,
+    this.price,
+    this.cat1,
+    this.cat2,
+    this.cat3,
+    this.categoryType,
+    this.categoryCode,
+    this.startDate,
+    this.endDate,
+  });
 
   Item.fromJson(Map<String, dynamic> json) {
     name = json["name"];
