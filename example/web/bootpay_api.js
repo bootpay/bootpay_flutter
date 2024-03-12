@@ -22,17 +22,29 @@ function _requestPayment(payload) {
 }
 
 
-function _jsBeforeLoad() {
-    _addCloseEvent();
-}
 
 function _setLocale(locale) {
     Bootpay.setLocale(locale)
 }
 
-function _addCloseEvent() {
-    document.addEventListener('bootpayclose', function (e) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage('결제창이 닫혔습니다'); } });
+
+var closeEventRegistered = false; // close 이벤트가 등록되었는지 여부를 추적하는 변수
+
+function _jsBeforeLoad() {
+    _addCloseEventOnce(); // 이 함수를 호출하여 한 번만 close 이벤트를 등록하도록 함
 }
+
+function _addCloseEventOnce() {
+    if (!closeEventRegistered) { // close 이벤트가 등록되어 있지 않은 경우에만 등록
+        document.addEventListener('bootpayclose', function (e) {
+            if (window.BootpayClose) {
+                BootpayClose();
+            }
+        });
+        closeEventRegistered = true; // close 이벤트가 이제 등록되었음을 표시
+    }
+}
+
 
 function _requestPayment(payload) {
     Bootpay.requestPayment(JSON.parse(payload))
