@@ -19,6 +19,7 @@ class Payload {
 
   double? price = 0;
   double? taxFree = 0;
+  double? depositPrice = 0; //보증급 [컵]
 
   String? orderId = '';
   String? subscriptionId = '';
@@ -46,6 +47,7 @@ class Payload {
     this.orderName,
     this.price,
     this.taxFree,
+    this.depositPrice,
     this.orderId,
     this.subscriptionId,
     this.authenticationId,
@@ -67,6 +69,7 @@ class Payload {
 
     price = json["price"];
     taxFree = json["tax_free"];
+    depositPrice = json["deposit_price"];
 
     orderId = json["order_id"];
     subscriptionId = json["subscription_id"];
@@ -93,6 +96,7 @@ class Payload {
       'order_name': orderName,
       'price': price,
       'tax_free': taxFree,
+      'deposit_price': depositPrice,
       'order_id': orderId,
       'subscription_id': subscriptionId,
       'authentication_id': authenticationId,
@@ -154,6 +158,7 @@ class Payload {
     addPart('order_name', orderName);
     addPart('price', price);
     addPart('tax_free', taxFree);
+    addPart('deposit_price', depositPrice);
 
     addPart('order_id', orderId);
     addPart('subscription_id', subscriptionId);

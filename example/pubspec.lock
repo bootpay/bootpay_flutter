@@ -55,7 +55,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "4.8.4"
+    version: "4.8.7-beta.1"
   bootpay_webview_flutter:
     dependency: transitive
     description:

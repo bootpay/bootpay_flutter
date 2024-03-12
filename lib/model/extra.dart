@@ -32,7 +32,7 @@ class Extra {
   bool? displaySuccessResult = false; // 결제 완료되면 부트페이가 제공하는 완료창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
   bool? displayErrorResult = true; // 결제 실패되면 부트페이가 제공하는 실패창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
   bool? subscribeTestPayment = true; //100원 결제 후 취소
-  double? disposableCupDeposit = 0; // 배달대행 플랫폼을 위한 컵 보증급 가격
+  // double? disposableCupDeposit = 0; // 배달대행 플랫폼을 위한 컵 보증급 가격
   ExtraCardEasyOption cardEasyOption = ExtraCardEasyOption();
   List<BrowserOpenType>? browserOpenType = [];
   int? useWelcomepayment = 0; //웰컴 재판모듈 진행시 1
@@ -77,7 +77,7 @@ class Extra {
     this.displaySuccessResult,
     this.displayErrorResult,
     this.subscribeTestPayment,
-    this.disposableCupDeposit,
+    // this.disposableCupDeposit,
     this.browserOpenType,
     this.useWelcomepayment,
     this.firstSubscriptionComment,
@@ -136,7 +136,7 @@ class Extra {
     redirectUrl = json["redirect_url"];
     displaySuccessResult = json["display_success_result"];
     displayErrorResult = json["display_error_result"];
-    disposableCupDeposit = json["disposable_cup_deposit"];
+    // disposableCupDeposit = json["disposable_cup_deposit"];
     useWelcomepayment = json["use_welcomepayment"];
     firstSubscriptionComment = json["first_subscription_comment"];
     this.enableCardCompanies = enableCardCompanies;
@@ -178,7 +178,7 @@ class Extra {
     "redirect_url": this.redirectUrl,
     "display_success_result": this.displaySuccessResult,
     "display_error_result": this.displayErrorResult,
-    "disposable_cup_deposit": this.disposableCupDeposit,
+    // "disposable_cup_deposit": this.disposableCupDeposit,
     "use_welcomepayment": this.useWelcomepayment,
     "first_subscription_comment": this.firstSubscriptionComment,
     "except_card_companies": this.exceptCardCompanies,
@@ -254,7 +254,7 @@ class Extra {
     addPart('redirect_url', redirectUrl);
     addPart('display_success_result', displaySuccessResult);
     addPart('display_error_result', displayErrorResult);
-    addPart('disposable_cup_deposit', disposableCupDeposit);
+    // addPart('disposable_cup_deposit', disposableCupDeposit);
     addPart('use_welcomepayment', useWelcomepayment);
     addPart('first_subscription_comment', firstSubscriptionComment);
 

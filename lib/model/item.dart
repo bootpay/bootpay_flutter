@@ -8,8 +8,8 @@ class Item {
   String? cat3 = '';
   String? categoryType;
   String? categoryCode;
-  String? startDate;
-  String? endDate;
+  String? startDate; //시작 - 공연, 영화, 보험, 여행, 항공, 숙박
+  String? endDate; //종료일
 
   Item({
     this.name,

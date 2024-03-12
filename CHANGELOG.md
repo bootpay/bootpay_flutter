@@ -1,3 +1,6 @@
+## 4.8.7-beta.1
+* extra-cupDeposit 삭제, payload에 deposit_price 추가 
+
 ## 4.8.6
 * payload, extra, item 생성자 추가 
 
