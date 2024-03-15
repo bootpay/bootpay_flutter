@@ -16,4 +16,5 @@ class BootpayConfig {
 
   static const String VERSION = "4.8.5";
 
+  static bool DISPLAY_WITH_HYBRID_COMPOSITION = false;
 }

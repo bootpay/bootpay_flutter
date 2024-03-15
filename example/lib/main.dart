@@ -368,6 +368,8 @@ class _SecondRouteState extends State<SecondRoute> {
     payload.pg = '나이스페이';
     payload.method = "카드";
 
+    // BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
+
     // payload.extra?.displayCashReceipt = false;
     // payload.extra?.exceptCardCompanies = ['하나', 'BC', '현대'];
     // payload.extra?.escrow = true;

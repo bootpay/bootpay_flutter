@@ -102,6 +102,7 @@
 
 import 'dart:async';
 
+import 'package:bootpay/config/bootpay_config.dart';
 import 'package:flutter/material.dart';
 import 'package:bootpay_webview_flutter/bootpay_webview_flutter.dart';
 import 'package:bootpay_webview_flutter_android/bootpay_webview_flutter_android.dart';
@@ -183,7 +184,11 @@ Page resource error:
     // #docregion platform_features
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
-      (controller.platform as AndroidWebViewController)
+
+
+
+
+    (controller.platform as AndroidWebViewController)
           .setMediaPlaybackRequiresUserGesture(false);
     }
     // #enddocregion platform_features
@@ -195,8 +200,24 @@ Page resource error:
   Widget build(context) {
     return Scaffold(
       backgroundColor: Colors.green,
-      body: SafeArea(child: WebViewWidget(controller: _controller)),
+      body: SafeArea(
+          child: platformWebViewWidget()
+      ),
     );
+  }
+
+  Widget platformWebViewWidget() {
+    if(_controller.platform is AndroidWebViewController && BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION) {
+      return WebViewWidget.fromPlatformCreationParams(
+        params: AndroidWebViewWidgetCreationParams.fromPlatformWebViewWidgetCreationParams(
+          AndroidWebViewWidgetCreationParams(
+            controller: _controller.platform,
+          ),
+          displayWithHybridComposition: true,
+        ),
+      );
+    }
+    return WebViewWidget(controller: _controller);
   }
 
 }

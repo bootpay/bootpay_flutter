@@ -127,7 +127,8 @@ class BootpayWebView extends StatefulWidget {
   }
 }
 
-class _BootpayWebViewState extends State<BootpayWebView> {
+class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObserver{
+  late WebViewController _controller;
 
   // final String INAPP_URL = 'https://webview.bootpay.co.kr/4.3.4/';
   final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-beta.25/';
@@ -140,7 +141,11 @@ class _BootpayWebViewState extends State<BootpayWebView> {
     // TODO: implement initState
     super.initState();
     // if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-    late final PlatformWebViewControllerCreationParams params;
+
+    WidgetsBinding.instance.addObserver(this);
+    late PlatformWebViewControllerCreationParams params;
+
+    // PlatformWebViewWidgetCreationParams
 
     if (WebViewPlatform.instance is BTWebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
@@ -148,11 +153,21 @@ class _BootpayWebViewState extends State<BootpayWebView> {
         mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
       );
     } else {
-      params = const PlatformWebViewControllerCreationParams();
+      params = PlatformWebViewControllerCreationParams(
+      );
     }
 
-    final WebViewController controller =
-    WebViewController.fromPlatformCreationParams(params);
+    final WebViewController controller = WebViewController.fromPlatformCreationParams(params);
+
+
+    //
+    // params = AndroidWebViewWidgetCreationParams.fromPlatformWebViewWidgetCreationParams(
+    //   AndroidWebViewWidgetCreationParams(
+    //     controller: _controller.platform,
+    //   ),
+    //   displayWithHybridComposition: true,
+    // );
+
     // #enddocregion platform_features
 
     controller
@@ -241,13 +256,42 @@ class _BootpayWebViewState extends State<BootpayWebView> {
     widget._controller = controller;
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // 앱이 다시 활성화될 때 웹뷰를 새로고침하거나 필요한 작업 수행
+      // _controller.
+      // _controller.re();
+    }
+  }
+
+  Widget platformWebViewWidget() {
+    if(widget._controller.platform is AndroidWebViewController && BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION) {
+      return WebViewWidget.fromPlatformCreationParams(
+        params: AndroidWebViewWidgetCreationParams.fromPlatformWebViewWidgetCreationParams(
+          AndroidWebViewWidgetCreationParams(
+            controller: widget._controller.platform,
+          ),
+          displayWithHybridComposition: true,
+        ),
+      );
+    }
+    return WebViewWidget(controller: widget._controller);
+  }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Stack(
       children: [
-        isClosed == false ? WebViewWidget(controller: widget._controller) : Container(),
+        isClosed == false ? platformWebViewWidget() : Container(),
         widget.showCloseButton == false ?
         Container() :
         widget.closeButton != null ?
