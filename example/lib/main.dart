@@ -167,6 +167,7 @@ class _SecondRouteState extends State<SecondRoute> {
       context: context,
       payload: payload,
       showCloseButton: false,
+
       // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data)  {
         print('------- onCancel: $data');
@@ -330,6 +331,7 @@ class _SecondRouteState extends State<SecondRoute> {
     extra.appScheme = 'bootpayFlutter';
     extra.directCardCompany = "국민";
     extra.directCardQuota = '00'; //directCardCompany 일 경우 할부정보는 필수
+    // extra.separatelyConfirmed = true;
 
 
     if(BootpayConfig.ENV == -1) {
@@ -365,8 +367,8 @@ class _SecondRouteState extends State<SecondRoute> {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = '나이스페이';
-    payload.method = "카드";
+    payload.pg = 'KCP';
+    payload.method = "카카오페이";
 
     // BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
 
@@ -378,10 +380,12 @@ class _SecondRouteState extends State<SecondRoute> {
 
     // payload.extra?.depositExpiration = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().add(const Duration(days: 7)));
 
+
     Bootpay().requestPayment(
       context: context,
       payload: payload,
       showCloseButton: false,
+
       // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data) {
         print('------- onCancel 1 : $data');
@@ -391,7 +395,9 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        //TODO - 원하시는 라우터로 페이지 이동
+        if (mounted && !kIsWeb) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
       },
       onIssued: (String data) {
         print('------- onIssued: $data');
@@ -407,6 +413,7 @@ class _SecondRouteState extends State<SecondRoute> {
       //   return true;
       // },
       onConfirmAsync: (String data) async {
+        print('------- onConfirmAsync: $data');
 
         return true;
       },

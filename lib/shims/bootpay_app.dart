@@ -93,7 +93,7 @@ class _WebViewRouteState extends State<WebViewRoute> {
     // TODO: implement build
     // isBootpayShow = true;
 
-    double paddingValue = MediaQuery.of(context).size.width * 0.2;
+    double paddingValue = BootpayConfig.DISPLAY_TABLET_FULLSCREEN ? 0 : MediaQuery.of(context).size.width * 0.2;
 
     if(Platform.isAndroid) {
       return WillPopScope(
@@ -149,7 +149,9 @@ class _WebViewRouteState extends State<WebViewRoute> {
 
 class BootpayPlatform extends BootpayApi{
 
+  String get WebUserAgent => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36';
   String get iOSUserAgent => 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
+  String get AndroidUserAgent => 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.40 Mobile Safari/537.36';
 
   // DebounceCloseController closeController = Get.find();
   BootpayWebView? webView;
@@ -325,7 +327,7 @@ class BootpayPlatform extends BootpayApi{
         int? requestType
       }) async {
 
-    if(isTablet(context)) {
+    if(isTabletOrWeb(context)) {
       if(userAgent == null) {
         userAgent = defaultOSUserAgent();
         // userAgent = iOSUserAgent;
@@ -352,26 +354,30 @@ class BootpayPlatform extends BootpayApi{
 
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => WebViewRoute(webView, isTablet(context))),
+      MaterialPageRoute(builder: (context) => WebViewRoute(webView, isTabletOrWeb(context))),
     );
     webView = null;
   }
 
   //ipad check
-  bool isTablet(BuildContext? context)  {
+  bool isTabletOrWeb(BuildContext? context)  {
     if(context == null) return false;
-    if(!Platform.isIOS) return false;
-    return MediaQuery.of(context).size.width > 600;
+    // if(!Platform.isIOS) return false;
+    return MediaQuery.of(context).size.width >= 600;
   }
 
   //iphone user agent
   String defaultOSUserAgent() {
-    return iOSUserAgent;
+    if(BootpayConfig.IS_FORCE_WEB) return WebUserAgent;
+    if(Platform.isIOS) return iOSUserAgent;
+    else return AndroidUserAgent;
+    // return iOSUserAgent;
   }
 
   @override
   String applicationId(String webApplicationId, String androidApplicationId, String iosApplicationId) {
-    if(Platform.isIOS) return iosApplicationId;
+    if(BootpayConfig.IS_FORCE_WEB) return webApplicationId;
+    else if(Platform.isIOS) return iosApplicationId;
     else return androidApplicationId;
   }
 

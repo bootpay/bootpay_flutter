@@ -92,7 +92,19 @@ class Extra {
     this.commonEventWebhook,
     this.deliveryPrice,
     this.useExtraDeduction,
-  });
+  }) {
+    this.deliveryDay = this.deliveryDay ?? 1;
+    this.displayCashReceipt = this.displayCashReceipt ?? true;
+    this.separatelyConfirmed = this.separatelyConfirmed ?? true;
+    this.locale = this.locale ?? 'ko';
+    this.openType = this.openType ?? 'redirect';
+    this.useBootpayInappSdk = this.useBootpayInappSdk ?? true;
+    this.redirectUrl = this.redirectUrl ?? 'https://api.bootpay.co.kr/v2';
+    this.displayErrorResult = this.displayErrorResult ?? true;
+    this.subscribeTestPayment = this.subscribeTestPayment ?? true;
+    this.confirmGraceSeconds = this.confirmGraceSeconds ?? 10;
+    this.timeout = this.timeout ?? 30;
+  }
 
   Extra.fromJson(Map<String, dynamic> json) {
     List<String> enableCardCompanies = [];

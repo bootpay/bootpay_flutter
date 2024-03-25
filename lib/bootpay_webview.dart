@@ -159,6 +159,9 @@ class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObse
 
     final WebViewController controller = WebViewController.fromPlatformCreationParams(params);
 
+    if(widget.userAgent != null) {
+      controller.setUserAgent(widget.userAgent!);
+    }
 
     //
     // params = AndroidWebViewWidgetCreationParams.fromPlatformWebViewWidgetCreationParams(
@@ -283,7 +286,9 @@ class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObse
         ),
       );
     }
-    return WebViewWidget(controller: widget._controller);
+    return WebViewWidget(
+        controller: widget._controller
+    );
   }
 
   @override
@@ -323,13 +328,17 @@ class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObse
 extension BootpayMethod on _BootpayWebViewState {
   Future<List<String>> getBootpayJSBeforeContentLoaded() async {
     List<String> result = [];
-    if (Platform.isAndroid) {
+
+    if (BootpayConfig.IS_FORCE_WEB) {
+      result.add("Bootpay.setVersion('" + BootpayConfig.VERSION + "', 'flutter')");
+    } else if (Platform.isAndroid) {
       result.add("Bootpay.setDevice('ANDROID');");
       result.add("Bootpay.setVersion('" + BootpayConfig.VERSION + "', 'android_flutter')");
     } else if (Platform.isIOS) {
       result.add("Bootpay.setDevice('IOS');");
       result.add("Bootpay.setVersion('" + BootpayConfig.VERSION + "', 'ios_flutter')");
     }
+
     if (BootpayConfig.ENV == BootpayConfig.ENV_DEBUG) {
       result.add("Bootpay.setEnvironmentMode('development');");
     } else if (BootpayConfig.ENV == BootpayConfig.ENV_STAGE) {
@@ -340,17 +349,9 @@ extension BootpayMethod on _BootpayWebViewState {
       result.add("Bootpay.setLocale('$locale');");
     }
 
-
-
-    // result.add("Bootpay.setEnvironmentMode('development');");
-    // result.add( "setTimeout(function() {" + await getAnalyticsData() + "}, 50);");
     result.add(await getAnalyticsData());
     result.add(widget.close());
 
-    // if (this.widget.payload?.extra?.quickPopup == 1 &&
-    //     this.widget.payload?.extra?.popup == 1) {
-    //   result.add("setTimeout(function() {BootPay.startQuickPopup();}, 30);");
-    // }
     return result;
   }
 
@@ -394,7 +395,7 @@ extension BootpayMethod on _BootpayWebViewState {
         widget.cancel() +
         "})";
 
-    // print(script);
+    // debugPrint(script);
 
 
     // return "setTimeout(function() {" + script + "}, 50);";
@@ -441,6 +442,9 @@ extension BootpayMethod on _BootpayWebViewState {
 
 extension BootpayCallback on _BootpayWebViewState {
   Future<void> goConfirmEvent(JavaScriptMessage message) async {
+
+    print("goConfirmEvent : ${this.widget.onConfirm}, ${this.widget.onConfirmAsync}");
+
     if (this.widget.onConfirm != null) {
       bool goTransactionConfirm = this.widget.onConfirm!(message.message);
       if (goTransactionConfirm) {

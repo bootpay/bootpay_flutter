@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:bootpay/config/bootpay_config.dart';
+
 import 'extra.dart';
 import 'item.dart';
 import 'user.dart';
@@ -127,8 +129,8 @@ class Payload {
 
 
   getApplicationId() {
-    if(kIsWeb) return this.webApplicationId;
-    if(Platform.isIOS) return this.iosApplicationId;
+    if(kIsWeb || BootpayConfig.IS_FORCE_WEB) return this.webApplicationId;
+    else if(Platform.isIOS) return this.iosApplicationId;
     else return this.androidApplicationId;
   }
 

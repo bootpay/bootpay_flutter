@@ -1,3 +1,6 @@
+## 4.8.8 
+* 삼성폰 안드로이드 웹뷰 프리징 현상 개선 
+
 ## 4.8.7-beta.1
 * extra-cupDeposit 삭제, payload에 deposit_price 추가 
 

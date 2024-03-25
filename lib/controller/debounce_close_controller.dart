@@ -17,7 +17,9 @@ class DebounceCloseController extends GetxController {
     _debounce = Timer(const Duration(milliseconds: 100), () {
 
       if(isDebounceShow == false) return;
-      if (onClose != null) onClose();
+      if (onClose != null) {
+        onClose();
+      }
       isDebounceShow = false;
       isFireCloseEvent = true;
       // BootpayPrint("DebounceCloseController bootpayClose : ${isFireCloseEvent}");
