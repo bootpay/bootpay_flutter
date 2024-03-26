@@ -367,10 +367,12 @@ class _SecondRouteState extends State<SecondRoute> {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = 'KCP';
-    payload.method = "카카오페이";
+    payload.pg = '다날';
+    payload.method = "카드";
 
+    // BootpayConfig.IS_FORCE_WEB = true;
     // BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
+    // BootpayConfig.DISPLAY_TABLET_FULLSCREEN = true;
 
     // payload.extra?.displayCashReceipt = false;
     // payload.extra?.exceptCardCompanies = ['하나', 'BC', '현대'];
@@ -379,6 +381,7 @@ class _SecondRouteState extends State<SecondRoute> {
     // Bootpay().setLocale('en'); //web locale
 
     // payload.extra?.depositExpiration = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().add(const Duration(days: 7)));
+
 
 
     Bootpay().requestPayment(

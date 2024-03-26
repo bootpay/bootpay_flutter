@@ -207,6 +207,14 @@ class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObse
             errorType: ${error.errorType}
             isForMainFrame: ${error.isForMainFrame}
                     ''');
+            if(error.errorCode == 3) { // SSL 인증서 에러, update 유도
+              if(error.description.contains("sslerror:")) {
+                if (this.widget.onError != null) {
+                  this.widget.onError!(error.description);
+                }
+                debounceClose();
+              }
+            }
           },
           onNavigationRequest: (NavigationRequest request) {
             if(request.url.contains("https://nid.naver.com")) {
