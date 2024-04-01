@@ -386,6 +386,7 @@ class BootpayPlatform extends BootpayApi{
   void removePaymentWindow() {
     if(webView != null) {
       webView!.removePaymentWindow();
+      webView = null;
     }
   }
 

@@ -84,6 +84,7 @@ abstract class BootpayApi {
   void transactionConfirm();
   // void removePaymentWindow();
   void dismiss(BuildContext context);
+  void removePaymentWindow();
 
   // 회원 추적 코드
   Future<http.Response> userTrace({

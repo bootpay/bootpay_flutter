@@ -27,6 +27,10 @@ function _setLocale(locale) {
     Bootpay.setLocale(locale)
 }
 
+function _removePaymentWindow() {
+    Bootpay.dismiss()
+}
+
 
 var closeEventRegistered = false; // close 이벤트가 등록되었는지 여부를 추적하는 변수
 

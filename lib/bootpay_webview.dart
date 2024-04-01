@@ -92,7 +92,7 @@ class BootpayWebView extends StatefulWidget {
 
   void removePaymentWindow() {
     _controller.runJavaScript(
-        "Bootpay.removePaymentWindow();"
+        "Bootpay.dismiss();"
     );
     // _controller.
     // _controller.

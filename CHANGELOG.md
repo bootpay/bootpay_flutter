@@ -1,3 +1,6 @@
+## 4.9.2
+* Bootpay().removePaymentWindow(); 함수 추가 
+
 ## 4.9.1
 * android ssl error 시 업데이트 안내하도록 개선 
 

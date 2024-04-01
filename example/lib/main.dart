@@ -347,6 +347,7 @@ class _SecondRouteState extends State<SecondRoute> {
     // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
     // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
 
+
     payload.user = user;
     payload.items = itemList;
     payload.extra = extra;

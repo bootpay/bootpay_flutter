@@ -29,6 +29,8 @@ external void _requestSubscription(String payload);
 external void _requestAuthentication(String payload);
 @JS()
 external void _setLocale(String locale);
+@JS()
+external void _removePaymentWindow();
 
 @JS()
 external void _dismiss(BuildContext context);
@@ -327,6 +329,11 @@ class BootpayPlatform extends BootpayApi{
   void setLocale(String locale) {
     // TODO: implement setLocale
     _setLocale(locale);
+  }
+
+  @override
+  void removePaymentWindow() {
+    _removePaymentWindow();
   }
 
 }

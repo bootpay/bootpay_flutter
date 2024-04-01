@@ -241,4 +241,9 @@ class Bootpay extends BootpayApi {
     // TODO: implement setLocale
     _platform.setLocale(locale);
   }
+
+  @override
+  void removePaymentWindow() {
+    _platform.removePaymentWindow();
+  }
 }
