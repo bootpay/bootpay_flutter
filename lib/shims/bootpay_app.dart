@@ -17,135 +17,11 @@ import '../bootpay_webview.dart';
 import '../controller/debounce_close_controller.dart';
 import '../model/payload.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'bootpay_app_page.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as BottomSheet;
 
-class WebViewRoute extends StatefulWidget {
 
-  BootpayWebView? webView;
-  bool isTablet;
-  WebViewRoute(this.webView, this.isTablet);
-
-  @override
-  _WebViewRouteState createState() => _WebViewRouteState();
-}
-
-class _WebViewRouteState extends State<WebViewRoute> {
-  DebounceCloseController closeController = Get.find();
-  DateTime? currentBackPressTime = DateTime.now();
-  bool isProgressShow = false;
-  // bool isBootpayShow = true;
-  // bool showHeaderView = false;
-
-
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    // closeController.isBootpayShow = true;
-    super.initState();
-
-    closeController.isFireCloseEvent = false;
-    closeController.isDebounceShow = true;
-
-    widget.webView?.onProgressShow = (isShow) {
-      setState(() {
-        isProgressShow = isShow;
-      });
-    };
-  }
-
-
-  // void dis
-
-  // void updateShowHeader(bool showHeader) {
-  //   if(this.showHeaderView != showHeader) {
-  //     setState(() {
-  //       showHeaderView = showHeader;
-  //     });
-  //   }
-  // }
-
-  clickCloseButton() {
-    if (widget.webView?.onCancel != null)
-      widget.webView?.onCancel!('{"action":"BootpayCancel","status":-100,"message":"사용자에 의한 취소"}');
-    if (widget.webView?.onClose != null)
-      widget.webView?.onClose!();
-  }
-
-
-  // Timer? _debounce;
-  void bootpayClose() {
-    // BootpayPrint("bootpayClose : ${closeController.isFireCloseEvent}");
-    if(closeController.isFireCloseEvent == true) return;
-    closeController.bootpayClose(this.widget.webView?.onClose);
-    closeController.isFireCloseEvent = false;
-  }
-
-  @override
-  void dispose() {
-    bootpayClose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    // isBootpayShow = true;
-
-    double paddingValue = BootpayConfig.DISPLAY_TABLET_FULLSCREEN ? 0 : MediaQuery.of(context).size.width * 0.2;
-
-    if(Platform.isAndroid) {
-      return WillPopScope(
-        child: Scaffold(
-            body: SafeArea(
-              child: Container(
-                  color: Colors.black26,
-                  child: widget.isTablet == false ? widget.webView ?? Container() : Padding(
-                    padding: EdgeInsets.all(paddingValue),
-                    child: widget.webView!,
-                  )
-              ),
-            )
-        ),
-        onWillPop: () async {
-          DateTime now = DateTime.now();
-          if (now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
-            currentBackPressTime = now;
-            Fluttertoast.showToast(msg: "\'뒤로\' 버튼을 한번 더 눌러주세요.");
-            return Future.value(false);
-          }
-          // bootpayClose();
-          return Future.value(true);
-        },
-      );
-    } else {
-      return Scaffold(
-          body: SafeArea(
-            child: Stack(
-              children: [
-                Container(
-                    color: Colors.black26,
-                    child: widget.isTablet == false ? widget.webView ?? Container() : Padding(
-                      padding: EdgeInsets.all(paddingValue),
-                      child: widget.webView!,
-                    )
-                ),
-                isProgressShow == false ? Container() : Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    color: Colors.black12,
-                    child: Center(child: CircularProgressIndicator(
-                      color: Colors.white,
-                    ))
-                )
-              ],
-            ),
-          )
-      );
-    }
-  }
-}
 
 class BootpayPlatform extends BootpayApi{
 
@@ -179,6 +55,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
+        double? webViewPadding,
         int? requestType
       }) {
 
@@ -196,6 +73,7 @@ class BootpayPlatform extends BootpayApi{
         onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         userAgent: userAgent,
+        padding: webViewPadding,
         requestType: BootpayConstant.REQUEST_TYPE_PAYMENT
     );
   }
@@ -216,6 +94,7 @@ class BootpayPlatform extends BootpayApi{
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
+        double? webViewPadding,
         int? requestType
       }) {
     goBootpayRequest(
@@ -232,6 +111,7 @@ class BootpayPlatform extends BootpayApi{
         onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         userAgent: userAgent,
+        padding: webViewPadding,
         requestType: BootpayConstant.REQUEST_TYPE_SUBSCRIPT
     );
   }
@@ -252,8 +132,10 @@ class BootpayPlatform extends BootpayApi{
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
+        double? webViewPadding,
         int? requestType
       }) {
+
     goBootpayRequest(
         key: key,
         context: context,
@@ -268,6 +150,7 @@ class BootpayPlatform extends BootpayApi{
         onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         userAgent: userAgent,
+        padding: webViewPadding,
         requestType: BootpayConstant.REQUEST_TYPE_AUTH
     );
   }
@@ -289,8 +172,10 @@ class BootpayPlatform extends BootpayApi{
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
+        double? webViewPadding,
         int? requestType
       }) {
+
     goBootpayRequest(
         key: key,
         context: context,
@@ -305,6 +190,7 @@ class BootpayPlatform extends BootpayApi{
         onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         userAgent: userAgent,
+        padding: webViewPadding,
         requestType: BootpayConstant.REQUEST_TYPE_PASSWORD
     );
   }
@@ -324,15 +210,16 @@ class BootpayPlatform extends BootpayApi{
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
         String? userAgent,
+        double? padding,
         int? requestType
       }) async {
 
-    if(isTabletOrWeb(context)) {
-      if(userAgent == null) {
-        userAgent = defaultOSUserAgent();
-        // userAgent = iOSUserAgent;
-      }
-    }
+    // if(isTabletOrWeb(context)) {
+    //   if(userAgent == null) {
+    //     userAgent = defaultOSUserAgent();
+    //     // userAgent = iOSUserAgent;
+    //   }
+    // }
 
     webView = BootpayWebView(
       payload: payload,
@@ -354,24 +241,23 @@ class BootpayPlatform extends BootpayApi{
 
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => WebViewRoute(webView, isTabletOrWeb(context))),
+      MaterialPageRoute(builder: (context) => BootpayAppPage(webView, padding))
     );
     webView = null;
   }
 
   //ipad check
-  bool isTabletOrWeb(BuildContext? context)  {
-    if(context == null) return false;
-    // if(!Platform.isIOS) return false;
-    return MediaQuery.of(context).size.width >= 600;
-  }
+  // bool isTabletOrWeb(BuildContext? context)  {
+  //   if(context == null) return false;
+  //   // if(!Platform.isIOS) return false;
+  //   return MediaQuery.of(context).size.width >= 600;
+  // }
 
   //iphone user agent
   String defaultOSUserAgent() {
     if(BootpayConfig.IS_FORCE_WEB) return WebUserAgent;
     if(Platform.isIOS) return iOSUserAgent;
     else return AndroidUserAgent;
-    // return iOSUserAgent;
   }
 
   @override
@@ -392,10 +278,6 @@ class BootpayPlatform extends BootpayApi{
 
   @override
   void dismiss(BuildContext context) {
-
-    // print(ModalRoute.of(context)?.settings.name);
-
-
     if(webView != null) {
       Navigator.of(context).pop();
       webView = null;

@@ -20,5 +20,5 @@ class BootpayConfig {
 
 
   static bool DISPLAY_WITH_HYBRID_COMPOSITION = false;
-  static bool DISPLAY_TABLET_FULLSCREEN = false;
+  // static bool DISPLAY_TABLET_FULLSCREEN = false; 결제요청시 padding 값으로 대체됨
 }

@@ -28,6 +28,8 @@ void main() {
 class FirstRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text('First Route'),
@@ -48,12 +50,8 @@ class FirstRoute extends StatelessWidget {
   }
 }
 
-class SecondRoute extends StatefulWidget {
-
-  _SecondRouteState createState() => _SecondRouteState();
-}
-
-class _SecondRouteState extends State<SecondRoute> {
+class SecondRoute extends StatelessWidget {
+  SecondRoute({super.key});
 
   Payload payload = Payload();
   //
@@ -78,10 +76,8 @@ class _SecondRouteState extends State<SecondRoute> {
     );
   }
 
-  @override
-  void initState() {
+  void init() {
     // TODO: implement initState
-    super.initState();
     bootpayAnalyticsUserTrace(); //통계용 함수 호출
     bootpayAnalyticsPageTrace(); //통계용 함수 호출
     bootpayReqeustDataInit(); //결제용 데이터 init
@@ -91,16 +87,18 @@ class _SecondRouteState extends State<SecondRoute> {
   @override
   Widget build(BuildContext context) {
 
-    print("build init");
+    init();
+
+    print('build init');
 
     return Scaffold(
-      body: Builder(builder: (BuildContext context) {
-        return Container(
+      body: Container(
           child: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const TextField(),
                 Center(
                   child: TextButton(
                     onPressed: () => goBootpayTest(context),
@@ -144,9 +142,8 @@ class _SecondRouteState extends State<SecondRoute> {
               ],
             ),
           ),
-        );
-      }),
-    );
+        )
+      );
   }
 
   ApiProvider _provider = ApiProvider();
@@ -377,7 +374,6 @@ class _SecondRouteState extends State<SecondRoute> {
 
     // BootpayConfig.IS_FORCE_WEB = true;
     // BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
-    // BootpayConfig.DISPLAY_TABLET_FULLSCREEN = true;
 
     // payload.extra?.displayCashReceipt = false;
     // payload.extra?.exceptCardCompanies = ['하나', 'BC', '현대'];
@@ -403,7 +399,7 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        if (mounted && !kIsWeb) {
+        if (!kIsWeb) {
           Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
         }
       },
@@ -474,9 +470,7 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        if (mounted) {
-          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        }
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
 
         //TODO - 원하시는 라우터로 페이지 이동
       },
@@ -537,9 +531,7 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        if (mounted) {
-          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        }
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
 
         //TODO - 원하시는 라우터로 페이지 이동
       },
@@ -601,9 +593,7 @@ class _SecondRouteState extends State<SecondRoute> {
       },
       onClose: () {
         print('------- onClose');
-        if(mounted) {
-          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        }
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
       },
       onIssued: (String data) {
         print('------- onIssued: $data');
