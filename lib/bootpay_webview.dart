@@ -20,7 +20,7 @@ import 'model/payload.dart';
 
 // 1. 웹앱을 대체하는 뷰를 활용한 샘플
 // 2. api 역할
-class BootpayWebView extends StatefulWidget {
+class BootpayWebView extends StatelessWidget {
   // Payload;
   // Event
   // controller
@@ -44,6 +44,9 @@ class BootpayWebView extends StatefulWidget {
   late final WebViewController _controller;
   // final Completer<WebViewController> _controller = Completer<WebViewController>();
 
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-beta.25/';
+
+
   BootpayWebView(
       {this.key,
         // this._controller,
@@ -62,8 +65,6 @@ class BootpayWebView extends StatefulWidget {
       })
       : super(key: key);
 
-  @override
-  State<StatefulWidget> createState() => _BootpayWebViewState();
 
   void setLocale(String locale) {
 
@@ -71,23 +72,12 @@ class BootpayWebView extends StatefulWidget {
   }
 
   void transactionConfirm() {
-    // String script = "Bootpay.confirm()" +
-    //     ".then( function (res) {" +
-    //     confirm() +
-    //     issued() +
-    //     done() +
-    //     "}, function (res) {" +
-    //     error() +
-    //     cancel() +
-    //     "});";
-
     String script = "Bootpay.confirm().then(function(confirmRes) { BootpayDone.postMessage(JSON.stringify(confirmRes)); }, function(confirmRes) { if (confirmRes.event === 'error') { BootpayError.postMessage(JSON.stringify(confirmRes)); } else if (confirmRes.event === 'cancel') { BootpayCancel.postMessage(JSON.stringify(confirmRes)); } })";
     if(payload?.extra?.openType == 'redirect') {
       script = "Bootpay.confirm();";
     }
 
     _controller.runJavaScript(script);
-    // _controller
   }
 
   void removePaymentWindow() {
@@ -125,28 +115,9 @@ class BootpayWebView extends StatefulWidget {
   String close() {
     return "document.addEventListener('bootpayclose', function (e) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage('결제창이 닫혔습니다'); } });";
   }
-}
 
-class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObserver{
-  late WebViewController _controller;
-
-  // final String INAPP_URL = 'https://webview.bootpay.co.kr/4.3.4/';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-beta.25/';
-
-
-  bool isClosed = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-
-    WidgetsBinding.instance.addObserver(this);
-    late PlatformWebViewControllerCreationParams params;
-
-    // PlatformWebViewWidgetCreationParams
-
+  late PlatformWebViewControllerCreationParams params;
+  void init() {
     if (WebViewPlatform.instance is BTWebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
         allowsInlineMediaPlayback: true,
@@ -159,19 +130,9 @@ class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObse
 
     final WebViewController controller = WebViewController.fromPlatformCreationParams(params);
 
-    if(widget.userAgent != null) {
-      controller.setUserAgent(widget.userAgent!);
+    if(userAgent != null) {
+      controller.setUserAgent(userAgent!);
     }
-
-    //
-    // params = AndroidWebViewWidgetCreationParams.fromPlatformWebViewWidgetCreationParams(
-    //   AndroidWebViewWidgetCreationParams(
-    //     controller: _controller.platform,
-    //   ),
-    //   displayWithHybridComposition: true,
-    // );
-
-    // #enddocregion platform_features
 
     controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -190,10 +151,10 @@ class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObse
 
               for (String script in await getBootpayJSBeforeContentLoaded()) {
                 // widget._controller.runJavaScript(javaScript)
-                widget._controller.runJavaScript(script);
+                _controller.runJavaScript(script);
 
               }
-              widget._controller.runJavaScript(getBootpayJS());
+              _controller.runJavaScript(getBootpayJS());
               debugPrint(getBootpayJS());
             }
 
@@ -209,8 +170,8 @@ class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObse
                     ''');
             if(error.errorCode == 3) { // SSL 인증서 에러, update 유도
               if(error.description.contains("sslerror:")) {
-                if (this.widget.onError != null) {
-                  this.widget.onError!(error.description);
+                if (this.onError != null) {
+                  this.onError!(error.description);
                 }
                 debounceClose();
               }
@@ -218,8 +179,8 @@ class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObse
           },
           onNavigationRequest: (NavigationRequest request) {
             if(request.url.contains("https://nid.naver.com")) {
-              widget._controller.runJavaScript("document.getElementById('back').remove()");
-            } 
+              _controller.runJavaScript("document.getElementById('back').remove()");
+            }
             return NavigationDecision.navigate;
           },
           // Navigation
@@ -228,112 +189,94 @@ class _BootpayWebViewState extends State<BootpayWebView> with WidgetsBindingObse
       )
       ..addJavaScriptChannel(
         'BootpayCancel',
-        onMessageReceived: onCancel,
+        onMessageReceived: onCancelJS,
       )
       ..addJavaScriptChannel(
         'BootpayError',
-        onMessageReceived: onError,
+        onMessageReceived: onErrorJS,
       )
       ..addJavaScriptChannel(
         'BootpayClose',
-        onMessageReceived: onClose,
+        onMessageReceived: onCloseJS,
       )
       ..addJavaScriptChannel(
         'BootpayIssued',
-        onMessageReceived: onIssued,
+        onMessageReceived: onIssuedJS,
       )
       ..addJavaScriptChannel(
         'BootpayConfirm',
-        onMessageReceived: onConfirm,
+        onMessageReceived: onConfirmJS,
       )
       ..addJavaScriptChannel(
         'BootpayDone',
-        onMessageReceived: onDone,
+        onMessageReceived: onDoneJS,
       )
       ..addJavaScriptChannel(
         'BootpayFlutterWebView',
-        onMessageReceived: onRedirect,
+        onMessageReceived: onRedirectJS,
       )
       ..loadRequest(Uri.parse(INAPP_URL));
 
-    // #docregion platform_features
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
       (controller.platform as AndroidWebViewController)
           .setMediaPlaybackRequiresUserGesture(false);
     }
-    // #enddocregion platform_features
 
-    widget._controller = controller;
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    WidgetsBinding.instance!.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // 앱이 다시 활성화될 때 웹뷰를 새로고침하거나 필요한 작업 수행
-      // _controller.
-      // _controller.re();
-    }
+    _controller = controller;
   }
 
   Widget platformWebViewWidget() {
-    if(widget._controller.platform is AndroidWebViewController && BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION) {
+    if(_controller.platform is AndroidWebViewController && BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION) {
       return WebViewWidget.fromPlatformCreationParams(
         params: AndroidWebViewWidgetCreationParams.fromPlatformWebViewWidgetCreationParams(
           AndroidWebViewWidgetCreationParams(
-            controller: widget._controller.platform,
+            controller: _controller.platform,
           ),
           displayWithHybridComposition: true,
         ),
       );
     }
     return WebViewWidget(
-        controller: widget._controller
+        controller: _controller
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    init();
     // TODO: implement build
     return Stack(
       children: [
-        isClosed == false ? platformWebViewWidget() : Container(),
-        widget.showCloseButton == false ?
-        Container() :
-        widget.closeButton != null ?
-        GestureDetector(
-          child: widget.closeButton!,
-          onTap: () => clickCloseButton(),
-        ) :
-        Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Container(
-            height: 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(child: Container()),
-                IconButton(
-                  onPressed: () => clickCloseButton(),
-                  icon: Icon(Icons.close, size: 35.0, color: Colors.black54),
-                ),
-              ],
+        platformWebViewWidget(),
+        if(showCloseButton ?? false)
+          closeButton != null ?
+          GestureDetector(
+            child: closeButton!,
+            onTap: () => clickCloseButton(),
+          ) :
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Container(
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: Container()),
+                  IconButton(
+                    onPressed: () => clickCloseButton(),
+                    icon: Icon(Icons.close, size: 35.0, color: Colors.black54),
+                  ),
+                ],
+              ),
             ),
-          ),
-        )
+          )
       ],
     );
   }
 }
 
-extension BootpayMethod on _BootpayWebViewState {
+extension BootpayMethod on BootpayWebView {
   Future<List<String>> getBootpayJSBeforeContentLoaded() async {
     List<String> result = [];
 
@@ -352,61 +295,39 @@ extension BootpayMethod on _BootpayWebViewState {
     } else if (BootpayConfig.ENV == BootpayConfig.ENV_STAGE) {
       result.add("Bootpay.setEnvironmentMode('stage');");
     }
-    String locale = widget.payload?.extra?.locale ?? "";
+    String locale = payload?.extra?.locale ?? "";
     if(locale.length > 0) {
       result.add("Bootpay.setLocale('$locale');");
     }
 
     result.add(await getAnalyticsData());
-    result.add(widget.close());
+    result.add(close());
 
     return result;
   }
 
-  // String getJSPasswordPayment() {
-  //   this.widget.payload?.method = "카드간편";
-  //
-  //   String script = "Bootpay.requestPayment(" +
-  //       "${this.widget.payload.toString()}" +
-  //       ")" +
-  //       ".then( function (res) {" +
-  //       widget.confirm() +
-  //       widget.issued() +
-  //       widget.done() +
-  //       "}, function (res) {" +
-  //       widget.error() +
-  //       widget.cancel() +
-  //       "})";
-  //
-  //   return "setTimeout(function() {" + script + "}, 50);";
-  // }
-
   String getBootpayJS() {
     String requestMethod = 'requestPayment';
-    if(widget.requestType == BootpayConstant.REQUEST_TYPE_SUBSCRIPT) {
+    if(this.requestType == BootpayConstant.REQUEST_TYPE_SUBSCRIPT) {
       requestMethod = 'requestSubscription';
-    } else if(widget.requestType == BootpayConstant.REQUEST_TYPE_AUTH) {
+    } else if(this.requestType == BootpayConstant.REQUEST_TYPE_AUTH) {
       requestMethod = 'requestAuthentication';
-    } else if(widget.requestType == BootpayConstant.REQUEST_TYPE_PASSWORD) {
-      this.widget.payload?.method = "카드간편";
+    } else if(this.requestType == BootpayConstant.REQUEST_TYPE_PASSWORD) {
+      this.payload?.method = "카드간편";
     }
 
     String script = "Bootpay.${requestMethod}(" +
-        "${this.widget.payload.toString()}" +
+        "${this.payload.toString()}" +
         ")" +
         ".then( function (res) {" +
-        widget.confirm() +
-        widget.issued() +
-        widget.done() +
+        confirm() +
+        issued() +
+        done() +
         "}, function (res) {" +
-        widget.error() +
-        widget.cancel() +
+        error() +
+        cancel() +
         "})";
 
-    // debugPrint(script);
-
-
-    // return "setTimeout(function() {" + script + "}, 50);";
     return script;
   }
 
@@ -414,52 +335,40 @@ extension BootpayMethod on _BootpayWebViewState {
 
   Future<String> getAnalyticsData() async {
     UserInfo.updateInfo();
-    // return "Bootpay.setAnalyticsData({uuid:'${await UserInfo.getBootpayUUID()}',sk:'${await UserInfo.getBootpaySK()}',sk_time:'${await UserInfo.getBootpayLastTime()}',time:'${DateTime.now().millisecondsSinceEpoch - await UserInfo.getBootpayLastTime()}'});";
     return "window.Bootpay.\$analytics.setAnalyticsData({uuid:'${await UserInfo.getBootpayUUID()}',sk:'${await UserInfo.getBootpaySK()}',sk_time:'${await UserInfo.getBootpayLastTime()}',time:'${DateTime.now().millisecondsSinceEpoch - await UserInfo.getBootpayLastTime()}'});";
   }
 
-  void transactionConfirm() {
-    widget.transactionConfirm();
-  }
-
-
 
   void clickCloseButton() {
-
-    if (this.widget.onCancel != null)
-      this.widget.onCancel!('{"action":"BootpayCancel","status":-100,"message":"사용자에 의한 취소"}');
+    if (this.onCancel != null)
+      this.onCancel!('{"action":"BootpayCancel","status":-100,"message":"사용자에 의한 취소"}');
   }
 
   void debounceClose() {
-    // BootpayPrint("debounceClose call");
-    widget.closeController.bootpayClose(this.widget.onClose);
-    // if (this.widget.debounceClose != null)
-    //   this.widget.debounceClose!();
-    // if (this.widget.onClose != null)
-    //   this.widget.onClose!();
+    closeController.bootpayClose(this.onClose);
   }
 
   void removePaymentWindow() {
-    setState(() {
-      this.isClosed = true;
-    });
+    // setState(() {
+    //   this.isClosed = true;
+    // });
 
-    widget.removePaymentWindow();
+    removePaymentWindow();
   }
 }
 
-extension BootpayCallback on _BootpayWebViewState {
+extension BootpayCallback on BootpayWebView {
   Future<void> goConfirmEvent(JavaScriptMessage message) async {
 
-    print("goConfirmEvent : ${this.widget.onConfirm}, ${this.widget.onConfirmAsync}");
+    print("goConfirmEvent : ${this.onConfirm}, ${this.onConfirmAsync}");
 
-    if (this.widget.onConfirm != null) {
-      bool goTransactionConfirm = this.widget.onConfirm!(message.message);
+    if (this.onConfirm != null) {
+      bool goTransactionConfirm = this.onConfirm!(message.message);
       if (goTransactionConfirm) {
         transactionConfirm();
       }
-    } else if(this.widget.onConfirmAsync != null) {
-      bool goTransactionConfirm = await this.widget.onConfirmAsync!(message.message);
+    } else if(this.onConfirmAsync != null) {
+      bool goTransactionConfirm = await this.onConfirmAsync!(message.message);
       if (goTransactionConfirm) {
         transactionConfirm();
       }
@@ -467,104 +376,88 @@ extension BootpayCallback on _BootpayWebViewState {
   }
 
   void onProgressShow(bool isShow) {
-    if(this.widget.payload?.extra?.openType != 'redirect' && isShow) {
+    if(this.payload?.extra?.openType != 'redirect' && isShow) {
 
     } else {
-      if(this.widget.onProgressShow != null) {
-        this.widget.onProgressShow!(isShow);
+      if(this.onProgressShow != null) {
+        this.onProgressShow!(isShow);
       }
     }
   }
 
 
-  Future<void> onCancel(JavaScriptMessage message) async {
+  Future<void> onCancelJS(JavaScriptMessage message) async {
     onProgressShow(false);
 
-    if (this.widget.onCancel != null)
-      this.widget.onCancel!(message.message);
+    if (this.onCancel != null)
+      this.onCancel!(message.message);
   }
 
-  Future<void> onError(JavaScriptMessage message) async {
+  Future<void> onErrorJS(JavaScriptMessage message) async {
     onProgressShow(false);
 
-    if (this.widget.onError != null)
-      this.widget.onError!(message.message);
+    if (this.onError != null)
+      this.onError!(message.message);
   }
 
-  Future<void> onClose(JavaScriptMessage message) async {
+  Future<void> onCloseJS(JavaScriptMessage message) async {
     debounceClose();
-    // if (this.widget.onClose != null) this.widget.onClose!();
-    // Navigator.of(context).pop();
   }
 
-  Future<void> onIssued(JavaScriptMessage message) async {
+  Future<void> onIssuedJS(JavaScriptMessage message) async {
     onProgressShow(false);
-
-    if (this.widget.onIssued != null)
-      this.widget.onIssued!(message.message);
+    if (this.onIssued != null)
+      this.onIssued!(message.message);
   }
 
 
-  Future<void> onConfirm(JavaScriptMessage message) async {
+  Future<void> onConfirmJS(JavaScriptMessage message) async {
     onProgressShow(true);
-
     await goConfirmEvent(message);
   }
 
 
-  Future<void> onDone(JavaScriptMessage message) async {
-    print("onDone here");
-    final data = json.decode(message.message);
-
+  Future<void> onDoneJS(JavaScriptMessage message) async {
     onProgressShow(false);
-
-    if (this.widget.onDone != null) this.widget.onDone!(message.message);
+    if (this.onDone != null) this.onDone!(message.message);
   }
 
-  Future<void> onRedirect(JavaScriptMessage message) async {
+  Future<void> onRedirectJS(JavaScriptMessage message) async {
     final data = json.decode(message.message);
-
 
     switch(data["event"]) {
       case "cancel":
         onProgressShow(false);
-
-        if (this.widget.onCancel != null) this.widget.onCancel!(message.message);
+        if (this.onCancel != null) this.onCancel!(message.message);
         debounceClose();
         break;
       case "error":
         onProgressShow(false);
-
-        if (this.widget.onError != null) this.widget.onError!(message.message);
-        if(this.widget.payload?.extra?.displayErrorResult != true) {
+        if (this.onError != null) this.onError!(message.message);
+        if(this.payload?.extra?.displayErrorResult != true) {
           debounceClose();
         }
         break;
       case "close":
         onProgressShow(false);
-
         debounceClose();
         break;
       case "issued":
         onProgressShow(false);
 
-        if (this.widget.onIssued != null) this.widget.onIssued!(message.message);
-        if(this.widget.payload?.extra?.displaySuccessResult != true) {
+        if (this.onIssued != null) this.onIssued!(message.message);
+        if(this.payload?.extra?.displaySuccessResult != true) {
           debounceClose();
         }
         break;
       case "confirm":
         onProgressShow(true);
-
         await goConfirmEvent(message);
         break;
       case "done":
-        print("onDone here");
-
         onProgressShow(false);
-
-        if (this.widget.onDone != null) this.widget.onDone!(message.message);
-        if(this.widget.payload?.extra?.displaySuccessResult != true) {
+        if (this.onDone != null) this.onDone!(message.message);
+        if(this.payload?.extra?.displaySuccessResult != true) {
           debounceClose();
         } else {
           final content = json.decode(data["data"]);

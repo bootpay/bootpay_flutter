@@ -90,6 +90,9 @@ class _SecondRouteState extends State<SecondRoute> {
 
   @override
   Widget build(BuildContext context) {
+
+    print("build init");
+
     return Scaffold(
       body: Builder(builder: (BuildContext context) {
         return Container(
@@ -369,8 +372,8 @@ class _SecondRouteState extends State<SecondRoute> {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = '다날';
-    payload.method = "카드";
+    payload.pg = '나이스페이';
+    payload.method = "네이버페이";
 
     // BootpayConfig.IS_FORCE_WEB = true;
     // BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
