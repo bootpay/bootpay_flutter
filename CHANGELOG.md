@@ -1,3 +1,6 @@
+## 4.9.3
+* 상태관리 제거, statless 위젯으로 변경
+
 ## 4.9.2
 * Bootpay().removePaymentWindow(); 함수 추가 
 
