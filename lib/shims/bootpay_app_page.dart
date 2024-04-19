@@ -114,7 +114,7 @@ class _BootpayAppPageState extends State<BootpayAppPage> {
                     color: Colors.black26,
                     child: Padding(
                       padding: EdgeInsets.all(paddingValue),
-                      child: widget.webView!,
+                      child: widget.webView ?? Container(),
                     )
                 ),
                 isProgressShow == false ? Container() : Container(

@@ -369,8 +369,8 @@ class SecondRoute extends StatelessWidget {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = '나이스페이';
-    payload.method = "네이버페이";
+    payload.pg = 'KCP';
+    payload.method = "카드자동";
 
     // BootpayConfig.IS_FORCE_WEB = true;
     // BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
