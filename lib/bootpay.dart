@@ -19,6 +19,9 @@ typedef BootpayConfirmCallback = bool Function(String data);
 typedef BootpayAsyncConfirmCallback = Future<bool> Function(String data);
 typedef BootpayCloseCallback = void Function();
 
+typedef WidgetResizeCallback = void Function(double height);
+
+
 class Bootpay extends BootpayApi {
   static final Bootpay _bootpay = Bootpay._internal();
   factory Bootpay() {

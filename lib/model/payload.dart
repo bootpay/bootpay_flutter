@@ -172,7 +172,6 @@ class Payload {
     addPart('user', user.toString(), isOriginal: true);
     addPart('items', getItems(), isOriginal: true);
 
-
     return "{${parts.join(", ")}}";
   }
 

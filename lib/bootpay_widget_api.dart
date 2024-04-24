@@ -1,4 +1,5 @@
 
+import 'package:bootpay/model/widget/widget_payload.dart';
 import 'package:flutter/widgets.dart';
 
 import 'bootpay.dart';
@@ -7,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 import 'model/stat_item.dart';
 
-abstract class BootpayWidgetApi {
+mixin BootpayWidgetApi {
 
   // void setEnvironmentMode(String locale);
 
@@ -15,15 +16,13 @@ abstract class BootpayWidgetApi {
       {
         Key? key,
         BuildContext? context,
-        String? divId,
-        Payload? payload
+        WidgetPayload? widgetPayload
       });
 
   void update(
       {
         Key? key,
         BuildContext? context,
-        Payload? payload,
-        bool? showCloseButton,
+        Payload? payload
       });
 }

@@ -5,6 +5,7 @@ library bootpay_api;
 import 'dart:convert';
 
 import 'package:bootpay/api/bootpay_analytics.dart';
+import 'package:bootpay/bootpay_widget_api.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:http/src/response.dart';
 import 'package:js/js.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import '../bootpay.dart';
 import '../bootpay_api.dart';
 import '../model/payload.dart';
+import '../model/widget/widget_payload.dart';
 
 @JS('Promise')
 class Promise<T> {
@@ -60,7 +62,7 @@ external set _BootpayAsyncConfirm(Promise Function(String) f);
 @JS('BootpayError')
 external set _BootpayError(void Function(String) f);
 
-class BootpayPlatform extends BootpayApi{
+class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
   BootpayDefaultCallback? _callbackCancel;
   BootpayDefaultCallback? _callbackError;
   BootpayCloseCallback? _callbackClose;
@@ -334,6 +336,16 @@ class BootpayPlatform extends BootpayApi{
   @override
   void removePaymentWindow() {
     _removePaymentWindow();
+  }
+
+  @override
+  void render({Key? key, BuildContext? context, WidgetPayload? widgetPayload}) {
+    // TODO: implement render
+  }
+
+  @override
+  void update({Key? key, BuildContext? context, Payload? payload}) {
+    // TODO: implement update
   }
 
 }

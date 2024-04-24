@@ -14,16 +14,18 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../bootpay.dart';
 import '../bootpay_api.dart';
 import '../bootpay_webview.dart';
+import '../bootpay_widget_api.dart';
 import '../controller/debounce_close_controller.dart';
 import '../model/payload.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../model/widget/widget_payload.dart';
 import 'bootpay_app_page.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as BottomSheet;
 
 
 
-class BootpayPlatform extends BootpayApi{
+class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
 
   String get WebUserAgent => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36';
   String get iOSUserAgent => 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
@@ -221,7 +223,7 @@ class BootpayPlatform extends BootpayApi{
     //   }
     // }
 
-    webView = BootpayWebView(
+    createWebView(
       payload: payload,
       showCloseButton: showCloseButton,
       key: key,
@@ -236,6 +238,7 @@ class BootpayPlatform extends BootpayApi{
       userAgent: userAgent,
       requestType: requestType,
     );
+    webView?.isWidget = false;
 
     if(context == null) return;
 
@@ -244,6 +247,39 @@ class BootpayPlatform extends BootpayApi{
       MaterialPageRoute(builder: (context) => BootpayAppPage(webView, padding))
     );
     webView = null;
+  }
+
+  void createWebView({
+    Key? key,
+    Payload? payload,
+    WidgetPayload? widgetPayload,
+    bool? showCloseButton,
+    Widget? closeButton,
+    BootpayDefaultCallback? onCancel,
+    BootpayDefaultCallback? onError,
+    BootpayCloseCallback? onClose,
+    BootpayDefaultCallback? onIssued,
+    BootpayConfirmCallback? onConfirm,
+    BootpayAsyncConfirmCallback? onConfirmAsync,
+    BootpayDefaultCallback? onDone,
+    String? userAgent,
+    int? requestType
+  }) {
+    if(webView == null) {
+      webView = BootpayWebView(key: key);
+    }
+    webView?.payload = payload;
+    webView?.showCloseButton = showCloseButton;
+    webView?.closeButton = closeButton;
+    webView?.onCancel = onCancel;
+    webView?.onError = onError;
+    webView?.onClose = onClose;
+    webView?.onIssued = onIssued;
+    webView?.onConfirm = onConfirm;
+    webView?.onConfirmAsync = onConfirmAsync;
+    webView?.onDone = onDone;
+    webView?.userAgent = userAgent;
+    webView?.requestType = requestType;
   }
 
   //ipad check
@@ -343,7 +379,31 @@ class BootpayPlatform extends BootpayApi{
 
   @override
   void setLocale(String locale) {
-    // TODO: implement setLocale
     if(webView != null) webView!.setLocale(locale);
+  }
+
+  @override
+  void render({Key? key, BuildContext? context, WidgetPayload? widgetPayload}) {
+    // if(webView != null) webView!.resizeWatch (key: key, context: context, payload: payload);
+
+    webView = null;
+    createWebView(
+      key: key,
+      widgetPayload: widgetPayload
+    );
+    webView?.isWidget = true;
+    webView?.widgetPayload = widgetPayload;
+
+    if(context == null) return;
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => BootpayAppPage(webView, 0))
+    );
+  }
+
+  @override
+  void update({Key? key, BuildContext? context, Payload? payload}) {
+    // TODO: implement update
   }
 }

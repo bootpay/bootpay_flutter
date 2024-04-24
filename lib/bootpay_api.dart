@@ -1,4 +1,5 @@
 
+import 'package:bootpay/model/widget/widget_payload.dart';
 import 'package:flutter/widgets.dart';
 
 import 'bootpay.dart';
@@ -105,4 +106,9 @@ abstract class BootpayApi {
     String? userId,
     List<StatItem>? items
   });
+
+  // void widgetRender({Key? key, BuildContext? context, String? divId, WidgetPayload? payload});
+  // void widgetUpdate({Key? key, BuildContext? context, Payload? payload});
+  // void widgetRequestPayment({Key? key, BuildContext? context, Payload? payload});
+
 }

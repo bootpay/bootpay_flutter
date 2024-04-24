@@ -3,6 +3,7 @@ import 'package:bootpay/config/bootpay_config.dart';
 
 import 'bootpay_widget_api.dart';
 import 'model/stat_item.dart';
+import 'model/widget/widget_payload.dart';
 import 'shims/bootpay_platform.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -11,14 +12,18 @@ import 'bootpay_api.dart';
 import 'model/payload.dart';
 import 'package:http/http.dart' as http;
 
+// https://webview.bootpay.co.kr/5.0.0-beta.30/widget.html
 
+// document.addEventListener('bootpaywidgetresize', function (e) {
+// console.log(e.detail)
+// })
 
-class BootpayWidget extends BootpayWidgetApi {
-  static final BootpayWidget _bootpayWidget = BootpayWidget._internal();
-  factory BootpayWidget() {
+class BootpayWidgetImpl with BootpayWidgetApi {
+  static final BootpayWidgetImpl _bootpayWidget = BootpayWidgetImpl._internal();
+  factory BootpayWidgetImpl() {
     return _bootpayWidget;
   }
-  BootpayWidget._internal() {
+  BootpayWidgetImpl._internal() {
     _platform = BootpayPlatform();
   }
 
@@ -31,12 +36,12 @@ class BootpayWidget extends BootpayWidgetApi {
   }
 
   @override
-  void render({Key? key, BuildContext? context, String? divId, Payload? payload}) {
-    // TODO: implement render
+  void render({Key? key, BuildContext? context, WidgetPayload? widgetPayload}) {
+    _platform.render(context: context, key: key, widgetPayload: widgetPayload);
   }
 
   @override
-  void update({Key? key, BuildContext? context, Payload? payload, bool? showCloseButton}) {
-    // TODO: implement update
+  void update({Key? key, BuildContext? context, Payload? payload}) {
+    _platform.update(context: context, key: key, payload: payload);
   }
 }

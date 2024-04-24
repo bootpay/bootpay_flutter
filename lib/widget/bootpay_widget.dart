@@ -1,0 +1,134 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:bootpay/bootpay_webview.dart';
+import 'package:bootpay/config/bootpay_config.dart';
+import 'package:bootpay/model/widget/widget_payload.dart';
+import 'package:get/get.dart';
+
+import 'package:flutter/material.dart';
+
+import 'package:bootpay_webview_flutter/bootpay_webview_flutter.dart';
+import 'package:bootpay_webview_flutter_android/bootpay_webview_flutter_android.dart';
+import 'package:bootpay_webview_flutter_wkwebview/bootpay_webview_flutter_wkwebview.dart';
+
+import '../bootpay.dart';
+import '../model/payload.dart';
+
+typedef BootpayWidgetControllerCallback = void Function(BootpayWidgetController controller);
+
+class BootpayWidget extends StatefulWidget {
+  // Key? key;
+
+  WidgetPayload? widgetPayload;
+  BootpayWidgetControllerCallback? onWidgetCreated;
+  BootpayWidgetController controller;
+  //
+  //
+  // BootpayWidget({
+  //   Key? key,
+  //   this.widgetPayload,
+  //   this.onWidgetCreated,
+  //   this.controller
+  // });
+
+  BootpayWidget({
+    Key? key,
+    this.widgetPayload,
+    this.onWidgetCreated,
+    required this.controller
+  });
+
+  // const BootpayWidgetView();
+
+  @override
+  State<BootpayWidget> createState() => _BootpayWidgetState();
+}
+
+class _BootpayWidgetState extends State<BootpayWidget> {
+
+  BootpayWebView _bootpayWebView = BootpayWebView();
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _bootpayWebView = BootpayWebView(key: widget.key);
+    _bootpayWebView.widgetPayload = widget.widgetPayload;
+    _bootpayWebView.isWidget = true;
+
+    widget.controller._bootpayWebView = _bootpayWebView;
+    widget.controller._initEvent();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return _bootpayWebView;
+  }
+
+  // late final WebViewController _controller;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   // #docregion platform_features
+  //   late final PlatformWebViewControllerCreationParams params;
+  //   if (WebViewPlatform.instance is BTWebKitWebViewPlatform) {
+  //     params = WebKitWebViewControllerCreationParams(
+  //       allowsInlineMediaPlayback: true,
+  //       mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
+  //     );
+  //   } else {
+  //     params = const PlatformWebViewControllerCreationParams();
+  //   }
+  //
+  //   final WebViewController controller =
+  //       WebViewController.fromPlatformCreationParams(params);
+  //   // #enddocregion platform_features
+  //
+  //   _controller = controller;
+  // }
+  //
+  // @override
+  // Widget build(context) {
+  //   return Scaffold(
+  //     backgroundColor: Colors.green,
+  //     body: WebViewWidget(controller: _controller),
+  //   );
+  // }
+}
+
+class BootpayWidgetController {
+
+  BootpayWebView? _bootpayWebView;
+
+  BootpayDefaultCallback? onWidgetAllAgreeTerms;
+  BootpayDefaultCallback? onWidgetReady;
+  WidgetResizeCallback? onWidgetResize;
+  BootpayDefaultCallback? onWidgetChangePayment;
+
+  double _widgetHeight = 0;
+
+  void _initEvent() {
+    print(1234);
+    print(_bootpayWebView);
+    _bootpayWebView?.onWidgetChangePayment = onWidgetChangePayment;
+    _bootpayWebView?.onWidgetAllAgreeTerms = onWidgetAllAgreeTerms;
+    _bootpayWebView?.onWidgetReady = onWidgetReady;
+    _bootpayWebView?.onWidgetResize = (height) {
+      if(_widgetHeight == height) return;
+      _widgetHeight = height;
+      if(onWidgetResize != null) onWidgetResize!(height);
+    };
+    // _bootpayWebView.con
+  }
+
+  void update({Payload? payload}) {
+
+  }
+}

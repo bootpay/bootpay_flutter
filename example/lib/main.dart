@@ -1,6 +1,8 @@
 
 
 import 'package:bootpay/bootpay.dart';
+import 'package:bootpay/bootpay_webview.dart';
+import 'package:bootpay/bootpay_widget_api.dart';
 import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/model/browser_open_type.dart';
 import 'package:bootpay/model/extra.dart';
@@ -8,6 +10,7 @@ import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:bootpay/model/user.dart';
+import 'package:bootpay/model/widget/widget_payload.dart';
 import 'package:bootpay_flutter_example/webapp_payment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -16,6 +19,8 @@ import 'package:flutter/material.dart';
 import 'deprecated/api_provider.dart';
 
 import 'package:intl/intl.dart';
+
+import 'widget_page.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -130,6 +135,12 @@ class SecondRoute extends StatelessWidget {
                   child: TextButton(
                     onPressed: () => goBootpayWebapp(context),
                     child: Text('웹앱 테스트'),
+                  ),
+                ),
+                Center(
+                  child: TextButton(
+                    onPressed: () => goWidgetTest(context),
+                    child: Text('위젯 테스트'),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -620,6 +631,29 @@ class SecondRoute extends StatelessWidget {
       onDone: (String data) {
         print('------- onDone: $data');
       },
+    );
+  }
+
+  void goWidgetTest(BuildContext context) {
+    // WidgetPayload widgetPayload = WidgetPayload();
+    // widgetPayload.webApplicationId = '59a7a368396fa64fc5d4a7db';
+    // widgetPayload.androidApplicationId = '59a7a368396fa64fc5d4a7db';
+    // widgetPayload.iosApplicationId = '59a7a368396fa64fc5d4a7db';
+    // // widgetPayload.androidApplicationId = '59a7a368396fa64fc5d4a7dc';
+    // // widgetPayload.iosApplicationId = '59a7a368396fa64fc5d4a7dd';
+    //
+    // widgetPayload.widgetKey = 'default-widget';
+    // widgetPayload.price = 1000;
+    // widgetPayload.taxFree = 0;
+
+    // BootpayWidget();
+
+    // BootpayWidget().render(context: context, widgetPayload: widgetPayload);
+
+    // BootpayWid
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WidgetPage()),
     );
   }
 

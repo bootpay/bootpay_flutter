@@ -24,6 +24,8 @@ class _BootpayAppPageState extends State<BootpayAppPage> {
   DateTime? currentBackPressTime = DateTime.now();
   bool isProgressShow = false;
 
+  double _height = 0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -38,6 +40,7 @@ class _BootpayAppPageState extends State<BootpayAppPage> {
         isProgressShow = isShow;
       });
     };
+
   }
 
 
