@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bootpay/config/bootpay_config.dart';
+import 'package:bootpay/model/widget/selected_info.dart';
 import 'package:bootpay/model/widget/widget_payload.dart';
 import 'package:get/get.dart';
 
@@ -34,10 +35,11 @@ class BootpayWebView extends StatefulWidget {
   BootpayDefaultCallback? onDone;
 
   //widget
-  BootpayDefaultCallback? onWidgetAllAgreeTerms;
-  BootpayDefaultCallback? onWidgetReady;
+
+  BootpayCloseCallback? onWidgetReady;
   WidgetResizeCallback? onWidgetResize;
-  BootpayDefaultCallback? onWidgetChangePayment;
+  WidgetChangePaymentCallback? onWidgetChangePayment;
+  WidgetChangePaymentCallback? onWidgetChangeAgreeTerm;
 
   BootpayProgressBarCallback? onProgressShow;
   // ShowHeaderCallback? onShowHeader;
@@ -84,7 +86,6 @@ class BootpayWebView extends StatefulWidget {
     if(payload?.extra?.openType == 'redirect') {
       script = "Bootpay.confirm();";
     }
-
     _controller.runJavaScript(script);
   }
 
@@ -94,6 +95,66 @@ class BootpayWebView extends StatefulWidget {
     );
     // _controller.
     // _controller.
+  }
+
+  void widgetUpdate(Payload? payload, bool? refresh) {
+    if(payload == null) return;
+    _controller.runJavaScript(
+        "BootpayWidget.update(${payload.toString()}, ${refresh == true ? 'true' : 'false'});"
+    );
+  }
+
+  void requestPayment({
+    Payload? payload,
+    BootpayDefaultCallback? onError,
+    BootpayCloseCallback? onClose,
+    BootpayDefaultCallback? onIssued,
+    BootpayConfirmCallback? onConfirm,
+    BootpayAsyncConfirmCallback? onConfirmAsync,
+    BootpayDefaultCallback? onDone,
+  }) {
+    String script = "BootpayWidget.requestPayment(" +
+        "${this..payload.toString()}" +
+        ")" +
+        ".then( function (res) {" +
+        confirm +
+        issued +
+        done +
+        "}, function (res) {" +
+        error +
+        cancel +
+        "})";
+
+    _controller.runJavaScript(
+        script
+    );
+  }
+
+
+  String get confirm {
+    return "if (res.event === 'confirm') { if (window.BootpayConfirm && window.BootpayConfirm.postMessage) { BootpayConfirm.postMessage(JSON.stringify(res)); } }";
+  }
+
+
+  String get done {
+    return "else if (res.event === 'done') { if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(res)); } }";
+  }
+
+
+  String get issued {
+    return "else if (res.event === 'issued') { if (window.BootpayIssued && window.BootpayIssued.postMessage) { BootpayIssued.postMessage(JSON.stringify(res)); } }";
+  }
+
+  String get error {
+    return "if (res.event === 'error') { if (window.BootpayError && window.BootpayError.postMessage) { BootpayError.postMessage(JSON.stringify(res)); } }";
+  }
+
+  String get cancel {
+    return "else if (res.event === 'cancel') { if (window.BootpayCancel && window.BootpayCancel.postMessage) { BootpayCancel.postMessage(JSON.stringify(res)); } }";
+  }
+
+  String get close {
+    return "document.addEventListener('bootpayclose', function (e) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage('결제창이 닫혔습니다'); } });";
   }
 }
 
@@ -105,40 +166,36 @@ class BootpayWebViewState extends State<BootpayWebView> {
   // late final WebViewController _controller;
   // final Completer<WebViewController> _controller = Completer<WebViewController>();
 
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-beta.32/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-beta.36/';
   late final String WIDGET_URL = INAPP_URL + 'widget.html';
 
 
 
-
-
-
-
-  String confirm() {
-    return "if (res.event === 'confirm') { if (window.BootpayConfirm && window.BootpayConfirm.postMessage) { BootpayConfirm.postMessage(JSON.stringify(res)); } }";
-  }
-
-
-  String done() {
-    return "else if (res.event === 'done') { if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(res)); } }";
-  }
-
-
-  String issued() {
-    return "else if (res.event === 'issued') { if (window.BootpayIssued && window.BootpayIssued.postMessage) { BootpayIssued.postMessage(JSON.stringify(res)); } }";
-  }
-
-  String error() {
-    return "if (res.event === 'error') { if (window.BootpayError && window.BootpayError.postMessage) { BootpayError.postMessage(JSON.stringify(res)); } }";
-  }
-
-  String cancel() {
-    return "else if (res.event === 'cancel') { if (window.BootpayCancel && window.BootpayCancel.postMessage) { BootpayCancel.postMessage(JSON.stringify(res)); } }";
-  }
-
-  String close() {
-    return "document.addEventListener('bootpayclose', function (e) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage('결제창이 닫혔습니다'); } });";
-  }
+  // String confirm() {
+  //   return "if (res.event === 'confirm') { if (window.BootpayConfirm && window.BootpayConfirm.postMessage) { BootpayConfirm.postMessage(JSON.stringify(res)); } }";
+  // }
+  //
+  //
+  // String done() {
+  //   return "else if (res.event === 'done') { if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(res)); } }";
+  // }
+  //
+  //
+  // String issued() {
+  //   return "else if (res.event === 'issued') { if (window.BootpayIssued && window.BootpayIssued.postMessage) { BootpayIssued.postMessage(JSON.stringify(res)); } }";
+  // }
+  //
+  // String error() {
+  //   return "if (res.event === 'error') { if (window.BootpayError && window.BootpayError.postMessage) { BootpayError.postMessage(JSON.stringify(res)); } }";
+  // }
+  //
+  // String cancel() {
+  //   return "else if (res.event === 'cancel') { if (window.BootpayCancel && window.BootpayCancel.postMessage) { BootpayCancel.postMessage(JSON.stringify(res)); } }";
+  // }
+  //
+  // String close() {
+  //   return "document.addEventListener('bootpayclose', function (e) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage('결제창이 닫혔습니다'); } });";
+  // }
 
 
   late PlatformWebViewControllerCreationParams params;
@@ -231,10 +288,6 @@ class BootpayWebViewState extends State<BootpayWebView> {
         onMessageReceived: onDoneJS,
       )
       ..addJavaScriptChannel(
-        'WidgetAllAgreeTerms',
-        onMessageReceived: onWidgetAllAgreeTermsJS,
-      )
-      ..addJavaScriptChannel(
         'WidgetReady',
         onMessageReceived: onWidgetReadyJS,
       )
@@ -245,6 +298,10 @@ class BootpayWebViewState extends State<BootpayWebView> {
       ..addJavaScriptChannel(
         'WidgetChangePayment',
         onMessageReceived: onWidgetChangePaymentJS,
+      )
+      ..addJavaScriptChannel(
+        'WidgetChangeTerms',
+        onMessageReceived: onWidgetChangeAgreeTermJS,
       )
       ..addJavaScriptChannel(
         'BootpayFlutterWebView',
@@ -344,18 +401,19 @@ class BootpayWebViewState extends State<BootpayWebView> {
   }
 
   Future<void> loadWidgetScript(String url) async {
-    print(renderWidgetJS());
 
     if (url.startsWith(WIDGET_URL)) {
       if(BootpayConfig.ENV == BootpayConfig.ENV_DEBUG) {
-        widget._controller.runJavaScript("BootpayWidget.setEnvironmentMode('development');");
+        widget._controller.runJavaScript("BootpayWidget.setEnvironmentMode('development', '');");
       }
-
-      widget._controller.runJavaScript(allAgreeWatch());
-      widget._controller.runJavaScript(readyWatch());
-      widget._controller.runJavaScript(resizeWatch());
-      widget._controller.runJavaScript(changeMethodWatch());
-      widget._controller.runJavaScript(renderWidgetJS());
+      //
+      // widget._controller.runJavaScript(allAgreeWatch);
+      widget._controller.runJavaScript(readyWatch);
+      widget._controller.runJavaScript(resizeWatch);
+      widget._controller.runJavaScript(changeMethodWatch);
+      widget._controller.runJavaScript(changeTermsWatch);
+      widget._controller.runJavaScript(renderWidgetJS);
+      widget._controller.runJavaScript(widget.close);
     }
   }
 
@@ -374,28 +432,34 @@ extension PaymentWidget on BootpayWebViewState {
 
 
 
-  String allAgreeWatch() {
-    return "document.addEventListener('bootpay-all-agree-terms', function (e) { if (window.WidgetAllAgreeTerms && window.WidgetAllAgreeTerms.postMessage) { WidgetAllAgreeTerms.postMessage(JSON.stringify(e.detail)); } });";
-  }
+  // String get allAgreeWatch {
+  //   return "document.addEventListener('bootpay-all-agree-terms', function (e) { if (window.WidgetAllAgreeTerms && window.WidgetAllAgreeTerms.postMessage) { WidgetAllAgreeTerms.postMessage(JSON.stringify(e.detail)); } });";
+  // }
 
-  String readyWatch() {
+  String get readyWatch {
     return "document.addEventListener('bootpay-widget-ready', function (e) { if (window.WidgetReady && window.WidgetReady.postMessage) { WidgetReady.postMessage(JSON.stringify(e.detail)); } });";
   }
 
   // {"height": 700}
-  String resizeWatch() {
+  String get resizeWatch {
     return "document.addEventListener('bootpay-widget-resize', function (e) { if (window.WidgetResize && window.WidgetResize.postMessage) { WidgetResize.postMessage(JSON.stringify(e.detail)); } });";
   }
 
   // {"pg":"nicepay","method":"card","select_terms":[{"term_id":"65eec9c1ca8deb0060382a7f","pk":"test_1","title":"테스트약관","term_type":1},{"term_id":"65eec9c1ca8deb0060382a80","pk":"new-terms","title":"새로운약관","term_type":1},{"pk":"external-test-1","title":"부트페이 외부 약관1","term_type":2}],"term_passed":false,"extra":{"direct_card_company":"하나","direct_card_quota":3,"direct_card_interest":true,"card_quota":0}}
-  String changeMethodWatch() {
+  String get changeMethodWatch {
     return "document.addEventListener('bootpay-widget-change-payment', function (e) { if (window.WidgetChangePayment && window.WidgetChangePayment.postMessage) { WidgetChangePayment.postMessage(JSON.stringify(e.detail)); } });";
   }
 
-  String renderWidgetJS() {
-    return "BootpayWidget.render('#bootpay-widget', " +
+  String get changeTermsWatch {
+    return "document.addEventListener('bootpay-widget-change-terms', function (e) { if (window.WidgetChangeTerms && window.WidgetChangeTerms.postMessage) { WidgetChangeTerms.postMessage(JSON.stringify(e.detail)); } });";
+  }
+
+  String get renderWidgetJS {
+    String temp =   "BootpayWidget.render('#bootpay-widget', " +
         "${this.widget.widgetPayload?.toString()}" +
         ")";
+    print(temp);
+    return temp;
   }
 
 }
@@ -425,7 +489,7 @@ extension BootpayMethod on BootpayWebViewState {
     }
 
     result.add(await getAnalyticsData());
-    result.add(close());
+    result.add(widget.close);
 
     return result;
   }
@@ -444,13 +508,15 @@ extension BootpayMethod on BootpayWebViewState {
         "${this.widget.payload.toString()}" +
         ")" +
         ".then( function (res) {" +
-        confirm() +
-        issued() +
-        done() +
+        widget.confirm +
+        widget.issued +
+        widget.done +
         "}, function (res) {" +
-        error() +
-        cancel() +
+        widget.error +
+        widget.cancel +
         "})";
+
+    print(script);
 
     return script;
   }
@@ -492,13 +558,16 @@ extension BootpayCallback on BootpayWebViewState {
   }
 
   void onProgressShow(bool isShow) {
-    if(this.widget.payload?.extra?.openType != 'redirect' && isShow) {
-
-    } else {
-      if(this.onProgressShow != null) {
-        this.onProgressShow!(isShow);
-      }
-    }
+    print(isShow);
+    // if(this.widget.payload?.extra?.openType != 'redirect' && isShow) {
+    //
+    // } else {
+    //   print(this.onProgressShow);
+    //   if(this.onProgressShow != null) {
+    //     this.onProgressShow!(isShow);
+    //   }
+    // }
+    // this.onProgressShow(isShow);
   }
 
 
@@ -538,14 +607,14 @@ extension BootpayCallback on BootpayWebViewState {
     if (this.widget.onDone != null) this.widget.onDone!(message.message);
   }
 
-  Future<void> onWidgetAllAgreeTermsJS(JavaScriptMessage message) async {
-    print("onWidgetAllAgreeTermsJS : ${message.message}");
-    if (this.widget.onWidgetAllAgreeTerms != null) this.widget.onWidgetAllAgreeTerms!(message.message);
-  }
+  // Future<void> onWidgetChangeAgreeTermJS(JavaScriptMessage message) async {
+  //   print("onWidgetAllAgreeTermsJS : ${message.message}");
+  //   if (this.widget.onWidgetChangeAgreeTerm != null) this.widget.onWidgetChangeAgreeTerm!(message.message);
+  // }
 
   Future<void> onWidgetReadyJS(JavaScriptMessage message) async {
     print("onWidgetReadyJS : ${message.message}");
-    if (this.widget.onWidgetReady != null) this.widget.onWidgetReady!(message.message);
+    if (this.widget.onWidgetReady != null) this.widget.onWidgetReady!();
   }
 
   Future<void> onWidgetResizeJS(JavaScriptMessage message) async {
@@ -563,7 +632,24 @@ extension BootpayCallback on BootpayWebViewState {
 
   Future<void> onWidgetChangePaymentJS(JavaScriptMessage message) async {
     print("onWidgetChangePaymentJS : ${message.message}");
-    if (this.widget.onWidgetChangePayment != null) this.widget.onWidgetChangePayment!(message.message);
+    try {
+      Map<String, dynamic> data = jsonDecode(message.message);
+      SelectedInfo selectedInfo = SelectedInfo.fromJson(data);
+      if (this.widget.onWidgetChangePayment != null) this.widget.onWidgetChangePayment!(selectedInfo);
+    } catch (e) {
+      print("Error parsing JSON: $e");
+    }
+  }
+
+  Future<void> onWidgetChangeAgreeTermJS(JavaScriptMessage message) async {
+    print("onWidgetChangeTermsJS : ${message.message}");
+    try {
+      Map<String, dynamic> data = jsonDecode(message.message);
+      SelectedInfo selectedInfo = SelectedInfo.fromJson(data);
+      if (this.widget.onWidgetChangeAgreeTerm != null) this.widget.onWidgetChangeAgreeTerm!(selectedInfo);
+    } catch (e) {
+      print("Error parsing JSON: $e");
+    }
   }
 
   Future<void> onRedirectJS(JavaScriptMessage message) async {

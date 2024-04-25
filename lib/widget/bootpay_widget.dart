@@ -107,28 +107,30 @@ class BootpayWidgetController {
 
   BootpayWebView? _bootpayWebView;
 
-  BootpayDefaultCallback? onWidgetAllAgreeTerms;
-  BootpayDefaultCallback? onWidgetReady;
+
+  BootpayCloseCallback? onWidgetReady;
   WidgetResizeCallback? onWidgetResize;
-  BootpayDefaultCallback? onWidgetChangePayment;
+  WidgetChangePaymentCallback? onWidgetChangePayment;
+  WidgetChangePaymentCallback? onWidgetChangeAgreeTerm;
 
   double _widgetHeight = 0;
 
   void _initEvent() {
-    print(1234);
-    print(_bootpayWebView);
     _bootpayWebView?.onWidgetChangePayment = onWidgetChangePayment;
-    _bootpayWebView?.onWidgetAllAgreeTerms = onWidgetAllAgreeTerms;
+    _bootpayWebView?.onWidgetChangeAgreeTerm = onWidgetChangeAgreeTerm;
     _bootpayWebView?.onWidgetReady = onWidgetReady;
     _bootpayWebView?.onWidgetResize = (height) {
       if(_widgetHeight == height) return;
       _widgetHeight = height;
       if(onWidgetResize != null) onWidgetResize!(height);
     };
-    // _bootpayWebView.con
   }
 
-  void update({Payload? payload}) {
+  void update({Payload? payload, bool? refresh}) {
+    _bootpayWebView?.widgetUpdate(payload, refresh ?? false);
+  }
 
+  void requestPayment(Payload? payload) {
+    _bootpayWebView?.requestPayment(payload);
   }
 }

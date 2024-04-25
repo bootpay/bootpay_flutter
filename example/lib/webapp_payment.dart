@@ -179,7 +179,9 @@ Page resource error:
           );
         },
       )
-      ..loadRequest(Uri.parse('https://dev-js.bootapi.com/test/payment'));
+      // ..loadRequest(Uri.parse('https://dev-js.bootapi.com/test/payment'));
+      ..loadRequest(Uri.parse('https://opicup-web-dev-new.web.app/ticketpass/t_exam_0_training_10_30_day?os=ios&phone=010-4444-4444&a=1'));
+
 
     // #docregion platform_features
     if (controller.platform is AndroidWebViewController) {

@@ -1,3 +1,7 @@
+import 'package:bootpay/bootpay.dart';
+import 'package:bootpay/model/extra.dart';
+import 'package:bootpay/model/payload.dart';
+import 'package:bootpay/model/widget/selected_info.dart';
 import 'package:bootpay/model/widget/widget_payload.dart';
 import 'package:bootpay/widget/bootpay_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,9 +17,19 @@ class WidgetPage extends StatefulWidget {
 
 class WidgetPageState extends State<WidgetPage> {
 
-  WidgetPayload? widgetPayload;
+  WidgetPayload? _widgetPayload;
+  SelectedInfo? _selectedInfo;
   BootpayWidgetController _controller = BootpayWidgetController();
-  // WidgetCon
+  final ScrollController _scrollController = ScrollController();
+
+
+  // String webApplicationId = '59a568d3e13f3336c21bf707';
+  // String androidApplicationId = '59a568d3e13f3336c21bf708';
+  // String iosApplicationId = '59a568d3e13f3336c21bf709';
+
+  String webApplicationId = '65af4990ca8deb00600454ba';
+  String androidApplicationId = '65af4990ca8deb00600454bb';
+  String iosApplicationId = '65af4990ca8deb00600454bc';
 
   double _widgetHeight = 0;
 
@@ -24,23 +38,54 @@ class WidgetPageState extends State<WidgetPage> {
     // TODO: implement initState
     super.initState();
 
-    widgetPayload = WidgetPayload();
-    widgetPayload?.webApplicationId = '59a7a368396fa64fc5d4a7db';
-    widgetPayload?.androidApplicationId = '59a7a368396fa64fc5d4a7db';
-    widgetPayload?.iosApplicationId = '59a7a368396fa64fc5d4a7db';
+    _widgetPayload = WidgetPayload();
+    // widgetPayload?.webApplicationId = '59a7a368396fa64fc5d4a7db';
+    // widgetPayload?.androidApplicationId = '59a7a368396fa64fc5d4a7db';
+    // widgetPayload?.iosApplicationId = '59a7a368396fa64fc5d4a7db';
 
-    widgetPayload?.price = 1000;
-    widgetPayload?.taxFree = 0;
-    widgetPayload?.use_terms = false;
+    _widgetPayload?.webApplicationId = webApplicationId;
+    _widgetPayload?.androidApplicationId = androidApplicationId;
+    _widgetPayload?.iosApplicationId = iosApplicationId;
 
-    // _controller.
+    _widgetPayload?.price = 1000;
+    _widgetPayload?.taxFree = 0;
+
     _controller.onWidgetResize = (height) {
-      print(height);
+      print('onWidgetResize : $height');
       if(_widgetHeight == height) return;
+      if(_widgetHeight < height) {
+        scrollDown(height - _widgetHeight);
+      }
       setState(() {
         _widgetHeight = height;
       });
     };
+    _controller.onWidgetChangePayment = (selectedInfo) {
+      print('onWidgetChangePayment : ${selectedInfo.toString()}');
+      setState(() {
+        _selectedInfo = selectedInfo;
+      });
+    };
+    _controller.onWidgetChangeAgreeTerm = (selectedInfo) {
+      print('onWidgetChangeAgreeTerm : ${selectedInfo.toString()}');
+      setState(() {
+        _selectedInfo = selectedInfo;
+      });
+    };
+    _controller.onWidgetReady = () {
+      print('onWidgetReady');
+    };
+  }
+
+  void scrollDown(double diff) {
+    final double currentPosition = _scrollController.position.pixels;
+    final double targetPosition = currentPosition + diff;
+
+    _scrollController.animateTo(
+      targetPosition,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
@@ -55,21 +100,22 @@ class WidgetPageState extends State<WidgetPage> {
           children: [
             Expanded(
                 child: SingleChildScrollView(
+                  controller: _scrollController,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 10),
+                      productWidget(),
                       SizedBox(height: 10),
                       SizedBox(
                         height: _widgetHeight,
                         child: BootpayWidget(
-                          widgetPayload: widgetPayload,
+                          widgetPayload: _widgetPayload,
                           controller: _controller,
                   
                         ),
                       ),
-                      productWidget(),
                     ],
                   ),
                 )
@@ -77,20 +123,11 @@ class WidgetPageState extends State<WidgetPage> {
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: Material(
-                color: Colors.blueAccent,
+                color: (_selectedInfo?.completed ?? false) ? Colors.blueAccent : Colors.grey,
                 borderRadius: BorderRadius.circular(10),
                 child: InkWell(
                   onTap: () {
-                    // print('결제하기');
-                    // Fluttertoast.showToast(
-                    //     msg: "This is Center Short Toast",
-                    //     toastLength: Toast.LENGTH_SHORT,
-                    //     gravity: ToastGravity.CENTER,
-                    //     timeInSecForIosWeb: 1,
-                    //     backgroundColor: Colors.red,
-                    //     textColor: Colors.white,
-                    //     fontSize: 16.0
-                    // );
+                    goBootpayPayment();
                   },
                   child: Container(
                     height: 60,
@@ -116,10 +153,11 @@ class WidgetPageState extends State<WidgetPage> {
           // Text('* 모의고사비 등 기타 경비가 포함된 금액입니다. * 정규수업용 교재비는 별도입니다. * 입학금은 별도로 받지 않습니다. * 학급당 학생수는 40명 대 (종로학원 50명 대)입니다. * 등록한 후, 대학에 추가 합격했을 경우 추가 합격을 통지 받은 날로부터 3일 이내에 환불신청서(소정양식)와 합격증을 제시하면 개강 전에는 전액을 환불해주고, 개강 후부터는 수강료 환불 기준에 따라서 환불합니다.'),
           Text('주문상품', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
           Container(
+              width: double.infinity,
               color: Colors.grey[200],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("\n안녕하세요\n\n더모아실용음악학원입니다\n\n행복한 가정의 달 5월이 시작 되었습니다\n\n벌써 2022년의 반이 지나가려고 하는데요\n\n세삼 시간이 정말 빠르게 흐르면서\n\n이번 2022년 신년에 다짐했던 부분들을\n\n잘 이루고 있는지 다들 궁금합니다\n\n그런 기념으로\n더모아실용음악학원에서 가정의 달 5월을 맞이하여\n\n신규 등록시 첫 달 10,000원 할인 이벤트를 준비했습니다\n\n많은 분들께서 악기, 노래를 한 번 배워보고자\n\n너무 감사하게도\n\n더모아실용음악학원을 찾아주시고 있는 요즘입니다\n\n그에 보답하고자 작은 이벤트를 준비했으니\n\n부담없이 연락을 주시면 감사하겠습니다 ^^!!\n\n본 이벤트는 2022년 5월 31일까지 진행되며,\n\n전 과목 모두 신규 등록시 첫 수강료가 10,000원 할인이 됩니다 (취미 , 입시반 포함)\n\n음악을 배워보고 싶지만 소질이 없으시다고 생각하시는분\n\n악기 하나 쯤 다뤄보고 싶다고 생각 하시는 분들\n\n악보를 못 읽는데도 가능할까? 라고 생각하시는 모든 분들\n\n걱정 하지 마시고 본원의 문을 용기내어 두드려 주시면\n\n친절하고 상세하게 상담을 통해 체계적인 레슨을 제공 해드리겠습니다^^!\n\n저희 더모아실용음악학원은\n\n항상 양질의 레슨을 제공하기 위해 최선을 다하겠습니다"),
+                child: Text("\n안녕하세요\n\n더모아실용음악학원입니다\n\n행복한 가정의 달 5월이 시작 되었습니다\n\n벌써 2022년의 반이 지나가려고 하는데요\n\n세삼 시간이 정말 빠르게 흐르면서\n\n이번 2022년 신년에 다짐했던 부분들을\n\n잘 이루고 있는지 다들 궁금합니다\n\n그런 기념으로\n더모아실용음악학원에서 가정의 달 5월을 맞이하여\n\n신규 등록시 첫 달 10,000원 할인 이벤트를 준비했습니다\n\n많은 분들께서 악기, 노래를 한 번 배워보고자\n\n너무 감사하게도\n\n더모아실용음악학원을 찾아주시고 있는 요즘입니다\n\n그에 보답하고자 작은 이벤트를 준비했으니\n\n부담없이 연락을 주시면 감사하겠습니다 ^^!!"),
               )
           ),
           Divider(),
@@ -127,13 +165,65 @@ class WidgetPageState extends State<WidgetPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('5월 수강료', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-              Text('320,000', style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.w600, fontSize: 16)),
+              Text('28,200원', style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.w600, fontSize: 16)),
 
             ]
           ), 
 
         ],
       ),
+    );
+  }
+
+  void goBootpayPayment() {
+    if((_selectedInfo?.completed ?? false) == false) return;
+
+    Payload payload = Payload();
+    payload.price = 28200;
+    payload.orderName = '5월 수강료';
+    payload.orderId = DateTime.now().millisecondsSinceEpoch.toString();
+    payload.webApplicationId = webApplicationId;
+    payload.androidApplicationId = androidApplicationId;
+    payload.iosApplicationId = iosApplicationId;
+
+    print(_selectedInfo?.extra?.directCardQuota);
+
+    payload.extra = Extra();
+    payload.extra?.directCardCompany = _selectedInfo?.extra?.directCardCompany;
+    payload.extra?.directCardQuota = "${_selectedInfo?.extra?.directCardQuota}";
+    payload.extra?.cardQuota = "${_selectedInfo?.extra?.cardQuota}";
+
+    payload.pg = _selectedInfo?.pg;
+    payload.method = _selectedInfo?.method;
+
+    Bootpay().requestPayment(
+      context: context,
+      payload: payload,
+      showCloseButton: false,
+
+      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
+      onCancel: (String data) {
+        print('------- onCancel 1 : $data');
+      },
+      onError: (String data) {
+        print('------- onError: $data');
+      },
+      onClose: () {
+        print('------- onClose');
+        if (!kIsWeb) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
+      },
+      onConfirm: (String data)  {
+        print('------- onConfirm: $data');
+        return true;
+      },
+      onIssued: (String data) {
+        print('------- onIssued: $data');
+      },
+      onDone: (String data) {
+        print('------- onDone: $data');
+      },
     );
   }
 

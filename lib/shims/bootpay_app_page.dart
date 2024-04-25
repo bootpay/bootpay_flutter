@@ -36,9 +36,10 @@ class _BootpayAppPageState extends State<BootpayAppPage> {
     closeController.isDebounceShow = true;
 
     widget.webView?.onProgressShow = (isShow) {
-      setState(() {
-        isProgressShow = isShow;
-      });
+      print(isShow);
+      // setState(() {
+      //   isProgressShow = isShow;
+      // });
     };
 
   }

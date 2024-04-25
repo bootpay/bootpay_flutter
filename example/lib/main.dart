@@ -94,8 +94,6 @@ class SecondRoute extends StatelessWidget {
 
     init();
 
-    print('build init');
-
     return Scaffold(
       body: Container(
           child: SafeArea(
@@ -380,8 +378,8 @@ class SecondRoute extends StatelessWidget {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = 'KCP';
-    payload.method = "카드자동";
+    payload.pg = '페이앱';
+    payload.method = "네이버페이";
 
     // BootpayConfig.IS_FORCE_WEB = true;
     // BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
@@ -635,21 +633,6 @@ class SecondRoute extends StatelessWidget {
   }
 
   void goWidgetTest(BuildContext context) {
-    // WidgetPayload widgetPayload = WidgetPayload();
-    // widgetPayload.webApplicationId = '59a7a368396fa64fc5d4a7db';
-    // widgetPayload.androidApplicationId = '59a7a368396fa64fc5d4a7db';
-    // widgetPayload.iosApplicationId = '59a7a368396fa64fc5d4a7db';
-    // // widgetPayload.androidApplicationId = '59a7a368396fa64fc5d4a7dc';
-    // // widgetPayload.iosApplicationId = '59a7a368396fa64fc5d4a7dd';
-    //
-    // widgetPayload.widgetKey = 'default-widget';
-    // widgetPayload.price = 1000;
-    // widgetPayload.taxFree = 0;
-
-    // BootpayWidget();
-
-    // BootpayWidget().render(context: context, widgetPayload: widgetPayload);
-
     // BootpayWid
     Navigator.push(
       context,
