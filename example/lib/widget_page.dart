@@ -1,8 +1,6 @@
 import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/payload.dart';
-import 'package:bootpay/model/widget/selected_info.dart';
-import 'package:bootpay/model/widget/widget_payload.dart';
 import 'package:bootpay/widget/bootpay_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -17,8 +15,9 @@ class WidgetPage extends StatefulWidget {
 
 class WidgetPageState extends State<WidgetPage> {
 
-  WidgetPayload? _widgetPayload;
-  SelectedInfo? _selectedInfo;
+  // WidgetPayloadTemp? _widgetPayload;
+  // WidgetPayload? _selectedInfo;
+  Payload? _payload;
   BootpayWidgetController _controller = BootpayWidgetController();
   final ScrollController _scrollController = ScrollController();
 
@@ -26,6 +25,10 @@ class WidgetPageState extends State<WidgetPage> {
   // String webApplicationId = '59a568d3e13f3336c21bf707';
   // String androidApplicationId = '59a568d3e13f3336c21bf708';
   // String iosApplicationId = '59a568d3e13f3336c21bf709';
+
+  // String webApplicationId = '65af4990ca8deb00600454ba';
+  // String androidApplicationId = '65af4990ca8deb00600454bb';
+  // String iosApplicationId = '65af4990ca8deb00600454bc';
 
   String webApplicationId = '65af4990ca8deb00600454ba';
   String androidApplicationId = '65af4990ca8deb00600454bb';
@@ -38,17 +41,20 @@ class WidgetPageState extends State<WidgetPage> {
     // TODO: implement initState
     super.initState();
 
-    _widgetPayload = WidgetPayload();
-    // widgetPayload?.webApplicationId = '59a7a368396fa64fc5d4a7db';
-    // widgetPayload?.androidApplicationId = '59a7a368396fa64fc5d4a7db';
-    // widgetPayload?.iosApplicationId = '59a7a368396fa64fc5d4a7db';
+    // _widgetPayload = WidgetPayloadTemp();
 
-    _widgetPayload?.webApplicationId = webApplicationId;
-    _widgetPayload?.androidApplicationId = androidApplicationId;
-    _widgetPayload?.iosApplicationId = iosApplicationId;
 
-    _widgetPayload?.price = 1000;
-    _widgetPayload?.taxFree = 0;
+    _payload = Payload();
+    // _payload?.webApplicationId = '59a7a368396fa64fc5d4a7db';
+    // _payload?.androidApplicationId = '59a7a368396fa64fc5d4a7db';
+    // _payload?.iosApplicationId = '59a7a368396fa64fc5d4a7db';
+    _payload?.webApplicationId = webApplicationId;
+    _payload?.androidApplicationId = androidApplicationId;
+    _payload?.iosApplicationId = iosApplicationId;
+    _payload?.price = 1000;
+    _payload?.taxFree = 0;
+    _payload?.widgetKey = 'default-widget';
+    _payload?.widgetSandbox = true;
 
     _controller.onWidgetResize = (height) {
       print('onWidgetResize : $height');
@@ -60,16 +66,16 @@ class WidgetPageState extends State<WidgetPage> {
         _widgetHeight = height;
       });
     };
-    _controller.onWidgetChangePayment = (selectedInfo) {
-      print('onWidgetChangePayment : ${selectedInfo.toString()}');
+    _controller.onWidgetChangePayment = (widgetData) {
+      print('onWidgetChangePayment22 : ${widgetData?.toJson()}');
       setState(() {
-        _selectedInfo = selectedInfo;
+        _payload?.mergeWidgetData(widgetData);
       });
     };
-    _controller.onWidgetChangeAgreeTerm = (selectedInfo) {
-      print('onWidgetChangeAgreeTerm : ${selectedInfo.toString()}');
+    _controller.onWidgetChangeAgreeTerm = (widgetData) {
+      print('onWidgetChangeAgreeTerm : ${widgetData?.toJson()}');
       setState(() {
-        _selectedInfo = selectedInfo;
+        _payload?.mergeWidgetData(widgetData);
       });
     };
     _controller.onWidgetReady = () {
@@ -111,7 +117,7 @@ class WidgetPageState extends State<WidgetPage> {
                       SizedBox(
                         height: _widgetHeight,
                         child: BootpayWidget(
-                          widgetPayload: _widgetPayload,
+                          payload: _payload,
                           controller: _controller,
                   
                         ),
@@ -123,7 +129,7 @@ class WidgetPageState extends State<WidgetPage> {
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: Material(
-                color: (_selectedInfo?.completed ?? false) ? Colors.blueAccent : Colors.grey,
+                color: (_payload?.widgetCompleted ?? false) ? Colors.blueAccent : Colors.grey,
                 borderRadius: BorderRadius.circular(10),
                 child: InkWell(
                   onTap: () {
@@ -176,7 +182,7 @@ class WidgetPageState extends State<WidgetPage> {
   }
 
   void goBootpayPayment() {
-    if((_selectedInfo?.completed ?? false) == false) return;
+    if((_payload?.widgetCompleted ?? false) == false) return;
 
     Payload payload = Payload();
     payload.price = 28200;
@@ -186,15 +192,16 @@ class WidgetPageState extends State<WidgetPage> {
     payload.androidApplicationId = androidApplicationId;
     payload.iosApplicationId = iosApplicationId;
 
-    print(_selectedInfo?.extra?.directCardQuota);
+    // print(_payload?.extra?.directCardQuota);
 
-    payload.extra = Extra();
-    payload.extra?.directCardCompany = _selectedInfo?.extra?.directCardCompany;
-    payload.extra?.directCardQuota = "${_selectedInfo?.extra?.directCardQuota}";
-    payload.extra?.cardQuota = "${_selectedInfo?.extra?.cardQuota}";
+    // payload.extra = Extra();
+    // payload.extra?.directCardCompany = _selectedInfo?.extra?.directCardCompany;
+    // payload.extra?.directCardQuota = "${_selectedInfo?.extra?.directCardQuota}";
+    // payload.extra?.cardQuota = "${_selectedInfo?.extra?.cardQuota}";
+    //
+    // payload.pg = _selectedInfo?.pg;
+    // payload.method = _selectedInfo?.method;
 
-    payload.pg = _selectedInfo?.pg;
-    payload.method = _selectedInfo?.method;
 
     Bootpay().requestPayment(
       context: context,

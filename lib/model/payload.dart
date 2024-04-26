@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:bootpay/config/bootpay_config.dart';
+import 'package:bootpay/model/widget/oopay.dart';
+import 'package:bootpay/model/widget/widget_data.dart';
 
 import 'extra.dart';
 import 'item.dart';
@@ -22,6 +24,7 @@ class Payload {
   double? price = 0;
   double? taxFree = 0;
   double? depositPrice = 0; //보증급 [컵]
+  String? currency; //KRW, USD
 
   String? orderId = '';
   String? subscriptionId = '';
@@ -38,6 +41,19 @@ class Payload {
   User? user = User();
   List<Item>? items = [];
 
+  //widget data request 관련
+  String? widgetKey; //default-widget
+  bool? widgetUseTerms;
+  bool? widgetSandbox;
+  Oopay? widgetOopay = Oopay();
+
+  //widget data response 관련
+  String? widgetWalletId;
+  WidgetData? widgetData;
+  List<WidgetTerm>? widgetSelectTerms;
+  bool? widgetTermPassed;
+  bool? widgetCompleted;
+
   // Payload();
   Payload({
     this.webApplicationId,
@@ -47,6 +63,7 @@ class Payload {
     this.method,
     this.methods,
     this.orderName,
+    this.currency,
     this.price,
     this.taxFree,
     this.depositPrice,
@@ -58,7 +75,20 @@ class Payload {
     this.extra,
     this.user,
     this.items,
-  });
+    this.widgetKey,
+    this.widgetUseTerms,
+    this.widgetSandbox,
+    this.widgetOopay,
+    this.widgetWalletId,
+    this.widgetData,
+    this.widgetSelectTerms,
+    this.widgetTermPassed,
+    this.widgetCompleted,
+  }) {
+    if(this.extra == null) {
+      this.extra = Extra();
+    }
+  }
 
   Payload.fromJson(Map<String, dynamic> json) {
     androidApplicationId = json["android_application_id"];
@@ -82,11 +112,27 @@ class Payload {
     // useOrderId = json["use_order_id"];
 
     metadata = json["metadata"];
+    currency = json["currency"];
 
 
     // accountExpireAt = json["account_expire_at"];
     // showAgreeWindow = json["show_agree_window"];
     extra = Extra.fromJson(json["extra"]);
+
+    widgetKey = json["widget_key"];
+    widgetUseTerms = json["use_terms"];
+    widgetSandbox = json["sandbox"];
+    widgetOopay = Oopay.fromJson(json["oopay"]);
+    widgetWalletId = json["wallet_id"];
+    widgetData = json["widget_data"] != null ? WidgetData.fromJson(json["widget_data"]) : null;
+    widgetSelectTerms = [];
+    if (json["select_terms"] != null) {
+      json["select_terms"].forEach((v) {
+        widgetSelectTerms?.add(WidgetTerm.fromJson(v));
+      });
+    }
+    widgetTermPassed = json["term_passed"];
+    widgetCompleted = json["completed"];
   }
 
 
@@ -97,6 +143,7 @@ class Payload {
       'pg': pg,
       'order_name': orderName,
       'price': price,
+      'currency': currency,
       'tax_free': taxFree,
       'deposit_price': depositPrice,
       'order_id': orderId,
@@ -106,7 +153,10 @@ class Payload {
       'metadata': metadata,
       // 'account_expire_at': accountExpireAt,
       // 'show_agree_window': showAgreeWindow,
-      'user_token': userToken
+      'user_token': userToken,
+      'widget_key': widgetKey,
+      'sandbox': widgetSandbox,
+      'use_terms': widgetUseTerms,
     };
     if(this.methods != null && this.methods!.length > 0) {
       if(kIsWeb) result['method'] = this.methods;
@@ -122,6 +172,12 @@ class Payload {
     }
     if(items!.length > 0) {
       result['items'] = items!.map((e) => e.toJson()).toList();
+    }
+    if(widgetOopay != null) {
+      result['oopay'] = widgetOopay!.toJson();
+    }
+    if(widgetSelectTerms != null && widgetSelectTerms!.length > 0) {
+      result['select_terms'] = getSelectTermsValue();
     }
 
     return result;
@@ -172,12 +228,18 @@ class Payload {
     addPart('user', user.toString(), isOriginal: true);
     addPart('items', getItems(), isOriginal: true);
 
+    addPart('use_terms', widgetUseTerms);
+    addPart('sandbox', widgetSandbox);
+    addPart('widget_key', widgetKey);
+    addPart('oopay', widgetOopay?.toJson(), isOriginal: true);
+    addPart('currency', currency);
+    addPart('select_terms', getSelectTermsValue(), isOriginal: true);
+
     return "{${parts.join(", ")}}";
   }
 
 
   String getMethodValue() {
-
     if(this.methods == null || this.methods!.isEmpty) {
       return "'${this.method ?? ''}'";
     } else {
@@ -187,6 +249,17 @@ class Payload {
       }
       return "[${result.join(",")}]";
     }
+  }
+
+  String getSelectTermsValue() {
+    List<String> result = [];
+    if(this.widgetSelectTerms != null) {
+      for(WidgetTerm term in this.widgetSelectTerms!) {
+        result.add(term.toString());
+      }
+    }
+
+    return "[${result.join(",")}]";
   }
 
   // String methodListString() {
@@ -241,5 +314,28 @@ class Payload {
       result += method;
     }
     return result;
+  }
+
+  void mergeWidgetData(WidgetData? data) {
+    if(data == null) return;
+    this.widgetData = data;
+    if(data.pg != null) this.pg = data.pg;
+    if(data.method != null) this.method = data.method;
+
+
+    this.widgetCompleted = data.completed;
+    this.widgetTermPassed = data.termPassed;
+    if(data.currency != null) this.currency = data.currency;
+    if(data.selectTerms != null) this.widgetSelectTerms = data.selectTerms;
+
+
+
+    if(this.extra == null) {
+      this.extra = Extra();
+    }
+    if(data?.extra?.directCardCompany != null) this.extra?.directCardCompany = data?.extra?.directCardCompany;
+    if(data?.extra?.directCardQuota != null) this.extra?.directCardQuota = "${data?.extra?.directCardQuota}";
+    if(data?.extra?.cardQuota != null) this.extra?.cardQuota = "${data?.extra?.cardQuota}";
+
   }
 }

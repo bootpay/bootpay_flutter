@@ -10,7 +10,6 @@ import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:bootpay/model/user.dart';
-import 'package:bootpay/model/widget/widget_payload.dart';
 import 'package:bootpay_flutter_example/webapp_payment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';

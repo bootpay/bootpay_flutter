@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import '../bootpay.dart';
 import '../bootpay_api.dart';
 import '../model/payload.dart';
-import '../model/widget/widget_payload.dart';
 
 @JS('Promise')
 class Promise<T> {
@@ -339,7 +338,7 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
   }
 
   @override
-  void render({Key? key, BuildContext? context, WidgetPayload? widgetPayload}) {
+  void render({Key? key, BuildContext? context, Payload? payload}) {
     // TODO: implement render
   }
 

@@ -1,5 +1,4 @@
 
-import 'package:bootpay/model/widget/widget_payload.dart';
 import 'package:flutter/widgets.dart';
 
 import 'bootpay.dart';

@@ -3,7 +3,6 @@ import 'package:bootpay/config/bootpay_config.dart';
 
 import 'bootpay_widget_api.dart';
 import 'model/stat_item.dart';
-import 'model/widget/widget_payload.dart';
 import 'shims/bootpay_platform.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -36,8 +35,8 @@ class BootpayWidgetImpl with BootpayWidgetApi {
   }
 
   @override
-  void render({Key? key, BuildContext? context, WidgetPayload? widgetPayload}) {
-    _platform.render(context: context, key: key, widgetPayload: widgetPayload);
+  void render({Key? key, BuildContext? context, Payload? payload}) {
+    _platform.render(context: context, key: key, payload: payload);
   }
 
   @override

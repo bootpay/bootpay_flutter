@@ -19,7 +19,6 @@ import '../controller/debounce_close_controller.dart';
 import '../model/payload.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../model/widget/widget_payload.dart';
 import 'bootpay_app_page.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as BottomSheet;
 
@@ -252,7 +251,6 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
   void createWebView({
     Key? key,
     Payload? payload,
-    WidgetPayload? widgetPayload,
     bool? showCloseButton,
     Widget? closeButton,
     BootpayDefaultCallback? onCancel,
@@ -383,16 +381,16 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
   }
 
   @override
-  void render({Key? key, BuildContext? context, WidgetPayload? widgetPayload}) {
+  void render({Key? key, BuildContext? context, Payload? payload}) {
     // if(webView != null) webView!.resizeWatch (key: key, context: context, payload: payload);
 
     webView = null;
     createWebView(
       key: key,
-      widgetPayload: widgetPayload
+        payload: payload
     );
     webView?.isWidget = true;
-    webView?.widgetPayload = widgetPayload;
+    webView?.payload = payload;
 
     if(context == null) return;
 

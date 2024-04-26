@@ -2,7 +2,7 @@
 import 'package:bootpay/config/bootpay_config.dart';
 
 import 'model/stat_item.dart';
-import 'model/widget/selected_info.dart';
+import 'model/widget/widget_data.dart';
 import 'shims/bootpay_platform.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -21,7 +21,7 @@ typedef BootpayAsyncConfirmCallback = Future<bool> Function(String data);
 typedef BootpayCloseCallback = void Function();
 
 typedef WidgetResizeCallback = void Function(double height);
-typedef WidgetChangePaymentCallback = void Function(SelectedInfo? data);
+typedef WidgetChangePaymentCallback = void Function(WidgetData? data);
 
 
 class Bootpay extends BootpayApi {

@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bootpay/config/bootpay_config.dart';
-import 'package:bootpay/model/widget/selected_info.dart';
-import 'package:bootpay/model/widget/widget_payload.dart';
+import 'package:bootpay/model/widget/widget_data.dart';
 import 'package:get/get.dart';
 
 import 'constant/bootpay_constant.dart';
@@ -24,7 +23,6 @@ import 'model/payload.dart';
 // 2. api 역할
 class BootpayWebView extends StatefulWidget {
   final Key? key;
-  WidgetPayload? widgetPayload;
   Payload? payload;
   BootpayDefaultCallback? onCancel;
   BootpayDefaultCallback? onError;
@@ -56,7 +54,6 @@ class BootpayWebView extends StatefulWidget {
       {this.key,
         // this._controller,
         this.payload,
-        this.widgetPayload,
         this.showCloseButton,
         this.onCancel,
         this.onError,
@@ -107,14 +104,24 @@ class BootpayWebView extends StatefulWidget {
   void requestPayment({
     Payload? payload,
     BootpayDefaultCallback? onError,
+    BootpayDefaultCallback? onCancel,
     BootpayCloseCallback? onClose,
     BootpayDefaultCallback? onIssued,
     BootpayConfirmCallback? onConfirm,
     BootpayAsyncConfirmCallback? onConfirmAsync,
     BootpayDefaultCallback? onDone,
   }) {
+    if(onError != null) this.onError = onError;
+    if(onCancel != null) this.onCancel = onCancel;
+    if(onClose != null) this.onClose = onClose;
+    if(onIssued != null) this.onIssued = onIssued;
+    if(onConfirm != null) this.onConfirm = onConfirm;
+    if(onConfirmAsync != null) this.onConfirmAsync = onConfirmAsync;
+    if(onDone != null) this.onDone = onDone;
+    if(payload != null) this.payload = payload;
+
     String script = "BootpayWidget.requestPayment(" +
-        "${this..payload.toString()}" +
+        "${this.payload?.toString()}" +
         ")" +
         ".then( function (res) {" +
         confirm +
@@ -124,6 +131,8 @@ class BootpayWebView extends StatefulWidget {
         error +
         cancel +
         "})";
+
+    print(script);
 
     _controller.runJavaScript(
         script
@@ -402,7 +411,14 @@ class BootpayWebViewState extends State<BootpayWebView> {
 
   Future<void> loadWidgetScript(String url) async {
 
+    if(widget.payload == null) {
+      debugPrint("** bootpayWidget payload data is null !! **");
+      return;
+    }
     if (url.startsWith(WIDGET_URL)) {
+      if(widget.payload?.widgetKey == null) debugPrint("** bootpayWidget widgetKey is null !! **");
+      if(widget.payload?.widgetSandbox == null) debugPrint("** bootpayWidget widgetSandbox is null !! **");
+
       if(BootpayConfig.ENV == BootpayConfig.ENV_DEBUG) {
         widget._controller.runJavaScript("BootpayWidget.setEnvironmentMode('development', '');");
       }
@@ -456,7 +472,7 @@ extension PaymentWidget on BootpayWebViewState {
 
   String get renderWidgetJS {
     String temp =   "BootpayWidget.render('#bootpay-widget', " +
-        "${this.widget.widgetPayload?.toString()}" +
+        "${this.widget.payload?.toString()}" +
         ")";
     print(temp);
     return temp;
@@ -634,8 +650,8 @@ extension BootpayCallback on BootpayWebViewState {
     print("onWidgetChangePaymentJS : ${message.message}");
     try {
       Map<String, dynamic> data = jsonDecode(message.message);
-      SelectedInfo selectedInfo = SelectedInfo.fromJson(data);
-      if (this.widget.onWidgetChangePayment != null) this.widget.onWidgetChangePayment!(selectedInfo);
+      WidgetData widgetData = WidgetData.fromJson(data);
+      if (this.widget.onWidgetChangePayment != null) this.widget.onWidgetChangePayment!(widgetData);
     } catch (e) {
       print("Error parsing JSON: $e");
     }
@@ -645,8 +661,8 @@ extension BootpayCallback on BootpayWebViewState {
     print("onWidgetChangeTermsJS : ${message.message}");
     try {
       Map<String, dynamic> data = jsonDecode(message.message);
-      SelectedInfo selectedInfo = SelectedInfo.fromJson(data);
-      if (this.widget.onWidgetChangeAgreeTerm != null) this.widget.onWidgetChangeAgreeTerm!(selectedInfo);
+      WidgetData widgetData = WidgetData.fromJson(data);
+      if (this.widget.onWidgetChangeAgreeTerm != null) this.widget.onWidgetChangeAgreeTerm!(widgetData);
     } catch (e) {
       print("Error parsing JSON: $e");
     }

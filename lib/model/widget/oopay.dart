@@ -8,4 +8,8 @@ class Oopay {
       "card_quota": "[${cardQuota?.join(",")}]"
     };
   }
+
+  Oopay.fromJson(Map<String, dynamic> json) {
+    cardQuota = json["card_quota"].cast<int>();
+  }
 }

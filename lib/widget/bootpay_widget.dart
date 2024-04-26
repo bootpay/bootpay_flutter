@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:bootpay/bootpay_webview.dart';
 import 'package:bootpay/config/bootpay_config.dart';
-import 'package:bootpay/model/widget/widget_payload.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter/material.dart';
@@ -21,7 +20,7 @@ typedef BootpayWidgetControllerCallback = void Function(BootpayWidgetController 
 class BootpayWidget extends StatefulWidget {
   // Key? key;
 
-  WidgetPayload? widgetPayload;
+  Payload? payload;
   BootpayWidgetControllerCallback? onWidgetCreated;
   BootpayWidgetController controller;
   //
@@ -35,7 +34,7 @@ class BootpayWidget extends StatefulWidget {
 
   BootpayWidget({
     Key? key,
-    this.widgetPayload,
+    this.payload,
     this.onWidgetCreated,
     required this.controller
   });
@@ -57,7 +56,7 @@ class _BootpayWidgetState extends State<BootpayWidget> {
     // TODO: implement initState
     super.initState();
     _bootpayWebView = BootpayWebView(key: widget.key);
-    _bootpayWebView.widgetPayload = widget.widgetPayload;
+    _bootpayWebView.payload = widget.payload;
     _bootpayWebView.isWidget = true;
 
     widget.controller._bootpayWebView = _bootpayWebView;
@@ -130,7 +129,25 @@ class BootpayWidgetController {
     _bootpayWebView?.widgetUpdate(payload, refresh ?? false);
   }
 
-  void requestPayment(Payload? payload) {
-    _bootpayWebView?.requestPayment(payload);
-  }
+  // void requestPayment({
+  //   Payload? payload,
+  //   BootpayDefaultCallback? onError,
+  //   BootpayDefaultCallback? onCancel,
+  //   BootpayCloseCallback? onClose,
+  //   BootpayDefaultCallback? onIssued,
+  //   BootpayConfirmCallback? onConfirm,
+  //   BootpayAsyncConfirmCallback? onConfirmAsync,
+  //   BootpayDefaultCallback? onDone,
+  // }) {
+  //   _bootpayWebView?.requestPayment(
+  //     payload: payload,
+  //     onCancel: onCancel,
+  //     onError: onError,
+  //     onClose: onClose,
+  //     onIssued: onIssued,
+  //     onConfirm: onConfirm,
+  //     onConfirmAsync: onConfirmAsync,
+  //     onDone: onDone
+  //   );
+  // }
 }

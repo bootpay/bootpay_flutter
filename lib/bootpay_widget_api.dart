@@ -1,5 +1,4 @@
 
-import 'package:bootpay/model/widget/widget_payload.dart';
 import 'package:flutter/widgets.dart';
 
 import 'bootpay.dart';
@@ -16,7 +15,7 @@ mixin BootpayWidgetApi {
       {
         Key? key,
         BuildContext? context,
-        WidgetPayload? widgetPayload
+        Payload? payload
       });
 
   void update(
