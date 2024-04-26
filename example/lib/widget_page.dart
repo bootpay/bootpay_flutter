@@ -45,9 +45,9 @@ class WidgetPageState extends State<WidgetPage> {
 
 
     _payload = Payload();
-    // _payload?.webApplicationId = '59a7a368396fa64fc5d4a7db';
-    // _payload?.androidApplicationId = '59a7a368396fa64fc5d4a7db';
-    // _payload?.iosApplicationId = '59a7a368396fa64fc5d4a7db';
+    _payload?.price = 28200;
+    _payload?.orderName = '5월 수강료';
+    _payload?.orderId = DateTime.now().millisecondsSinceEpoch.toString();
     _payload?.webApplicationId = webApplicationId;
     _payload?.androidApplicationId = androidApplicationId;
     _payload?.iosApplicationId = iosApplicationId;
@@ -55,6 +55,7 @@ class WidgetPageState extends State<WidgetPage> {
     _payload?.taxFree = 0;
     _payload?.widgetKey = 'default-widget';
     _payload?.widgetSandbox = true;
+    _payload?.widgetUseTerms = true;
 
     _controller.onWidgetResize = (height) {
       print('onWidgetResize : $height');
@@ -129,7 +130,7 @@ class WidgetPageState extends State<WidgetPage> {
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: Material(
-                color: (_payload?.widgetCompleted ?? false) ? Colors.blueAccent : Colors.grey,
+                color: (_payload?.widgetIsCompleted ?? false) ? Colors.blueAccent : Colors.grey,
                 borderRadius: BorderRadius.circular(10),
                 child: InkWell(
                   onTap: () {
@@ -182,30 +183,11 @@ class WidgetPageState extends State<WidgetPage> {
   }
 
   void goBootpayPayment() {
-    if((_payload?.widgetCompleted ?? false) == false) return;
-
-    Payload payload = Payload();
-    payload.price = 28200;
-    payload.orderName = '5월 수강료';
-    payload.orderId = DateTime.now().millisecondsSinceEpoch.toString();
-    payload.webApplicationId = webApplicationId;
-    payload.androidApplicationId = androidApplicationId;
-    payload.iosApplicationId = iosApplicationId;
-
-    // print(_payload?.extra?.directCardQuota);
-
-    // payload.extra = Extra();
-    // payload.extra?.directCardCompany = _selectedInfo?.extra?.directCardCompany;
-    // payload.extra?.directCardQuota = "${_selectedInfo?.extra?.directCardQuota}";
-    // payload.extra?.cardQuota = "${_selectedInfo?.extra?.cardQuota}";
-    //
-    // payload.pg = _selectedInfo?.pg;
-    // payload.method = _selectedInfo?.method;
-
+    if((_payload?.widgetIsCompleted ?? false) == false) return;
 
     Bootpay().requestPayment(
       context: context,
-      payload: payload,
+      payload: _payload,
       showCloseButton: false,
 
       // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),

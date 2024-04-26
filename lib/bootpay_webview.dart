@@ -418,6 +418,7 @@ class BootpayWebViewState extends State<BootpayWebView> {
     if (url.startsWith(WIDGET_URL)) {
       if(widget.payload?.widgetKey == null) debugPrint("** bootpayWidget widgetKey is null !! **");
       if(widget.payload?.widgetSandbox == null) debugPrint("** bootpayWidget widgetSandbox is null !! **");
+      if(widget.payload?.widgetUseTerms == null) debugPrint("** bootpayWidget widgetUseTerms is null !! **");
 
       if(BootpayConfig.ENV == BootpayConfig.ENV_DEBUG) {
         widget._controller.runJavaScript("BootpayWidget.setEnvironmentMode('development', '');");
@@ -629,14 +630,12 @@ extension BootpayCallback on BootpayWebViewState {
   // }
 
   Future<void> onWidgetReadyJS(JavaScriptMessage message) async {
-    print("onWidgetReadyJS : ${message.message}");
+    // print("onWidgetReadyJS : ${message.message}");
     if (this.widget.onWidgetReady != null) this.widget.onWidgetReady!();
   }
 
   Future<void> onWidgetResizeJS(JavaScriptMessage message) async {
-    // print("onWidgetResizeJS : ${message.message}, ${widget.onWidgetResize}, ${widget.onWidgetReady}");
-    // message.message
-    print("onWidgetResizeJS : ${message.message}");
+    // print("onWidgetResizeJS : ${message.message}");
     try {
       Map<String, dynamic> data = jsonDecode(message.message);
       double height = double.parse(data['height'].toString());
@@ -647,7 +646,7 @@ extension BootpayCallback on BootpayWebViewState {
   }
 
   Future<void> onWidgetChangePaymentJS(JavaScriptMessage message) async {
-    print("onWidgetChangePaymentJS : ${message.message}");
+    // print("onWidgetChangePaymentJS : ${message.message}");
     try {
       Map<String, dynamic> data = jsonDecode(message.message);
       WidgetData widgetData = WidgetData.fromJson(data);
@@ -658,7 +657,7 @@ extension BootpayCallback on BootpayWebViewState {
   }
 
   Future<void> onWidgetChangeAgreeTermJS(JavaScriptMessage message) async {
-    print("onWidgetChangeTermsJS : ${message.message}");
+    // print("onWidgetChangeTermsJS : ${message.message}");
     try {
       Map<String, dynamic> data = jsonDecode(message.message);
       WidgetData widgetData = WidgetData.fromJson(data);

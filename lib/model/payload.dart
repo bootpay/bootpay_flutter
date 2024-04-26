@@ -48,11 +48,13 @@ class Payload {
   Oopay? widgetOopay = Oopay();
 
   //widget data response 관련
-  String? widgetWalletId;
-  WidgetData? widgetData;
-  List<WidgetTerm>? widgetSelectTerms;
-  bool? widgetTermPassed;
-  bool? widgetCompleted;
+  String? _widgetWalletId;
+  WidgetData? _widgetData;
+  List<WidgetTerm>? _widgetSelectTerms;
+  bool? _widgetTermPassed;
+  bool? _widgetCompleted;
+
+  bool get widgetIsCompleted => (_widgetTermPassed ?? false) && (_widgetCompleted ?? false);
 
   // Payload();
   Payload({
@@ -79,11 +81,6 @@ class Payload {
     this.widgetUseTerms,
     this.widgetSandbox,
     this.widgetOopay,
-    this.widgetWalletId,
-    this.widgetData,
-    this.widgetSelectTerms,
-    this.widgetTermPassed,
-    this.widgetCompleted,
   }) {
     if(this.extra == null) {
       this.extra = Extra();
@@ -123,16 +120,16 @@ class Payload {
     widgetUseTerms = json["use_terms"];
     widgetSandbox = json["sandbox"];
     widgetOopay = Oopay.fromJson(json["oopay"]);
-    widgetWalletId = json["wallet_id"];
-    widgetData = json["widget_data"] != null ? WidgetData.fromJson(json["widget_data"]) : null;
-    widgetSelectTerms = [];
+    _widgetWalletId = json["wallet_id"];
+    _widgetData = json["widget_data"] != null ? WidgetData.fromJson(json["widget_data"]) : null;
+    _widgetSelectTerms = [];
     if (json["select_terms"] != null) {
       json["select_terms"].forEach((v) {
-        widgetSelectTerms?.add(WidgetTerm.fromJson(v));
+        _widgetSelectTerms?.add(WidgetTerm.fromJson(v));
       });
     }
-    widgetTermPassed = json["term_passed"];
-    widgetCompleted = json["completed"];
+    _widgetTermPassed = json["term_passed"];
+    _widgetCompleted = json["completed"];
   }
 
 
@@ -176,7 +173,7 @@ class Payload {
     if(widgetOopay != null) {
       result['oopay'] = widgetOopay!.toJson();
     }
-    if(widgetSelectTerms != null && widgetSelectTerms!.length > 0) {
+    if(_widgetSelectTerms != null && _widgetSelectTerms!.length > 0) {
       result['select_terms'] = getSelectTermsValue();
     }
 
@@ -230,10 +227,14 @@ class Payload {
 
     addPart('use_terms', widgetUseTerms);
     addPart('sandbox', widgetSandbox);
+    // addPart('widget_sandbox', widgetSandbox);
     addPart('widget_key', widgetKey);
+    if(widgetKey != null) addPart("widget", 1);
     addPart('oopay', widgetOopay?.toJson(), isOriginal: true);
     addPart('currency', currency);
-    addPart('select_terms', getSelectTermsValue(), isOriginal: true);
+    addPart('wallet_id', _widgetWalletId);
+    addPart('terms', getSelectTermsValue(), isOriginal: true);
+    // addPart('select_terms', getSelectTermsValue(), isOriginal: true);
 
     return "{${parts.join(", ")}}";
   }
@@ -253,8 +254,8 @@ class Payload {
 
   String getSelectTermsValue() {
     List<String> result = [];
-    if(this.widgetSelectTerms != null) {
-      for(WidgetTerm term in this.widgetSelectTerms!) {
+    if(this._widgetSelectTerms != null) {
+      for(WidgetTerm term in this._widgetSelectTerms!) {
         result.add(term.toString());
       }
     }
@@ -318,17 +319,16 @@ class Payload {
 
   void mergeWidgetData(WidgetData? data) {
     if(data == null) return;
-    this.widgetData = data;
+    this._widgetData = data;
     if(data.pg != null) this.pg = data.pg;
     if(data.method != null) this.method = data.method;
 
 
-    this.widgetCompleted = data.completed;
-    this.widgetTermPassed = data.termPassed;
+    this._widgetCompleted = data.completed;
+    this._widgetTermPassed = data.termPassed;
     if(data.currency != null) this.currency = data.currency;
-    if(data.selectTerms != null) this.widgetSelectTerms = data.selectTerms;
-
-
+    if(data.selectTerms != null) this._widgetSelectTerms = data.selectTerms;
+    if(data.walletId != null) this._widgetWalletId = data.walletId;
 
     if(this.extra == null) {
       this.extra = Extra();
@@ -336,6 +336,5 @@ class Payload {
     if(data?.extra?.directCardCompany != null) this.extra?.directCardCompany = data?.extra?.directCardCompany;
     if(data?.extra?.directCardQuota != null) this.extra?.directCardQuota = "${data?.extra?.directCardQuota}";
     if(data?.extra?.cardQuota != null) this.extra?.cardQuota = "${data?.extra?.cardQuota}";
-
   }
 }

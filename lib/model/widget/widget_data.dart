@@ -50,7 +50,7 @@ class WidgetTerm {
   String? termId;
   String? pk;
   String? title;
-  String? agree;
+  bool? agree;
   int? termType;
 
   WidgetTerm({this.termId, this.pk, this.title, this.agree, this.termType});
@@ -71,6 +71,26 @@ class WidgetTerm {
       "agree": agree,
       "term_type": termType,
     };
+  }
+
+  String toString() {
+    List<String> parts = [];
+
+    void addPart(String key, dynamic value) {
+      if (value != null) {
+        String formattedValue = value is String ? "'${value.replaceAll("'", "\\'")}'" : value.toString();
+        parts.add("$key: $formattedValue");
+      }
+    }
+
+    addPart('term_id', this.termId);
+    addPart('pk', this.pk);
+    addPart('title', this.title);
+    addPart('agree', this.agree);
+    addPart('term_type', this.termType);
+
+
+    return "{${parts.join(',')}}";
   }
 }
 
