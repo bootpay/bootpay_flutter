@@ -259,9 +259,6 @@ class SecondRoute extends StatelessWidget {
 
   //통계용 함수
   bootpayAnalyticsPageTrace() async {
-
-    
-
     StatItem item1 = StatItem();
     item1.itemName = "미키 마우스"; // 주문정보에 담길 상품명
     item1.unique = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
@@ -373,12 +370,13 @@ class SecondRoute extends StatelessWidget {
     payload.extra?.browserOpenType = [
       BrowserOpenType.fromJson({"browser": "naver", "open_type": 'popup'}),
     ];
+    payload.extra?.displaySuccessResult = true;
 
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = '페이앱';
-    payload.method = "네이버페이";
+    payload.pg = '나이스페이';
+    payload.method = "카드";
 
     // BootpayConfig.IS_FORCE_WEB = true;
     // BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
@@ -515,7 +513,7 @@ class SecondRoute extends StatelessWidget {
 
     payload.pg = "나이스페이";
     payload.method = "카드자동";
-    // payload.extra?.subscribeTestPayment = false;
+    // payload.extra?.subscriptionComment = '월월 ';
 
 
     payload.metadata = {

@@ -53,6 +53,12 @@ class Extra {
 
   bool? directCardInterest = false; //무이자여부, true면 무이자
 
+  String? easyPaymentMethod; //네이버페이 결제시 포인트/카드를 선택할 수 있습니다. 나이스페이만 가능
+  String? cashReceiptType; //네이버 포인트, 계좌이체 결제시 소득공제/지출증빙 선택할 수 있습니다. 나이스페이만 가능
+  String? identityNo; // 네이버페이 포인트, 계좌이체 결제시 현금영수증 발행할 전화번호 혹은 사업자등록번호를 입력합니다. 나이스페이만 가능
+
+  String? subscriptionComment; //부트페이용 결제창의 '정기자동결제' 멘트 수정 요소
+
   Extra({
     this.cardQuota,
     this.sellerName,
@@ -94,6 +100,11 @@ class Extra {
     this.commonEventWebhook,
     this.deliveryPrice,
     this.useExtraDeduction,
+    this.directCardInterest,
+    this.easyPaymentMethod,
+    this.cashReceiptType,
+    this.identityNo,
+    this.subscriptionComment,
   }) {
     this.deliveryDay = this.deliveryDay ?? 1;
     this.displayCashReceipt = this.displayCashReceipt ?? true;
@@ -166,6 +177,13 @@ class Extra {
     deliveryPrice = json["delivery_price"];
     useExtraDeduction = json["use_extra_deduction"];
     directCardInterest = json["direct_card_interest"];
+
+    useExtraDeduction = json["use_extra_deduction"];
+    directCardInterest = json["direct_card_interest"];
+    easyPaymentMethod = json["easy_payment_method"];
+    cashReceiptType = json["cash_receipt_type"];
+    identityNo = json["identity_no"];
+    subscriptionComment = json["subscription_comment"];
   }
 
   Map<String, dynamic> toJson() => {
@@ -208,7 +226,11 @@ class Extra {
     "common_event_webhook": this.commonEventWebhook,
     "delivery_price": this.deliveryPrice,
     "use_extra_deduction": this.useExtraDeduction,
-    "direct_card_interest": this.directCardInterest
+    "direct_card_interest": this.directCardInterest,
+    "easy_payment_method": this.easyPaymentMethod,
+    "cash_receipt_type": this.cashReceiptType,
+    "identity_no": this.identityNo,
+    "subscription_comment": this.subscriptionComment,
   };
 
   // String getQuotas() {
@@ -291,6 +313,11 @@ class Extra {
     addPart('delivery_price', deliveryPrice);
     addPart('use_extra_deduction', useExtraDeduction);
     addPart('direct_card_interest', directCardInterest);
+
+    addPart('easy_payment_method', easyPaymentMethod);
+    addPart('cash_receipt_type', cashReceiptType);
+    addPart('identity_no', identityNo);
+    addPart('subscription_comment', subscriptionComment);
 
     return "{${parts.join(',')}}";
   }

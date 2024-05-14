@@ -1,3 +1,7 @@
+## 4.9.7
+* dependency 버전 업데이트
+* extra 필드 추가 
+
 ## 4.9.6
 * goRouter 사용시 ios 뒤로가기 런타임 에러 개선
 

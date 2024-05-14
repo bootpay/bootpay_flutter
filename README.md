@@ -301,7 +301,7 @@ class _SecondRouteState extends State<SecondRoute> {
 
 
     res = await _provider.getEasyPayUserToken(res.body['access_token'], generateUser());
-    print("res: ${res.body}");
+    
     // bootpayTest(context, res.body["user_token"], user);
     return res.body["user_token"];
   }

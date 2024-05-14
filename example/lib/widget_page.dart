@@ -22,17 +22,14 @@ class WidgetPageState extends State<WidgetPage> {
   final ScrollController _scrollController = ScrollController();
 
 
-  // String webApplicationId = '59a568d3e13f3336c21bf707';
-  // String androidApplicationId = '59a568d3e13f3336c21bf708';
-  // String iosApplicationId = '59a568d3e13f3336c21bf709';
+  String webApplicationId = '59a568d3e13f3336c21bf707';
+  String androidApplicationId = '59a568d3e13f3336c21bf708';
+  String iosApplicationId = '59a568d3e13f3336c21bf709';
 
   // String webApplicationId = '65af4990ca8deb00600454ba';
   // String androidApplicationId = '65af4990ca8deb00600454bb';
   // String iosApplicationId = '65af4990ca8deb00600454bc';
 
-  String webApplicationId = '65af4990ca8deb00600454ba';
-  String androidApplicationId = '65af4990ca8deb00600454bb';
-  String iosApplicationId = '65af4990ca8deb00600454bc';
 
   double _widgetHeight = 0;
 

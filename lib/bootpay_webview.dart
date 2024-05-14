@@ -705,8 +705,11 @@ extension BootpayCallback on BootpayWebViewState {
         if(this.widget.payload?.extra?.displaySuccessResult != true) {
           debounceClose();
         } else {
-          final content = json.decode(data["data"]);
-          if(content["method_origin_symbol"] == "card_rebill_rest") {
+          // String content = data["data"];
+          print("redirect done : ${data["data"]}");
+          final content = data["data"]["method_origin_symbol"];
+          print("content : ${content}");
+          if(content == "card_rebill_rest") {
             debounceClose();
           }
         }
