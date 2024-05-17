@@ -1,3 +1,6 @@
+## 4.9.8
+* bootpay dimiss 호출시 파괴된 context 에러 개선
+
 ## 4.9.7
 * dependency 버전 업데이트
 * extra 필드 추가 

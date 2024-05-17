@@ -311,9 +311,13 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
   }
 
   @override
-  void dismiss(BuildContext context) {
+  void dismiss(BuildContext? context) {
     if(webView != null) {
-      Navigator.of(context).pop();
+      if(context != null && context.mounted && Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      } else {
+        print("Bootpay dismiss: context is null, not mounted, or destroyed");
+      }
       webView = null;
     }
   }
