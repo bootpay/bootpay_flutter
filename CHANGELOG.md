@@ -1,3 +1,6 @@
+## 4.9.9 
+* direct_card_quota 값 조건부로 추가되도록 개선 
+
 ## 4.9.8
 * bootpay dimiss 호출시 파괴된 context 에러 개선
 

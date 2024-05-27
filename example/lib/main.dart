@@ -334,8 +334,8 @@ class SecondRoute extends StatelessWidget {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutter';
-    extra.directCardCompany = "국민";
-    extra.directCardQuota = '00'; //directCardCompany 일 경우 할부정보는 필수
+    // extra.directCardCompany = "국민";
+    // extra.directCardQuota = '00'; //directCardCompany 일 경우 할부정보는 필수
     // extra.separatelyConfirmed = true;
 
 
@@ -512,7 +512,7 @@ class SecondRoute extends StatelessWidget {
     // payload.method = 'easy_rebill';
 
     payload.pg = "나이스페이";
-    payload.method = "카드자동";
+    payload.method = "카드간편";
     // payload.extra?.subscriptionComment = '월월 ';
 
 
@@ -545,6 +545,7 @@ class SecondRoute extends StatelessWidget {
         print('------- onIssued: $data');
       },
       onConfirm: (String data) {
+        print('------- onConfirm: $data');
         /**
             1. 바로 승인하고자 할 때
             return true;

@@ -277,7 +277,11 @@ class Extra {
     addPart('app_scheme', appScheme);
     addPart('use_card_point', useCardPoint);
     addPart('direct_card_company', directCardCompany);
-    addPart('direct_card_quota', directCardQuota ?? '0');
+    if(directCardCompany != null && directCardCompany!.isNotEmpty) {
+      addPart('direct_card_quota', directCardQuota ?? '0');
+    }
+    // addPart('direct_card_quota', directCardQuota ?? '0');
+    // addPart('direct_card_quota', directCardQuota);
     addPart('use_order_id', useOrderId);
     addPart('international_card_only', internationalCardOnly);
     addPart('phone_carrier', phoneCarrier);

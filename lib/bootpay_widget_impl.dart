@@ -11,12 +11,6 @@ import 'bootpay_api.dart';
 import 'model/payload.dart';
 import 'package:http/http.dart' as http;
 
-// https://webview.bootpay.co.kr/5.0.0-beta.30/widget.html
-
-// document.addEventListener('bootpaywidgetresize', function (e) {
-// console.log(e.detail)
-// })
-
 class BootpayWidgetImpl with BootpayWidgetApi {
   static final BootpayWidgetImpl _bootpayWidget = BootpayWidgetImpl._internal();
   factory BootpayWidgetImpl() {

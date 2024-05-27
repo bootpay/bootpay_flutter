@@ -176,6 +176,8 @@ class BootpayWebViewState extends State<BootpayWebView> {
   // final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-beta.36/';
+  // final String INAPP_URL = 'https://webview.bootpay.co.kr/4.3.4/';
+
   late final String WIDGET_URL = INAPP_URL + 'widget.html';
 
 
