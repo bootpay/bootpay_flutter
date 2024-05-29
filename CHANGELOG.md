@@ -1,3 +1,6 @@
+## 4.9.91
+* flutter web에서 payload.items가 null 일때 예외처리 추가
+
 ## 4.9.9 
 * direct_card_quota 값 조건부로 추가되도록 개선 
 

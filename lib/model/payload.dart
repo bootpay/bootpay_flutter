@@ -167,7 +167,7 @@ class Payload {
     if(user != null) {
       result['user'] = user!.toJson();
     }
-    if(items!.length > 0) {
+    if((items?.length ?? 0) > 0) {
       result['items'] = items!.map((e) => e.toJson()).toList();
     }
     if(widgetOopay != null) {

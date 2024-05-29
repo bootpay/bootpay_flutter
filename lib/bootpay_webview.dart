@@ -242,7 +242,7 @@ class BootpayWebViewState extends State<BootpayWebView> {
             // debugPrint('Page started loading: $url');
           },
           onPageFinished: (String url) async {
-            // debugPrint('Page finished loading: $url');
+            debugPrint('Page finished loading: $url');
             (widget.isWidget ?? false) ? loadWidgetScript(url) : loadPaymentScript(url);
 
           },

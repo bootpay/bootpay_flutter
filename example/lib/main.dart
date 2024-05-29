@@ -329,7 +329,7 @@ class SecondRoute extends StatelessWidget {
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
-    user.phone = "010-0000-0000";
+    // user.phone = "010-0000-0000";
     user.addr = 'null';
 
     Extra extra = Extra(); // 결제 옵션
@@ -365,18 +365,18 @@ class SecondRoute extends StatelessWidget {
   void goBootpayTest(BuildContext context) {
     if(kIsWeb) {
       //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
-      payload.extra?.openType = 'iframe';
+      payload.extra?.openType = 'popup';
     }
     payload.extra?.browserOpenType = [
       BrowserOpenType.fromJson({"browser": "naver", "open_type": 'popup'}),
     ];
-    payload.extra?.displaySuccessResult = true;
+    // payload.extra?.displaySuccessResult = true;
 
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = '나이스페이';
-    payload.method = "카드";
+    payload.pg = '헥토';
+    payload.method = "가상계좌";
 
     // BootpayConfig.IS_FORCE_WEB = true;
     // BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
@@ -424,8 +424,8 @@ class SecondRoute extends StatelessWidget {
       // },
       onConfirmAsync: (String data) async {
         print('------- onConfirmAsync: $data');
-
-        return true;
+        Bootpay().dismiss(context);
+        return false;
       },
       // onConfirmAsync: (String data) async {
       //   print('------- onConfirmAsync11: $data');
@@ -476,7 +476,9 @@ class SecondRoute extends StatelessWidget {
       },
       onClose: () {
         print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        if (!kIsWeb) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
 
         //TODO - 원하시는 라우터로 페이지 이동
       },
@@ -511,8 +513,8 @@ class SecondRoute extends StatelessWidget {
     // payload.pg = 'kakao';
     // payload.method = 'easy_rebill';
 
-    payload.pg = "나이스페이";
-    payload.method = "카드간편";
+    payload.pg = "키움페이";
+    payload.method = "카드자동";
     // payload.extra?.subscriptionComment = '월월 ';
 
 
@@ -533,11 +535,15 @@ class SecondRoute extends StatelessWidget {
       },
       onError: (String data) {
         print('------- onError 3: $data');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        if (!kIsWeb) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
       },
       onClose: () {
         print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        if (!kIsWeb) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
 
         //TODO - 원하시는 라우터로 페이지 이동
       },
@@ -580,9 +586,11 @@ class SecondRoute extends StatelessWidget {
     payload.pg = "다날";
     payload.method = "본인인증";
     payload.authenticationId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+    // payload.extra = null;
     payload.extra = Extra();
     payload.extra?.openType = 'iframe';
-    payload.extra?.showCloseButton = true;
+    payload.items = null;
+    // payload.extra?.showCloseButton = true;
     // payload.extra?.show
     // payload.extra?.ageLimit = 40;
 
@@ -600,7 +608,9 @@ class SecondRoute extends StatelessWidget {
       },
       onClose: () {
         print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        if (!kIsWeb) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
       },
       onIssued: (String data) {
         print('------- onIssued: $data');
