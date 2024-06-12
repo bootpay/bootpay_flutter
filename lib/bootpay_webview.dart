@@ -24,6 +24,7 @@ import 'model/payload.dart';
 enum BootpayPaymentResult {
   DONE,
   ERROR,
+  CANCEL,
   NONE
 }
 
@@ -286,6 +287,13 @@ class BootpayWebView extends StatefulWidget {
 
   void widgetStatusReset() {
     _controller.loadRequest(Uri.parse(WIDGET_URL));
+    if(paymentResult == BootpayPaymentResult.NONE) { //hardware 백 버튼에 의한 뒤로가기일 확률이 높다
+      //cancel 호출
+      if(this.onCancel != null) {
+        this.onCancel!('{"action":"BootpayCancel","status":-100,"message":"사용자에 의한 취소"}');
+      }
+    }
+
     closeController.isDebounceShow = false;
     paymentResult = BootpayPaymentResult.NONE;
   }
@@ -766,7 +774,7 @@ extension BootpayCallback on BootpayWebViewState {
 
   Future<void> onCancelJS(JavaScriptMessage message) async {
     onProgressShow(false);
-
+    widget.paymentResult = BootpayPaymentResult.CANCEL;
 
     if (this.widget.onCancel != null)
       this.widget.onCancel!(message.message);
@@ -858,6 +866,7 @@ extension BootpayCallback on BootpayWebViewState {
       switch(data["event"]) {
         case "cancel":
           onProgressShow(false);
+          widget.paymentResult = BootpayPaymentResult.CANCEL;
           if (this.widget.onCancel != null) this.widget.onCancel!(message.message);
           debounceClose();
           break;
