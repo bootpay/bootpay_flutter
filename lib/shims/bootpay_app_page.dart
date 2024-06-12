@@ -67,7 +67,12 @@ class _BootpayAppPageState extends State<BootpayAppPage> {
   void bootpayClose() {
     // BootpayPrint("bootpayClose : ${closeController.isFireCloseEvent}");
     if(closeController.isFireCloseEvent == true) return;
-    closeController.bootpayClose(this.widget.webView?.onClose);
+    if(this.widget.webView?.isWidget == true ) {
+      closeController.bootpayClose(this.widget.webView?.onCloseWidget);
+    } else {
+      closeController.bootpayClose(this.widget.webView?.onClose);
+    }
+
     closeController.isFireCloseEvent = false;
   }
 

@@ -21,17 +21,29 @@ class WidgetPageState extends State<WidgetPage> {
   BootpayWidgetController _controller = BootpayWidgetController();
   final ScrollController _scrollController = ScrollController();
 
+  //
+  // String webApplicationId = '59a568d3e13f3336c21bf707';
+  // String androidApplicationId = '59a568d3e13f3336c21bf708';
+  // String iosApplicationId = '59a568d3e13f3336c21bf707';
 
-  String webApplicationId = '59a568d3e13f3336c21bf707';
-  String androidApplicationId = '59a568d3e13f3336c21bf708';
-  String iosApplicationId = '59a568d3e13f3336c21bf709';
-
-  // String webApplicationId = '65af4990ca8deb00600454ba';
-  // String androidApplicationId = '65af4990ca8deb00600454bb';
-  // String iosApplicationId = '65af4990ca8deb00600454bc';
+  String webApplicationId = '5b9f51264457636ab9a07cdb';
+  String androidApplicationId = '5b9f51264457636ab9a07cdb';
+  String iosApplicationId = '5b9f51264457636ab9a07cdb';
 
 
-  double _widgetHeight = 0;
+  // 5b9f51264457636ab9a07cdb
+  // 5b9f51264457636ab9a07cdc
+  // 5b9f51264457636ab9a07cdd
+  // 5b9f51264457636ab9a07cde
+  // sfilSOSVakw+PZA+PRux4Iuwm7a//9CXXudCq9TMDHk=
+  // token: 6667b08b04ab6d03f274d32e
+
+  // String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
+  // String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
+  // String iosApplicationId = '5b8f6a4d396fa665fdc2b5e7';
+
+
+  double _widgetHeight = Bootpay().WIDGET_HEIGHT;
 
   @override
   void initState() {
@@ -53,6 +65,8 @@ class WidgetPageState extends State<WidgetPage> {
     _payload?.widgetKey = 'default-widget';
     _payload?.widgetSandbox = true;
     _payload?.widgetUseTerms = true;
+    _payload?.userToken = "6667b08b04ab6d03f274d32e";
+    _payload?.extra?.displaySuccessResult = true;
 
     _controller.onWidgetResize = (height) {
       print('onWidgetResize : $height');
@@ -182,14 +196,14 @@ class WidgetPageState extends State<WidgetPage> {
   void goBootpayPayment() {
     if((_payload?.widgetIsCompleted ?? false) == false) return;
 
-    Bootpay().requestPayment(
+    _controller.requestPayment(
       context: context,
       payload: _payload,
-      showCloseButton: false,
+      // showCloseButton: false,
 
       // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data) {
-        print('------- onCancel 1 : $data');
+        print('------- onCancel 2 : $data');
       },
       onError: (String data) {
         print('------- onError: $data');
@@ -209,6 +223,7 @@ class WidgetPageState extends State<WidgetPage> {
       },
       onDone: (String data) {
         print('------- onDone: $data');
+        // FlutterToast.showToast(msg: '결제가 완료되었습니다.');
       },
     );
   }

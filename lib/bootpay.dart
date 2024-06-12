@@ -41,6 +41,8 @@ class Bootpay extends BootpayApi {
     return _platform.applicationId(webApplicationId, androidApplicationId, iosApplicationId);
   }
 
+  final double WIDGET_HEIGHT = 300.0;
+
   @override
   void requestPayment(
       {Key? key,

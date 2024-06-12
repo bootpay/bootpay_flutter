@@ -59,15 +59,16 @@ class SecondRoute extends StatelessWidget {
 
   Payload payload = Payload();
   //
-  String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
-  String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
-  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+  // String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
+  // String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
+  // String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+  // 6667acb3b257e906bb15d04b
 
    
   // extra.browserOpenType = [];
-  // String webApplicationId = '5b9f51264457636ab9a07cdb';
-  // String androidApplicationId = '5b9f51264457636ab9a07cdc';
-  // String iosApplicationId = '5b9f51264457636ab9a07cdd';
+  String webApplicationId = '5b9f51264457636ab9a07cdb';
+  String androidApplicationId = '5b9f51264457636ab9a07cdc';
+  String iosApplicationId = '5b9f51264457636ab9a07cdd';
 
 
 
@@ -141,12 +142,12 @@ class SecondRoute extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10),
-                // Center(
-                //   child: TextButton(
-                //     onPressed: () => goBootpayPassword(context),
-                //     child: Text('비밀번호 결제테스트'),
-                //   ),
-                // ),
+                Center(
+                  child: TextButton(
+                    onPressed: () => goBootpayPassword(context),
+                    child: Text('비밀번호 결제테스트'),
+                  ),
+                ),
               ],
             ),
           ),
@@ -158,10 +159,11 @@ class SecondRoute extends StatelessWidget {
 
   //해당 기능은 혼동을 줄 수 있으므로 bio_password 사용을 대체, 그러므로 삭제
   // @deprecated
-  // goBootpayPassword(BuildContext context) async {
-  //   String userToken = await getUserToken(context);
-  //   bootpayPasswordTest(context, userToken, generateUser());
-  // }
+  goBootpayPassword(BuildContext context) async {
+    String userToken = await getUserToken(context);
+    print("token : $userToken");
+    bootpayPasswordTest(context, userToken, generateUser());
+  }
 
 
   void bootpayPasswordTest(BuildContext context, String userToken, User user) {
@@ -170,6 +172,7 @@ class SecondRoute extends StatelessWidget {
       //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
       payload.extra?.openType = 'iframe';
     }
+    payload.pg = "나이스페이";
 
     Bootpay().requestPassword(
       context: context,
@@ -220,8 +223,18 @@ class SecondRoute extends StatelessWidget {
   }
 
   Future<String> getUserToken(BuildContext context) async {
-    String restApplicationId = "5b8f6a4d396fa665fdc2b5ea";
-    String pk = "rm6EYECr6aroQVG2ntW0A6LpWnkTgP4uQ3H18sDDUYw=";
+    String restApplicationId = "";
+    String pk = "";
+
+    if(BootpayConfig.ENV == BootpayConfig.ENV_PROMOTION) {
+      restApplicationId = "5b8f6a4d396fa665fdc2b5ea";
+      pk = "rm6EYECr6aroQVG2ntW0A6LpWnkTgP4uQ3H18sDDUYw=";
+    } else {
+      restApplicationId = "5b9f51264457636ab9a07cde";
+      pk = "sfilSOSVakw+PZA+PRux4Iuwm7a//9CXXudCq9TMDHk=";
+    }
+
+
     var res = await _provider.getRestToken(restApplicationId, pk);
 
 
@@ -375,8 +388,12 @@ class SecondRoute extends StatelessWidget {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = '헥토';
-    payload.method = "가상계좌";
+    payload.pg = '나이스페이';
+    payload.method = "네이버페이";
+
+    // payload.pg = '카카오';
+    // payload.method = "간편자동";
+
 
     // BootpayConfig.IS_FORCE_WEB = true;
     // BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;

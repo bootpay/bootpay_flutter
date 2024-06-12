@@ -220,5 +220,4 @@ Page resource error:
     }
     return WebViewWidget(controller: _controller);
   }
-
 }

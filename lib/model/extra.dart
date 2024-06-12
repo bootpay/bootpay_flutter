@@ -1,6 +1,7 @@
 import 'package:bootpay/model/browser_open_type.dart';
 
 import 'extra_card_easy_option.dart';
+import 'onestore.dart';
 
 class Extra {
 
@@ -58,6 +59,8 @@ class Extra {
   String? identityNo; // 네이버페이 포인트, 계좌이체 결제시 현금영수증 발행할 전화번호 혹은 사업자등록번호를 입력합니다. 나이스페이만 가능
 
   String? subscriptionComment; //부트페이용 결제창의 '정기자동결제' 멘트 수정 요소
+
+  Onestore? oneStore; //원스토어 결제 옵션
 
   Extra({
     this.cardQuota,

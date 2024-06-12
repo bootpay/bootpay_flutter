@@ -116,7 +116,7 @@ class Payload {
     // showAgreeWindow = json["show_agree_window"];
     extra = Extra.fromJson(json["extra"]);
 
-    widgetKey = json["widget_key"];
+    widgetKey = json["key"];
     widgetUseTerms = json["use_terms"];
     widgetSandbox = json["sandbox"];
     widgetOopay = Oopay.fromJson(json["oopay"]);
@@ -151,7 +151,7 @@ class Payload {
       // 'account_expire_at': accountExpireAt,
       // 'show_agree_window': showAgreeWindow,
       'user_token': userToken,
-      'widget_key': widgetKey,
+      'key': widgetKey,
       'sandbox': widgetSandbox,
       'use_terms': widgetUseTerms,
     };
@@ -228,7 +228,7 @@ class Payload {
     addPart('use_terms', widgetUseTerms);
     addPart('sandbox', widgetSandbox);
     // addPart('widget_sandbox', widgetSandbox);
-    addPart('widget_key', widgetKey);
+    addPart('key', widgetKey);
     if(widgetKey != null) addPart("widget", 1);
     addPart('oopay', widgetOopay?.toJson(), isOriginal: true);
     addPart('currency', currency);

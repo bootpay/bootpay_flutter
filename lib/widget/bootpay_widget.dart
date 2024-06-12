@@ -66,6 +66,7 @@ class _BootpayWidgetState extends State<BootpayWidget> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    _bootpayWebView.activeHeroAnimation(context);
     return _bootpayWebView;
   }
 
@@ -112,9 +113,10 @@ class BootpayWidgetController {
   WidgetChangePaymentCallback? onWidgetChangePayment;
   WidgetChangePaymentCallback? onWidgetChangeAgreeTerm;
 
-  double _widgetHeight = 0;
+  double _widgetHeight = 0.0;
 
   void _initEvent() {
+    _widgetHeight = _bootpayWebView?.widgetHeight ?? 0.0;
     _bootpayWebView?.onWidgetChangePayment = onWidgetChangePayment;
     _bootpayWebView?.onWidgetChangeAgreeTerm = onWidgetChangeAgreeTerm;
     _bootpayWebView?.onWidgetReady = onWidgetReady;
@@ -129,25 +131,27 @@ class BootpayWidgetController {
     _bootpayWebView?.widgetUpdate(payload, refresh ?? false);
   }
 
-  // void requestPayment({
-  //   Payload? payload,
-  //   BootpayDefaultCallback? onError,
-  //   BootpayDefaultCallback? onCancel,
-  //   BootpayCloseCallback? onClose,
-  //   BootpayDefaultCallback? onIssued,
-  //   BootpayConfirmCallback? onConfirm,
-  //   BootpayAsyncConfirmCallback? onConfirmAsync,
-  //   BootpayDefaultCallback? onDone,
-  // }) {
-  //   _bootpayWebView?.requestPayment(
-  //     payload: payload,
-  //     onCancel: onCancel,
-  //     onError: onError,
-  //     onClose: onClose,
-  //     onIssued: onIssued,
-  //     onConfirm: onConfirm,
-  //     onConfirmAsync: onConfirmAsync,
-  //     onDone: onDone
-  //   );
-  // }
+  void requestPayment({
+    Payload? payload,
+    BootpayDefaultCallback? onError,
+    BootpayDefaultCallback? onCancel,
+    BootpayCloseCallback? onClose,
+    BootpayDefaultCallback? onIssued,
+    BootpayConfirmCallback? onConfirm,
+    BootpayAsyncConfirmCallback? onConfirmAsync,
+    BootpayDefaultCallback? onDone,
+    required BuildContext context,
+  }) {
+
+    _bootpayWebView?.requestPayment(
+      payload: payload,
+      onCancel: onCancel,
+      onError: onError,
+      onClose: onClose,
+      onIssued: onIssued,
+      onConfirm: onConfirm,
+      onConfirmAsync: onConfirmAsync,
+      onDone: onDone
+    );
+  }
 }

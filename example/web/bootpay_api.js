@@ -74,6 +74,30 @@ function _requestPayment(payload) {
     });
 }
 
+//function _requestPayment(payload) {
+//    Bootpay.requestPayment(JSON.parse(payload))
+//    .then(function(res){
+//        if (res.event === 'confirm') {
+//          if(BootpayConfirm(JSON.stringify(res))) {
+//            _transactionConfirm();
+//          } else {
+//            BootpayAsyncConfirm(JSON.stringify(res))
+//            .then(function(res){
+//              if(res) {
+//                _transactionConfirm();
+//              }
+//            }, function(res) {
+//            });
+//          }
+//        }
+//        else if (res.event === 'issued') { console.log(res);  }
+//        else if (res.event === 'done') { console.log(res);  }
+//    }, function(res) {
+//        if (res.event === 'error') { console.log(res); }
+//        else if (res.event === 'cancel') { console.log(res); }
+//    });
+//}
+
 function _requestSubscription(payload) {
     Bootpay.requestSubscription(JSON.parse(payload))
     .then(function(res){
