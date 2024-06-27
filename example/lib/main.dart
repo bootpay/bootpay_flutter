@@ -59,16 +59,16 @@ class SecondRoute extends StatelessWidget {
 
   Payload payload = Payload();
   //
-  // String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
-  // String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
-  // String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+  String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
+  String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
+  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
   // 6667acb3b257e906bb15d04b
 
    
   // extra.browserOpenType = [];
-  String webApplicationId = '5b9f51264457636ab9a07cdb';
-  String androidApplicationId = '5b9f51264457636ab9a07cdc';
-  String iosApplicationId = '5b9f51264457636ab9a07cdd';
+  // String webApplicationId = '5b9f51264457636ab9a07cdb';
+  // String androidApplicationId = '5b9f51264457636ab9a07cdc';
+  // String iosApplicationId = '5b9f51264457636ab9a07cdd';
 
 
 
@@ -239,6 +239,8 @@ class SecondRoute extends StatelessWidget {
 
 
     res = await _provider.getEasyPayUserToken(res.body['access_token'], generateUser());
+
+    print("user token : ${res.body}");
     // bootpayTest(context, res.body["user_token"], user);
     return res.body["user_token"];
   }
@@ -322,7 +324,7 @@ class SecondRoute extends StatelessWidget {
     // payload.method = '네이버페이';
     // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
-    payload.price = 1000.0; //정기결제시 0 혹은 주석
+    // payload.price = 0.0; //정기결제시 0 혹은 주석
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함

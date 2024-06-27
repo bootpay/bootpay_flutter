@@ -7,6 +7,12 @@ import 'package:bootpay/model/widget/widget_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+
+// import 'package:webview_flutter/webview_flutter.dart';
+// import 'package:webview_flutter_android/webview_flutter_android.dart';
+// import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+
+
 import 'bootpay_hero_webview.dart';
 import 'constant/bootpay_constant.dart';
 import 'controller/debounce_close_controller.dart';
@@ -31,6 +37,9 @@ enum BootpayPaymentResult {
 // 1. 웹앱을 대체하는 뷰를 활용한 샘플
 // 2. api 역할
 class BootpayWebView extends StatefulWidget {
+
+  final GlobalKey<BootpayWebViewState> _globalKey = GlobalKey<BootpayWebViewState>();
+
   final Key? key;
   BuildContext? _context; //widget에서 사용할 context, hero animation에서 사용됨
   Payload? payload;
@@ -107,6 +116,9 @@ class BootpayWebView extends StatefulWidget {
       script = "Bootpay.confirm();";
       // script = "window.Bootpay.submit();";
     }
+
+    print("transactionConfirm : $script");
+
     _controller.runJavaScript(script);
   }
 
@@ -164,6 +176,16 @@ class BootpayWebView extends StatefulWidget {
     bool refresh = false;
     String updateScript = "BootpayWidget.update(${payload.toString()}, ${refresh == true ? 'true' : 'false'});";
 
+    if (BootpayConfig.IS_FORCE_WEB) {
+      updateScript += "Bootpay.setVersion('" + BootpayConfig.VERSION + "', 'flutter');";
+    } else if (Platform.isAndroid) {
+      updateScript += "Bootpay.setDevice('ANDROID');";
+      updateScript += "Bootpay.setVersion('" + BootpayConfig.VERSION + "', 'android_flutter');";
+    } else if (Platform.isIOS) {
+      updateScript += "Bootpay.setDevice('IOS');";
+      updateScript += "Bootpay.setVersion('" + BootpayConfig.VERSION + "', 'ios_flutter');";
+    }
+
     //full screen webview 로 이동
     goPush();
 
@@ -180,7 +202,7 @@ class BootpayWebView extends StatefulWidget {
   }
 
 
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-rc.9/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-rc.13/';
   // final String INAPP_URL = 'https://webview.bootpay.co.kr/4.3.4/';
 
   late final String WIDGET_URL = INAPP_URL + 'widget.html';
@@ -275,7 +297,11 @@ class BootpayWebView extends StatefulWidget {
     await Navigator.push(
       _context!,
       MaterialPageRoute(
-        builder: (_) => BootpayHeroWebView(onCloseWidget: onCloseWidget, controller: _controller),
+        builder: (_) => BootpayHeroWebView(
+            webViewKey: _globalKey,
+            onCloseWidget: onCloseWidget,
+            controller: _controller
+        ),
       ),
     );
 
@@ -356,40 +382,6 @@ class BootpayWebViewState extends State<BootpayWebView> {
 
 
 
-
-  // late final WebViewController _controller;
-  // final Completer<WebViewController> _controller = Completer<WebViewController>();
-
-
-
-
-  // String confirm() {
-  //   return "if (res.event === 'confirm') { if (window.BootpayConfirm && window.BootpayConfirm.postMessage) { BootpayConfirm.postMessage(JSON.stringify(res)); } }";
-  // }
-  //
-  //
-  // String done() {
-  //   return "else if (res.event === 'done') { if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(res)); } }";
-  // }
-  //
-  //
-  // String issued() {
-  //   return "else if (res.event === 'issued') { if (window.BootpayIssued && window.BootpayIssued.postMessage) { BootpayIssued.postMessage(JSON.stringify(res)); } }";
-  // }
-  //
-  // String error() {
-  //   return "if (res.event === 'error') { if (window.BootpayError && window.BootpayError.postMessage) { BootpayError.postMessage(JSON.stringify(res)); } }";
-  // }
-  //
-  // String cancel() {
-  //   return "else if (res.event === 'cancel') { if (window.BootpayCancel && window.BootpayCancel.postMessage) { BootpayCancel.postMessage(JSON.stringify(res)); } }";
-  // }
-  //
-  // String close() {
-  //   return "document.addEventListener('bootpayclose', function (e) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage('결제창이 닫혔습니다'); } });";
-  // }
-
-
   late PlatformWebViewControllerCreationParams params;
   void init() {
     widget.firstPageLoad = false;
@@ -404,6 +396,16 @@ class BootpayWebViewState extends State<BootpayWebView> {
       params = PlatformWebViewControllerCreationParams(
       );
     }
+
+    // if (WebViewPlatform.instance is BTWebKitWebViewPlatform) {
+    //   params = WebKitWebViewControllerCreationParams(
+    //     allowsInlineMediaPlayback: true,
+    //     mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
+    //   );
+    // } else {
+    //   params = PlatformWebViewControllerCreationParams(
+    //   );
+    // }
 
     final WebViewController controller = WebViewController.fromPlatformCreationParams(params);
 
@@ -465,9 +467,40 @@ class BootpayWebViewState extends State<BootpayWebView> {
             }
             return NavigationDecision.navigate;
           },
+          // onHttpError: (HttpResponseError error) {
+          //   debugPrint('Error occurred on page: ${error.response?.statusCode}');
+          // },
+          onUrlChange: (UrlChange change) {
+            debugPrint('url change to ${change.url}');
+          },
+          // onHttpAuthRequest: (HttpAuthRequest request) {
+          //   debugPrint('auth request: ${request.host}');
+          // },
           // Navigation
 
         ),
+      )
+      // ..setOnJavaScriptAlertDialog((JavaScriptAlertDialogRequest request) async {
+      //   await _showAlert(context, request.message);
+      // })
+      // ..setOnJavaScriptConfirmDialog(
+      //         (JavaScriptConfirmDialogRequest request) async {
+      //       final bool result = await _showConfirm(context, request.message);
+      //       return result;
+      //     })
+      // ..setOnJavaScriptTextInputDialog(
+      //         (JavaScriptTextInputDialogRequest request) async {
+      //       final String result =
+      //       await _showTextInput(context, request.message, request.defaultText);
+      //       return result;
+      //     })
+      ..addJavaScriptChannel(
+        'Toaster',
+        onMessageReceived: (JavaScriptMessage message) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message.message)),
+          );
+        },
       )
       ..addJavaScriptChannel(
         'BootpayCancel',
@@ -524,6 +557,68 @@ class BootpayWebViewState extends State<BootpayWebView> {
     widget._controller = controller;
   }
 
+  //
+  // final GlobalKey<_CustomWidgetState> _customWidgetKey = GlobalKey<_CustomWidgetState>();
+
+  Future<void> _showAlert(BuildContext context, String message) async {
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                  child: const Text('OK'))
+            ],
+          );
+        });
+  }
+
+  Future<bool> _showConfirm(BuildContext context, String message) async {
+    return await showDialog<bool>(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop(false);
+                  },
+                  child: const Text('Cancel')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop(true);
+                  },
+                  child: const Text('OK')),
+            ],
+          );
+        }) ??
+        false;
+  }
+
+  Future<String> _showTextInput(
+      BuildContext context, String message, String? defaultText) async {
+    return await showDialog<String>(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop('Text test');
+                  },
+                  child: const Text('Enter')),
+            ],
+          );
+        }) ??
+        '';
+  }
+
   Widget platformWebViewWidget() {
     if(widget._controller.platform is AndroidWebViewController && BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION) {
       return WebViewWidget.fromPlatformCreationParams(
@@ -536,6 +631,7 @@ class BootpayWebViewState extends State<BootpayWebView> {
       );
     }
     return WebViewWidget(
+        // key: widget._globalKey,
         controller: widget._controller
     );
   }

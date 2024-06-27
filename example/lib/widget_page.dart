@@ -2,7 +2,7 @@ import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/widget/bootpay_widget.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class WidgetPageState extends State<WidgetPage> {
 
   // WidgetPayloadTemp? _widgetPayload;
   // WidgetPayload? _selectedInfo;
-  Payload? _payload;
+  Payload _payload = Payload();
   BootpayWidgetController _controller = BootpayWidgetController();
   final ScrollController _scrollController = ScrollController();
 
@@ -27,8 +27,8 @@ class WidgetPageState extends State<WidgetPage> {
   // String iosApplicationId = '59a568d3e13f3336c21bf707';
 
   String webApplicationId = '5b9f51264457636ab9a07cdb';
-  String androidApplicationId = '5b9f51264457636ab9a07cdb';
-  String iosApplicationId = '5b9f51264457636ab9a07cdb';
+  String androidApplicationId = '5b9f51264457636ab9a07cdc';
+  String iosApplicationId = '5b9f51264457636ab9a07cdd';
 
 
   // 5b9f51264457636ab9a07cdb
@@ -54,19 +54,19 @@ class WidgetPageState extends State<WidgetPage> {
 
 
     _payload = Payload();
-    _payload?.price = 28200;
-    _payload?.orderName = '5월 수강료';
-    _payload?.orderId = DateTime.now().millisecondsSinceEpoch.toString();
-    _payload?.webApplicationId = webApplicationId;
-    _payload?.androidApplicationId = androidApplicationId;
-    _payload?.iosApplicationId = iosApplicationId;
-    _payload?.price = 1000;
-    _payload?.taxFree = 0;
-    _payload?.widgetKey = 'default-widget';
-    _payload?.widgetSandbox = true;
-    _payload?.widgetUseTerms = true;
-    _payload?.userToken = "6667b08b04ab6d03f274d32e";
-    _payload?.extra?.displaySuccessResult = true;
+    _payload.price = 28200;
+    _payload.orderName = '5월 수강료';
+    _payload.orderId = DateTime.now().millisecondsSinceEpoch.toString();
+    _payload.webApplicationId = webApplicationId;
+    _payload.androidApplicationId = androidApplicationId;
+    _payload.iosApplicationId = iosApplicationId;
+    _payload.price = 1000;
+    _payload.taxFree = 0;
+    _payload.widgetKey = 'default-widget';
+    _payload.widgetSandbox = true;
+    _payload.widgetUseTerms = true;
+    _payload.userToken = "6667b08b04ab6d03f274d32e";
+    _payload.extra?.displaySuccessResult = true;
 
     _controller.onWidgetResize = (height) {
       print('onWidgetResize : $height');
@@ -196,12 +196,11 @@ class WidgetPageState extends State<WidgetPage> {
   void goBootpayPayment() {
     if((_payload?.widgetIsCompleted ?? false) == false) return;
 
+    debugPrint("widget request : ${_payload?.toJson()}");
+
     _controller.requestPayment(
       context: context,
       payload: _payload,
-      // showCloseButton: false,
-
-      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data) {
         print('------- onCancel 2 : $data');
       },

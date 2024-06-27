@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/model/widget/oopay.dart';
 import 'package:bootpay/model/widget/widget_data.dart';
+import 'package:js/js_util.dart';
 
 import 'extra.dart';
 import 'item.dart';
@@ -53,6 +54,7 @@ class Payload {
   List<WidgetTerm>? _widgetSelectTerms;
   bool? _widgetTermPassed;
   bool? _widgetCompleted;
+  // bool useBootpayInappSdk = true;
 
   bool get widgetIsCompleted => (_widgetTermPassed ?? false) && (_widgetCompleted ?? false);
 
@@ -227,9 +229,13 @@ class Payload {
 
     addPart('use_terms', widgetUseTerms);
     addPart('sandbox', widgetSandbox);
+
     // addPart('widget_sandbox', widgetSandbox);
     addPart('key', widgetKey);
-    if(widgetKey != null) addPart("widget", 1);
+    if(widgetKey != null) {
+      addPart("widget", 1);
+      addPart('use_bootpay_inapp_sdk', true);
+    }
     addPart('oopay', widgetOopay?.toJson(), isOriginal: true);
     addPart('currency', currency);
     addPart('wallet_id', _widgetWalletId);
