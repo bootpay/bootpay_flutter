@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/model/widget/oopay.dart';
 import 'package:bootpay/model/widget/widget_data.dart';
-import 'package:js/js_util.dart';
 
 import 'extra.dart';
 import 'item.dart';
