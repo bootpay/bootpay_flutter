@@ -62,16 +62,6 @@ class SecondRoute extends StatelessWidget {
   String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
   String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
   String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
-  // 6667acb3b257e906bb15d04b
-
-   
-  // extra.browserOpenType = [];
-  // String webApplicationId = '5b9f51264457636ab9a07cdb';
-  // String androidApplicationId = '5b9f51264457636ab9a07cdc';
-  // String iosApplicationId = '5b9f51264457636ab9a07cdd';
-
-
-
 
   String get applicationId {
     return Bootpay().applicationId(

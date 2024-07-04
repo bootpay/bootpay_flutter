@@ -66,41 +66,9 @@ class _BootpayWidgetState extends State<BootpayWidget> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    _bootpayWebView.activeHeroAnimation(context);
+    _bootpayWebView.setPrivateWidgetEvent(context);
     return _bootpayWebView;
   }
-
-  // late final WebViewController _controller;
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //
-  //   // #docregion platform_features
-  //   late final PlatformWebViewControllerCreationParams params;
-  //   if (WebViewPlatform.instance is BTWebKitWebViewPlatform) {
-  //     params = WebKitWebViewControllerCreationParams(
-  //       allowsInlineMediaPlayback: true,
-  //       mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
-  //     );
-  //   } else {
-  //     params = const PlatformWebViewControllerCreationParams();
-  //   }
-  //
-  //   final WebViewController controller =
-  //       WebViewController.fromPlatformCreationParams(params);
-  //   // #enddocregion platform_features
-  //
-  //   _controller = controller;
-  // }
-  //
-  // @override
-  // Widget build(context) {
-  //   return Scaffold(
-  //     backgroundColor: Colors.green,
-  //     body: WebViewWidget(controller: _controller),
-  //   );
-  // }
 }
 
 class BootpayWidgetController {

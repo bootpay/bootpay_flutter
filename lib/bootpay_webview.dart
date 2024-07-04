@@ -187,7 +187,7 @@ class BootpayWebView extends StatefulWidget {
     }
 
     //full screen webview 로 이동
-    goPush();
+    pushInternalWebView();
 
     //300ms 뒤에 실행
     Future.delayed(Duration(milliseconds: 300), () {
@@ -233,13 +233,13 @@ class BootpayWebView extends StatefulWidget {
     return "document.addEventListener('bootpayclose', function (e) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage('결제창이 닫혔습니다'); } });";
   }
 
-  void activeHeroAnimation(BuildContext context) {
+  void setPrivateWidgetEvent(BuildContext context) {
     _context = context;
 
 
     this.onFullSizeScreen = (data) {
       print("onFullSizeScreen called");
-      goPush();
+      pushInternalWebView();
     };
 
     this.onRevertScreen = (data) {
@@ -263,36 +263,9 @@ class BootpayWebView extends StatefulWidget {
     };
   }
 
-  Future<void> goPush() async {
+  Future<void> pushInternalWebView() async {
     if(_context == null) return;
     closeController.isDebounceShow = true;
-    // await Navigator.push(
-    //   _context!,
-    //   PageRouteBuilder(
-    //       transitionDuration:
-    //       const Duration(milliseconds: 300),
-    //       pageBuilder: (_, __, ___) => BootpayHeroWebView(controller: _controller),
-    //       transitionsBuilder:  (_, animation, __, child) {
-    //         return FadeTransition(
-    //           opacity: animation,
-    //           child: child,
-    //         );
-    //       }
-    //   ),
-    // );
-
-    // await Navigator.push(
-    //   _context!,
-    //   PageRouteBuilder(
-    //     transitionDuration: const Duration(milliseconds: 300),
-    //     pageBuilder: (_, __, ___) => BootpayHeroWebView(controller: _controller),
-    //     transitionsBuilder: (_, animation, secondaryAnimation, child) {
-    //       return MaterialPageRoute(
-    //         builder: (_) => BootpayHeroWebView(controller: _controller),
-    //       ).buildTransitions(_, animation, secondaryAnimation, child);
-    //     },
-    //   ),
-    // );
 
     await Navigator.push(
       _context!,
@@ -306,9 +279,6 @@ class BootpayWebView extends StatefulWidget {
     );
 
     widgetStatusReset();
-    // print("loadWidgetScript called");
-
-    // loadWidgetScript(WIDGET_URL);
   }
 
   void widgetStatusReset() {
