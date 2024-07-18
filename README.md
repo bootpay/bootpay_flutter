@@ -303,13 +303,14 @@ Bootpay().dismiss(context);
 return false; 
 ```
 
-## 자동결제
+## 자동결제 - 빌링키 발급 요청하기 
  
 ```dart
 void goBootpaySubscriptionUITest(BuildContext context) {
     payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
     payload.pg = "키움페이";
     payload.method = "카드자동"; 
+    // payload.price = 1000; 금액이 0 이상일 경우 빌링키 발급 후 결제가 진행됩니다.
 
     payload.metadata = {
       "callbackParam1" : "value12",
