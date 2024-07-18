@@ -1,25 +1,22 @@
 # bootpay 플러터 라이브러리 
 
-부트페이에서 지원하는 공식 Flutter 라이브러리 입니다. (클라이언트 용)
-* PG 결제창 연동은 클라이언트 라이브러리에서 수행됩니다. (Javascript, Android, iOS, React Native, Flutter 등)
-* 결제 검증 및 취소, 빌링키 발급, 본인인증 등의 수행은 서버사이드에서 진행됩니다. (Java, PHP, Python, Ruby, Node.js, Go, ASP.NET 등)
+부트페이에서 지원하는 공식 Flutter 라이브러리 입니다
+* Android, iOS, Web 을 지원합니다.
+* Android OS 16, iOS OS 13 부터 사용 가능합니다.
 
-## Bootpay 버전안내 
-이 모듈은 web, android, ios를 지원합니다.
-android os 16, ios os 9 부터 사용 가능합니다. 
-
+## Bootpay 버전안내  
 이 모듈의 4.0.0 이상 버전부터는 Bootpay V2 이며,
 그 이하 버전은 Bootpay V1에 해당합니다.
 
 Bootpay V1, V2에 대한 특이점은 [개발매뉴얼](https://docs.bootpay.co.kr/?front=android&backend=nodejs#migration-feature)을 참고해주세요.
 
-## 기능 
-
+## 기능
 1. web/ios/android 지원 
 2. 국내 주요 PG사 지원 
-3. 신용카드/계좌이체/가상계좌/휴대폰소액결제
-4. 부트페이 통합결제 / 정기결제 / 생체인증 결제 지원
-5. 본인인증 지원 
+3. 주요 결제수단 지원 
+4. 카드/계좌 자동결제 지원 
+5. 위젯 지원  
+6. 본인인증 지원 
 
 ## 설치하기 
 ``pubspec.yaml`` 파일에 아래 모듈을 추가해주세요
@@ -37,8 +34,8 @@ dependencies:
 따로 설정하실 것이 없습니다. 
 
 ### iOS
-** {your project root}/ios/Runner/Info.plist **
-``CFBundleURLName``과 ``CFBundleURLSchemes``의 값은 개발사에서 고유값으로 지정해주셔야 합니다. 외부앱(카드사앱)에서 다시 기존 앱으로 앱투앱 호출시 필요한 스키마 값입니다. 
+#### {your project root}/ios/Runner/Info.plist
+``CFBundleURLName``과 ``CFBundleURLSchemes``의 값은 개발사에서 고유값으로 지정해주셔야 합니다. 외부앱(카드사앱)에서 다시 기존 앱으로 돌아올 때 필요한 스키마 값입니다. 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -63,11 +60,7 @@ dependencies:
                 <string>bootpaySample</string> 
             </array>
         </dict>
-    </array>
-
-    ...
-    <key>NSFaceIDUsageDescription</key>
-    <string>생체인증 결제 진행시 권한이 필요합니다</string>
+    </array> 
 </dict>
 </plist>
 ```
@@ -76,7 +69,7 @@ dependencies:
 flutter web 빌드하면 web/index.html 파일이 생성됩니다. 해당 파일 header에 아래 script를 추가해주세요.
 ```html 
 <!-- bootpay-최신버전-js 를 참조하여 추가합니다 -->
-<script src="https://js.bootpay.co.kr/bootpay-4.2.0.min.js"></script> 
+<script src="https://js.bootpay.co.kr/bootpay-5.0.0.min.js"></script> 
 <script src="bootpay_api.js" defer></script>
 ```
 [bootpay_api](https://github.com/bootpay/bootpay_flutter/blob/main/example/web/bootpay_api.js) 파일을 프로젝트에 추가합니다.
@@ -84,636 +77,241 @@ flutter web 빌드하면 web/index.html 파일이 생성됩니다. 해당 파일
 <img src="https://github.com/bootpay/git-open-resources/blob/main/flutter-web-config.png?raw=true" width="840px" height="525px" title="Github_Logo"/>
 위 설정을 완료하면 flutter web에서도 동일한 문법으로 bootpay를 사용할 수 있습니다.
 
+## 위젯 설정 
+[부트페이 관리자](https://developers.bootpay.co.kr/pg/guides/widget)에서 위젯을 생성하셔야만 사용이 가능합니다. 
 
-## 결제하기  
-```dart 
+## 위젯 렌더링 
+```dart  
+Payload _payload = Payload();
+BootpayWidgetController _controller = BootpayWidgetController();
 
-import 'package:bootpay/bootpay.dart';
-import 'package:bootpay/config/bootpay_config.dart';
-import 'package:bootpay/model/browser_open_type.dart';
-import 'package:bootpay/model/extra.dart';
-import 'package:bootpay/model/item.dart';
-import 'package:bootpay/model/payload.dart';
-import 'package:bootpay/model/stat_item.dart';
-import 'package:bootpay/model/user.dart';
-import 'package:bootpay_flutter_example/webapp_payment.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
-import 'deprecated/api_provider.dart';
-
-import 'package:intl/intl.dart';
-
-void main() {
-  runApp(MaterialApp(
-    title: 'Navigation Basics',
-    home: FirstRoute(),
-  ));
-  // runApp(FirstRoute());
+@override
+void initState() {
+  // TODO: implement initState
+  super.initState();
+  
+  _payload.orderName = '5월 수강료';
+  _payload.orderId = DateTime
+      .now()
+      .millisecondsSinceEpoch
+      .toString();
+  _payload.webApplicationId = webApplicationId;
+  _payload.androidApplicationId = androidApplicationId;
+  _payload.iosApplicationId = iosApplicationId;
+  _payload.price = 1000;
+  _payload.taxFree = 0;
+  _payload.widgetKey = 'default-widget';
+  _payload.widgetSandbox = true;
+  _payload.widgetUseTerms = true;
+  // _payload.userToken = "6667b08b04ab6d03f274d32e";
+  _payload.extra?.displaySuccessResult = true;
 }
 
-class FirstRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('First Route'),
-      ),
-      body: Center(
-        child: TextButton(
-          child: Text('결제 route로 이동'),
-          onPressed: () {
-            // 눌렀을 때 두 번째 route로 이동합니다.
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SecondRoute()),
-            );
-          },
-        ),
-      ),
-    );
-  }
+@override
+Widget build(BuildContext context) {
+  return Container(
+    //하위로 위젯 정의  
+      child: BootpayWidget(
+        payload: _payload,
+        controller: _controller,
+      )
+  );
 }
 
-class SecondRoute extends StatefulWidget {
 
-  _SecondRouteState createState() => _SecondRouteState();
-}
+```
 
-class _SecondRouteState extends State<SecondRoute> {
-
-  Payload payload = Payload();
-  //
-  String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
-  String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
-  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
-
-   
-  // extra.browserOpenType = [];
-  // String webApplicationId = '5b9f51264457636ab9a07cdb';
-  // String androidApplicationId = '5b9f51264457636ab9a07cdc';
-  // String iosApplicationId = '5b9f51264457636ab9a07cdd';
-
-
-
-
-  String get applicationId {
-    return Bootpay().applicationId(
-      webApplicationId,
-      androidApplicationId,
-      iosApplicationId
-    );
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    bootpayAnalyticsUserTrace(); //통계용 함수 호출
-    bootpayAnalyticsPageTrace(); //통계용 함수 호출
-    bootpayReqeustDataInit(); //결제용 데이터 init
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Builder(builder: (BuildContext context) {
-        return Container(
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: TextButton(
-                    onPressed: () => goBootpayTest(context),
-                    child: Text('일반결제 테스트'),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Center(
-                  child: TextButton(
-                    onPressed: () => goBootpaySubscriptionUITest(context),
-                    child: Text('비인증 정기결제 테스트 (부트페이 UI)'),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Center(
-                  child: TextButton(
-                    onPressed: () => goBootpaySubscriptionTest(context),
-                    child: Text('인증 정기결제 테스트 (PG사 UI)'),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Center(
-                  child: TextButton(
-                    onPressed: () => goBootpayAuthTest(context),
-                    child: Text('본인인증 테스트'),
-                  ),
-                ),
-                Center(
-                  child: TextButton(
-                    onPressed: () => goBootpayWebapp(context),
-                    child: Text('웹앱 테스트'),
-                  ),
-                ),
-                // SizedBox(height: 10),
-                // Center(
-                //   child: TextButton(
-                //     onPressed: () => goBootpayPassword(context),
-                //     child: Text('비밀번호 결제테스트'),
-                //   ),
-                // ),
-              ],
-            ),
-          ),
-        );
-      }),
-    );
-  }
-
-  ApiProvider _provider = ApiProvider();
-
-  //해당 기능은 혼동을 줄 수 있으므로 bio_password 사용을 대체, 그러므로 삭제
-  // @deprecated
-  // goBootpayPassword(BuildContext context) async {
-  //   String userToken = await getUserToken(context);
-  //   bootpayPasswordTest(context, userToken, generateUser());
-  // }
-
-
-  void bootpayPasswordTest(BuildContext context, String userToken, User user) {
-    payload.userToken = userToken;
-    if(kIsWeb) {
-      //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
-      payload.extra?.openType = 'iframe';
+## 위젯 이벤트 처리 
+```dart
+@override
+void initState() {
+  // TODO: implement initState
+  super.initState();
+  // BootpayWidgetController _controller = BootpayWidgetController();
+  //위젯 사이즈 변경 이벤트 
+  _controller.onWidgetResize = (height) {
+    print('onWidgetResize : $height');
+    //예제에서는 높이가 변경되면 스크롤을 내립니다.
+    if(_widgetHeight == height) return;
+    if(_widgetHeight < height) {
+      scrollDown(height - _widgetHeight);
     }
-
-    Bootpay().requestPassword(
-      context: context,
-      payload: payload,
-      showCloseButton: false,
-      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
-      onCancel: (String data)  {
-        print('------- onCancel: $data');
-      },
-      onError: (String data) {
-        print('------- onCancel: $data');
-      },
-      onClose: () {
-        print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        //TODO - 원하시는 라우터로 페이지 이동
-      },
-      onIssued: (String data) {
-        print('------- onIssued: $data');
-      },
-      onConfirm: (String data) {
-        /**
-            1. 바로 승인하고자 할 때
-            return true;
-         **/
-        /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
-            return false;
-         ***/
-        /***
-            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-            return false; 후에 서버에서 결제승인 수행
-         */
-        // checkQtyFromServer(data);
-        // return true;
-        return false;
-      },
-      onDone: (String data) {
-        print('------- onDone: $data');
-      },
-    );
-  }
-
-  Future<String> getUserToken(BuildContext context) async {
-    String restApplicationId = "5b8f6a4d396fa665fdc2b5ea";
-    String pk = "rm6EYECr6aroQVG2ntW0A6LpWnkTgP4uQ3H18sDDUYw=";
-    var res = await _provider.getRestToken(restApplicationId, pk);
-
-
-    res = await _provider.getEasyPayUserToken(res.body['access_token'], generateUser());
-    
-    // bootpayTest(context, res.body["user_token"], user);
-    return res.body["user_token"];
-  }
-
-
-  User generateUser() {
-    var user = User();
-    user.id = '123411aaaaaaaaaaaabd4ss11';
-    user.gender = 1;
-    user.email = 'test1234@gmail.com';
-    user.phone = '01012345678';
-    user.birth = '19880610';
-    user.username = '홍길동';
-    user.area = '서울';
-    return user;
-  }
-
-
-  //통계용 함수
-  bootpayAnalyticsUserTrace() async {
-
-    await Bootpay().userTrace(
-        id: 'user_1234',
-        email: 'user1234@gmail.com',
-        gender: -1,
-        birth: '19941014',
-        area: '서울',
-        applicationId: applicationId
-    );
-  }
-
-  //통계용 함수
-  bootpayAnalyticsPageTrace() async {
-
-    StatItem item1 = StatItem();
-    item1.itemName = "미키 마우스"; // 주문정보에 담길 상품명
-    item1.unique = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
-    item1.price = 500; // 상품의 가격
-    item1.cat1 = '컴퓨터';
-    item1.cat2 = '주변기기';
-
-    StatItem item2 = StatItem();
-    item2.itemName = "키보드"; // 주문정보에 담길 상품명
-    item2.unique = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
-    item2.price = 500; // 상품의 가격
-    item2.cat1 = '컴퓨터';
-    item2.cat2 = '주변기기';
-
-    List<StatItem> items = [item1, item2];
-
-    await Bootpay().pageTrace(
-        url: 'main_1234',
-        pageType: 'sub_page_1234',
-        applicationId: applicationId,
-        userId: 'user_1234',
-        items: items
-    );
-  }
-
-  //결제용 데이터 init
-  bootpayReqeustDataInit() {
-    Item item1 = Item();
-    item1.name = "미키 '마우스"; // 주문정보에 담길 상품명
-    item1.qty = 1; // 해당 상품의 주문 수량
-    item1.id = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
-    item1.price = 500; // 상품의 가격
-
-    Item item2 = Item();
-    item2.name = "키보드"; // 주문정보에 담길 상품명
-    item2.qty = 1; // 해당 상품의 주문 수량
-    item2.id = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
-    item2.price = 500.50; // 상품의 가격
-    List<Item> itemList = [item1, item2];
-
-    payload.webApplicationId = webApplicationId; // web application id
-    payload.androidApplicationId = androidApplicationId; // android application id
-    payload.iosApplicationId = iosApplicationId; // ios application id
-
-
-    // payload.pg = '다날';
-    // payload.method = '카드';
-    // payload.method = '네이버페이';
-    // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
-    payload.orderName = "테스트 상품"; //결제할 상품명
-    payload.price = 1000.50; //정기결제시 0 혹은 주석
-
-
-    payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
-
-
-    payload.metadata = {
-      "callbackParam1" : "value12",
-      "callbackParam2" : "value34",
-      "callbackParam3" : "value56",
-      "callbackParam4" : "value78",
-    }; // 전달할 파라미터, 결제 후 되돌려 주는 값
-    payload.items = itemList; // 상품정보 배열
-
-
-    User user = User(); // 구매자 정보
-    user.id = "12341234";
-    user.username = "사용자 이름";
-    user.email = "user1234@gmail.com";
-    user.area = "서울";
-    user.phone = "010-0000-0000";
-    user.addr = 'null';
-
-    Extra extra = Extra(); // 결제 옵션
-    extra.appScheme = 'bootpayFlutter';
-
-
-    if(BootpayConfig.ENV == -1) {
-      payload.extra?.redirectUrl = 'https://dev-api.bootpay.co.kr/v2';
-    } else if(BootpayConfig.ENV == -2) {
-      payload.extra?.redirectUrl = 'https://stage-api.bootpay.co.kr/v2';
-    }  else {
-      payload.extra?.redirectUrl = 'https://api.bootpay.co.kr/v2';
-    }
-
-    // extra.cardQuota = '3';
-    // extra.openType = 'popup';
-
-    // extra.carrier = "SKT,KT,LGT"; //본인인증 시 고정할 통신사명
-    // extra.ageLimit = 20; // 본인인증시 제한할 최소 나이 ex) 20 -> 20살 이상만 인증이 가능
-
-    payload.user = user;
-    payload.items = itemList;
-    payload.extra = extra;
-    // payload.extra?.openType = "iframe";
-  }
-
-
-  //버튼클릭시 부트페이 결제요청 실행
-  void goBootpayTest(BuildContext context) {
-    if(kIsWeb) {
-      //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
-      payload.extra?.openType = 'iframe';
-    }
-    payload.extra?.browserOpenType = [
-      BrowserOpenType.fromJson({"browser": "naver", "open_type": 'popup'}),
-    ];
-
-    // print('popup');
-    // payload.extra?.openType = 'popup';
-
-    payload.pg = '나이스페이';
-    payload.method = "네이버페이";
-
-    payload.extra?.displayCashReceipt = false;
-    // payload.extra?.escrow = true;
-    // payload.extra?.locale = 'en'; //app locale
-    // Bootpay().setLocale('en'); //web locale
-
-    // payload.extra?.depositExpiration = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().add(const Duration(days: 7)));
-
-    Bootpay().requestPayment(
-      context: context,
-      payload: payload,
-      showCloseButton: false,
-      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
-      onCancel: (String data) {
-        print('------- onCancel 1 : $data');
-      },
-      onError: (String data) {
-        print('------- onError: $data');
-      },
-      onClose: () {
-        print('------- onClose');
-        Future.delayed(Duration(seconds: 0)).then((value) {
-
-          if (mounted) {
-            print('Bootpay().dismiss');
-            Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-          }
-        });
-
-        // Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        //TODO - 원하시는 라우터로 페이지 이동
-      },
-      onIssued: (String data) {
-        print('------- onIssued: $data');
-      },
-      onConfirm: (String data)  {
-
-        // checkQtyFromServer(data, context).then((value) => print(1243));
-        // await check
-
-        print('------- onConfirm: $data');
-
-        Bootpay().dismiss(context);
-        // checkQtyFromServer(data);
-        return false;
-      },
-      // onConfirmAsync: (String data) async {
-      //   print('------- onConfirmAsync11: $data');
-      //   /**
-      //       1. 바로 승인하고자 할 때
-      //       return true;
-      //    **/
-      //   /***
-      //       2. 비동기 승인 하고자 할 때
-      //       checkQtyFromServer(data);
-      //       return false;
-      //    ***/
-      //   /***
-      //       3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-      //       return false; 후에 서버에서 결제승인 수행
-      //    */
-      //
-      //   await checkQtyFromServer(data);
-      //   print('------- onConfirmAsync22: $data');
-      //   // return true;
-      //   // return true;
-      //   return true;
-      // },
-      onDone: (String data) {
-        print('------- onDone: $data');
-      },
-    );
-  }
-
-  //버튼클릭시 부트페이 정기결제 요청 실행
-  void goBootpaySubscriptionTest(BuildContext context) {
-    payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
-    // payload.pg = "토스";
-    // payload.method = "카드정기";
-    // payload.extra?.subscribeTestPayment = false;
-
-
-    Bootpay().requestSubscription(
-      context: context,
-      payload: payload,
-      showCloseButton: false,
-      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
-      onCancel: (String data) {
-        print('------- onCancel 2: $data');
-      },
-      onError: (String data) {
-        print('------- onError 2: $data');
-      },
-      onClose: () {
-        print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        //TODO - 원하시는 라우터로 페이지 이동
-      },
-      onIssued: (String data) {
-        print('------- onIssued: $data');
-      },
-      onConfirm: (String data) {
-        /**
-            1. 바로 승인하고자 할 때
-            return true;
-         **/
-        /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
-            return false;
-         ***/
-        /***
-            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-            return false; 후에 서버에서 결제승인 수행
-         */
-        checkQtyFromServer(data);
-        return false;
-      },
-      onDone: (String data) {
-        print('------- onDone: $data');
-      },
-    );
-  }
-
-  void goBootpaySubscriptionUITest(BuildContext context) {
-    payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
-    // payload.pg = 'kakao';
-    // payload.method = 'easy_rebill';
-
-    payload.pg = "나이스페이";
-    payload.method = "카드자동";
-    // payload.extra?.subscribeTestPayment = false;
-
-
-    payload.metadata = {
-      "callbackParam1" : "value12",
-      "callbackParam2" : "value34",
-      "callbackParam3" : "value56",
-      "callbackParam4" : "value78",
-    }; // 전달할 파라미터, 결제 후 되돌려 주는 값
-
-    Bootpay().requestSubscription(
-      context: context,
-      payload: payload,
-      showCloseButton: false,
-      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
-      onCancel: (String data) {
-        print('------- onCancel 3: $data');
-      },
-      onError: (String data) {
-        print('------- onError 3: $data');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-      },
-      onClose: () {
-        print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        //TODO - 원하시는 라우터로 페이지 이동
-      },
-      onIssued: (String data) {
-        print('------- onIssued: $data');
-      },
-      onConfirm: (String data) {
-        /**
-            1. 바로 승인하고자 할 때
-            return true;
-         **/
-        /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
-            return false;
-         ***/
-        /***
-            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-            return false; 후에 서버에서 결제승인 수행
-         */
-
-        checkQtyFromServer(data);
-        return false;
-      },
-      onDone: (String data) {
-        print('------- onDone: $data');
-      },
-    );
-  }
-
-  void goBootpayWebapp(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => WebAppPayment()));
-
-  }
-
-  void goBootpayAuthTest(BuildContext context) {
-
-
-    payload.pg = "다날";
-    payload.method = "본인인증";
-    payload.authenticationId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
-    payload.extra = Extra();
-    payload.extra?.openType = 'iframe';
-    payload.extra?.showCloseButton = true;
-    // payload.extra?.show
-    // payload.extra?.ageLimit = 40;
-
-
-    Bootpay().requestAuthentication(
-      context: context,
-      payload: payload,
-      showCloseButton: false,
-      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
-      onCancel: (String data) {
-        print('------- onCancel: $data');
-      },
-      onError: (String data) {
-        print('------- onError: $data');
-      },
-      onClose: () {
-        print('------- onClose');
-        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        //TODO - 원하시는 라우터로 페이지 이동
-      },
-      onIssued: (String data) {
-        print('------- onIssued: $data');
-      },
-      onConfirm: (String data) {
-        /**
-            1. 바로 승인하고자 할 때
-            return true;
-         **/
-        /***
-            2. 비동기 승인 하고자 할 때
-            checkQtyFromServer(data);
-            return false;
-         ***/
-        /***
-            3. 서버승인을 하고자 하실 때 (클라이언트 승인 X)
-            return false; 후에 서버에서 결제승인 수행
-         */
-
-        // Bootpay().dismiss(context);
-        // return false;
-        return true;
-      },
-      onDone: (String data) {
-        print('------- onDone: $data');
-      },
-    );
-  }
-
-
-
-  Future<void> checkQtyFromServer(String data) async {
-    //TODO 서버로부터 재고파악을 한다
-    print('checkQtyFromServer start: $data');
-    return Future.delayed(Duration(seconds: 1), () {
-      print('checkQtyFromServer end: $data');
-
-      Bootpay().transactionConfirm();
-      return true;
+    setState(() {
+      _widgetHeight = height;
     });
-  }
+  };
+  //선택된 결제수단 변경 이벤트 
+  _controller.onWidgetChangePayment = (widgetData) {
+    print('onWidgetChangePayment22 : ${widgetData?.toJson()}');
+    //예제에서는 widgetData 정보를 payload에 반영합니다. 반영된 payload는 추후 결제요청시 사용됩니다.
+    setState(() {
+      _payload?.mergeWidgetData(widgetData);
+    });
+  };
+  //선택된 약관 변경 이벤트
+  _controller.onWidgetChangeAgreeTerm = (widgetData) {
+    print('onWidgetChangeAgreeTerm : ${widgetData?.toJson()}');
+    //예제에서는 widgetData 정보를 payload에 반영합니다. 반영된 payload는 추후 결제요청시 사용됩니다.
+    setState(() {
+      _payload?.mergeWidgetData(widgetData);
+    });
+  };
+  //위젯이 렌더링되면 호출되는 이벤트
+  _controller.onWidgetReady = () {
+    print('onWidgetReady');
+  };
 }
 ```
 
+## 위젯으로 결제하기 
+이 방법은 위젯을 사용하여 결제하는 방법입니다. 위젯을 사용하지 않고 결제를 요청하는 방법은 별도로 제공합니다. 
+```dart
+// BootpayWidgetController _controller = BootpayWidgetController();
+_controller.requestPayment(
+    context: context,
+    payload: _payload,
+    onCancel: (String data) {
+        print('------- onCancel 2 : $data');
+    },
+    onError: (String data) {
+        print('------- onError: $data');
+    },
+    onClose: () {
+        print('------- onClose');
+        if (!kIsWeb) {
+          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+        }
+    },
+    onConfirm: (String data)  {
+        print('------- onConfirm: $data');
+        return true; //결제를 승인합니다 
+    },
+    onIssued: (String data) {
+        print('------- onIssued: $data');
+    },
+    onDone: (String data) {
+        print('------- onDone: $data');
+        // FlutterToast.showToast(msg: '결제가 완료되었습니다.');
+    },
+);
+```
+
+## 결제하기
+이 방법은 위젯을 사용하지 않고 결제하는 방법입니다.
+```dart 
+//결제 정보를 초기화합니다.
+void bootpayReqeustDataInit() {
+  Item item1 = Item();
+  item1.name = "미키 '마우스"; // 주문정보에 담길 상품명
+  item1.qty = 1; // 해당 상품의 주문 수량
+  item1.id = "ITEM_CODE_MOUSE"; // 해당 상품의 고유 키
+  item1.price = 500; // 상품의 가격
+
+  Item item2 = Item();
+  item2.name = "키보드"; // 주문정보에 담길 상품명
+  item2.qty = 1; // 해당 상품의 주문 수량
+  item2.id = "ITEM_CODE_KEYBOARD"; // 해당 상품의 고유 키
+  item2.price = 500; // 상품의 가격
+  List<Item> itemList = [item1, item2];
+
+  payload.webApplicationId = webApplicationId; // web application id
+  payload.androidApplicationId = androidApplicationId; // android application id
+  payload.iosApplicationId = iosApplicationId; // ios application id
+
+  payload.pg = '다날';
+  payload.method = '카드';
+  // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
+  payload.orderName = "테스트 상품"; //결제할 상품명
+  payload.price = 1000.0; //정기결제시 0 혹은 주석
+
+  payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+
+  payload.metadata = {
+    "callbackParam1" : "value12",
+    "callbackParam2" : "value34",
+    "callbackParam3" : "value56",
+    "callbackParam4" : "value78",
+  }; // 전달할 파라미터, 결제 후 되돌려 주는 값
+  payload.items = itemList; // 상품정보 배열
+
+
+  User user = User(); // 구매자 정보
+  user.id = "12341234";
+  user.username = "사용자 이름";
+  user.email = "user1234@gmail.com";
+  user.area = "서울";
+  user.phone = "010-0000-0000";
+  user.addr = 'null';
+
+  Extra extra = Extra(); // 결제 옵션
+  extra.appScheme = 'bootpayFlutter'; //결제 후 돌아갈 ios 앱 스키마를 설정합니다 
+   
+  payload.user = user;
+  payload.items = itemList;
+  payload.extra = extra; 
+}
+
+void goBootpayPayment(BuildContext context) {
+  Bootpay().requestPayment(
+    context: context,
+    payload: payload,
+    showCloseButton: false,
+
+    // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
+    onCancel: (String data) {
+      print('------- onCancel 1 : $data');
+    },
+    onError: (String data) {
+      print('------- onError: $data');
+    },
+    onClose: () {
+      print('------- onClose');
+      if (!kIsWeb) {
+        Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+      }
+    },
+    onIssued: (String data) {
+      print('------- onIssued: $data');
+    },
+    onConfirm: (String data)  { 
+      // checkQtyFromServer(data);
+      return true;
+    },
+    // onConfirmAsync: (String data) async {
+    //   onConfirm 대신 사용하는 이벤트 처리 함수입니다. 내부에서 Future 문법을 사용할 수 있습니다.
+    //   print('------- onConfirmAsync: $data');
+    //   return true;
+    // },
+    onDone: (String data) {
+      print('------- onDone: $data');
+    },
+  );
+}
+```
+
+### Bootpay 승인 요청 
+onConfirm, onConfirmAsync에서 승인 요청시 사용하는 함수입니다. 이 함수는 return false 로 리턴할 경우 사용합니다.  
+```dart
+Bootpay().transactionConfirm();
+return false; 
+```
+
+### Bootpay 창 닫기 
+onConfirm, onConfirmAsync등에서 진행중인 결제창을 닫을 때 사용하는 함수입니다. 서버인증으로 승인이 되었을 경우에, 클라이언트에서 창을 닫을 때 사용합니다.
+```dart
+Bootpay().dismiss(context);
+return false; 
+```
+
+### 자동결제
+ 
+```dart
+```
+
+
 ## Documentation
 
-[부트페이 개발매뉴얼](https://docs.bootpay.co.kr/)을 참조해주세요
+[부트페이 개발매뉴얼](https://developer.bootpay.co.kr/)을 참조해주세요
 
 ## 기술문의
 

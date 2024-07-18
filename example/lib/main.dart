@@ -314,7 +314,7 @@ class SecondRoute extends StatelessWidget {
     // payload.method = '네이버페이';
     // payload.methods = ['카드', '휴대폰', '가상계좌', '계좌이체', '카카오페이'];
     payload.orderName = "테스트 상품"; //결제할 상품명
-    // payload.price = 0.0; //정기결제시 0 혹은 주석
+    payload.price = 1000.0; //정기결제시 0 혹은 주석
 
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
@@ -334,7 +334,7 @@ class SecondRoute extends StatelessWidget {
     user.username = "사용자 이름";
     user.email = "user1234@gmail.com";
     user.area = "서울";
-    // user.phone = "010-0000-0000";
+    user.phone = "010-0000-0000";
     user.addr = 'null';
 
     Extra extra = Extra(); // 결제 옵션
@@ -400,6 +400,7 @@ class SecondRoute extends StatelessWidget {
 
 
 
+
     Bootpay().requestPayment(
       context: context,
       payload: payload,
@@ -433,8 +434,9 @@ class SecondRoute extends StatelessWidget {
       // },
       onConfirmAsync: (String data) async {
         print('------- onConfirmAsync: $data');
-        Bootpay().dismiss(context);
-        return false;
+        // Bootpay().dismiss(context);
+        // return false;
+        return true;
       },
       // onConfirmAsync: (String data) async {
       //   print('------- onConfirmAsync11: $data');

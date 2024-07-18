@@ -21,12 +21,12 @@ class BootpayHeroWebView extends StatefulWidget {
 
   GlobalKey webViewKey;
   WebViewController controller;
-  BootpayCloseCallback? onCloseWidget;
+  // BootpayCloseCallback? onCloseWidget;
 
   BootpayHeroWebView({
     Key? key,
     required this.webViewKey,
-    this.onCloseWidget,
+    // this.onCloseWidget,
     required this.controller
   }) : super(key: key);
 

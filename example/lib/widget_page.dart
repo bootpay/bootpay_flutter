@@ -15,8 +15,6 @@ class WidgetPage extends StatefulWidget {
 
 class WidgetPageState extends State<WidgetPage> {
 
-  // WidgetPayloadTemp? _widgetPayload;
-  // WidgetPayload? _selectedInfo;
   Payload _payload = Payload();
   BootpayWidgetController _controller = BootpayWidgetController();
   final ScrollController _scrollController = ScrollController();
@@ -31,16 +29,6 @@ class WidgetPageState extends State<WidgetPage> {
   String iosApplicationId = '5b9f51264457636ab9a07cdd';
 
 
-  // 5b9f51264457636ab9a07cdb
-  // 5b9f51264457636ab9a07cdc
-  // 5b9f51264457636ab9a07cdd
-  // 5b9f51264457636ab9a07cde
-  // sfilSOSVakw+PZA+PRux4Iuwm7a//9CXXudCq9TMDHk=
-  // token: 6667b08b04ab6d03f274d32e
-
-  // String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
-  // String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
-  // String iosApplicationId = '5b8f6a4d396fa665fdc2b5e7';
 
 
   double _widgetHeight = Bootpay().WIDGET_HEIGHT;
@@ -49,9 +37,6 @@ class WidgetPageState extends State<WidgetPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    // _widgetPayload = WidgetPayloadTemp();
-
 
     _payload = Payload();
     _payload.price = 28200;
