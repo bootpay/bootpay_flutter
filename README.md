@@ -2,7 +2,7 @@
 
 부트페이에서 지원하는 공식 Flutter 라이브러리 입니다
 * Android, iOS, Web 을 지원합니다.
-* Android OS 16, iOS OS 13 부터 사용 가능합니다.
+* Android SDK 16, iOS OS 13 부터 사용 가능합니다.
 
 ## Bootpay 버전안내  
 이 모듈의 4.0.0 이상 버전부터는 Bootpay V2 이며,
