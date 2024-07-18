@@ -485,7 +485,7 @@ data 포맷은 아래와 같습니다.
 ### onDone 함수
 PG에서 거래 승인 이후에 호출 되는 함수입니다. 결제 완료 후 다음 결제 결과를 호출 할 수 있는 함수 입니다.
 
-이 함수가 호출 된 후 반드시 REST API를 통해 [결제검증](https://docs.bootpay.co.kr/rest/verify)을 수행해야합니다. data 포맷은 아래와 같습니다.
+이 함수가 호출 된 후 반드시 REST API를 통해 [결제검증](https://developers.bootpay.co.kr/pg/server/receipt)을 수행해증야합니다. data 포맷은 아래와 같습니다.
 
 ```text
 {
