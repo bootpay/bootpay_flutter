@@ -51,7 +51,6 @@ class Bootpay extends BootpayApi {
         bool? showCloseButton,
         Widget? closeButton,
         BootpayDefaultCallback? onCancel,
-
         BootpayDefaultCallback? onError,
         BootpayCloseCallback? onClose,
         BootpayDefaultCallback? onIssued,
@@ -73,7 +72,7 @@ class Bootpay extends BootpayApi {
         onConfirm: onConfirm,
         onConfirmAsync: onConfirmAsync,
         onDone: onDone,
-
+        userAgent: userAgent,
         requestType: requestType
     );
   }
@@ -91,6 +90,7 @@ class Bootpay extends BootpayApi {
         BootpayDefaultCallback? onIssued,
         BootpayConfirmCallback? onConfirm,
         BootpayAsyncConfirmCallback? onConfirmAsync,
+        String? userAgent,
         BootpayDefaultCallback? onDone,
         int? requestType}) {
 
@@ -108,6 +108,7 @@ class Bootpay extends BootpayApi {
         onClose: onClose,
         onIssued: onIssued,
         onConfirm: onConfirm,
+        userAgent: userAgent,
         onConfirmAsync: onConfirmAsync,
         onDone: onDone,
         requestType: requestType
@@ -128,6 +129,7 @@ class Bootpay extends BootpayApi {
         BootpayConfirmCallback? onConfirm,
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
+        String? userAgent,
         int? requestType}) {
 
     if(payload?.subscriptionId == null || payload?.subscriptionId?.length == 0) {
@@ -146,6 +148,7 @@ class Bootpay extends BootpayApi {
         onConfirm: onConfirm,
         onConfirmAsync: onConfirmAsync,
         onDone: onDone,
+        userAgent: userAgent,
         requestType: requestType
     );
   }
@@ -165,6 +168,7 @@ class Bootpay extends BootpayApi {
         BootpayConfirmCallback? onConfirm,
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
+        String? userAgent,
         int? requestType}) {
 
 
@@ -180,6 +184,7 @@ class Bootpay extends BootpayApi {
         onConfirm: onConfirm,
         onConfirmAsync: onConfirmAsync,
         onDone: onDone,
+        userAgent: userAgent,
         requestType: requestType
     );
   }

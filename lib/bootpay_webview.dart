@@ -202,8 +202,9 @@ class BootpayWebView extends StatefulWidget {
   }
 
 
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-rc.15/';
+  // final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-rc.15/';
   // final String INAPP_URL = 'https://webview.bootpay.co.kr/4.3.4/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-beta.36/';
 
   late final String WIDGET_URL = INAPP_URL + 'widget.html';
 
@@ -382,6 +383,8 @@ class BootpayWebViewState extends State<BootpayWebView> {
     if(widget.userAgent != null) {
       controller.setUserAgent(widget.userAgent!);
     }
+
+    print("user Agent: ${widget.userAgent}");
 
     String loadUrl = (widget.isWidget ?? false) ? widget.WIDGET_URL : widget.INAPP_URL;
     // print(loadUrl);

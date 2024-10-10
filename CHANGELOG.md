@@ -1,3 +1,6 @@
+## 4.9.92
+* userAgent 버그 수정 
+
 ## 4.9.91
 * flutter web에서 payload.items가 null 일때 예외처리 추가
 

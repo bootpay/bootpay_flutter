@@ -380,8 +380,10 @@ class SecondRoute extends StatelessWidget {
     // print('popup');
     // payload.extra?.openType = 'popup';
 
-    payload.pg = '나이스페이';
-    payload.method = "네이버페이";
+    payload.pg = '다날';
+    payload.method = "카드";
+
+    // payload.extra?.cardQuota = "0";
 
     // payload.pg = '카카오';
     // payload.method = "간편자동";
@@ -405,8 +407,6 @@ class SecondRoute extends StatelessWidget {
       context: context,
       payload: payload,
       showCloseButton: false,
-
-      // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data) {
         print('------- onCancel 1 : $data');
       },
@@ -434,7 +434,6 @@ class SecondRoute extends StatelessWidget {
       // },
       onConfirmAsync: (String data) async {
         print('------- onConfirmAsync: $data');
-        // Bootpay().dismiss(context);
         // return false;
         return true;
       },
@@ -599,6 +598,8 @@ class SecondRoute extends StatelessWidget {
     payload.authenticationId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
     // payload.extra = null;
     payload.extra = Extra();
+
+
     payload.extra?.openType = 'iframe';
     payload.items = null;
     // payload.extra?.showCloseButton = true;
