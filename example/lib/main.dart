@@ -22,6 +22,7 @@ import 'package:intl/intl.dart';
 import 'widget_page.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     title: 'Navigation Basics',
     home: FirstRoute(),
@@ -158,11 +159,12 @@ class SecondRoute extends StatelessWidget {
 
   void bootpayPasswordTest(BuildContext context, String userToken, User user) {
     payload.userToken = userToken;
-    if(kIsWeb) {
-      //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
-      payload.extra?.openType = 'iframe';
-    }
+    // if(kIsWeb) {
+    //   //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
+    //   payload.extra?.openType = 'iframe';
+    // }
     payload.pg = "나이스페이";
+    payload.extra?.separatelyConfirmed = false;
 
     Bootpay().requestPassword(
       context: context,
@@ -224,15 +226,23 @@ class SecondRoute extends StatelessWidget {
       pk = "sfilSOSVakw+PZA+PRux4Iuwm7a//9CXXudCq9TMDHk=";
     }
 
+    try {
+      var res = await _provider.getRestToken(restApplicationId, pk);
 
-    var res = await _provider.getRestToken(restApplicationId, pk);
 
+      print("user token 11 : ${res.body}, $restApplicationId, $pk");
 
-    res = await _provider.getEasyPayUserToken(res.body['access_token'], generateUser());
+      res = await _provider.getEasyPayUserToken(res.body['access_token'], generateUser());
 
-    print("user token : ${res.body}");
-    // bootpayTest(context, res.body["user_token"], user);
-    return res.body["user_token"];
+      print("user token 22 : ${res.body}");
+      // bootpayTest(context, res.body["user_token"], user);
+      return res.body["user_token"];
+    } catch(e) {
+      print("error : $e");
+    }
+
+    return "";
+
   }
 
 
@@ -523,9 +533,12 @@ class SecondRoute extends StatelessWidget {
     // payload.pg = 'kakao';
     // payload.method = 'easy_rebill';
 
-    payload.pg = "키움페이";
-    payload.method = "카드자동";
+
+    payload.pg = "나이스페이";
+    payload.method = "easy_card";
     // payload.extra?.subscriptionComment = '월월 ';
+
+    // print("payload.extra?.openType : ${payload.extra?.openType}");
 
 
     payload.metadata = {

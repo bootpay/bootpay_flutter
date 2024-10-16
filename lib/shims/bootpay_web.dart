@@ -101,6 +101,7 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
         BootpayConfirmCallback? onConfirm,
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
+        String? userAgent, //사용되진 않음
         int? requestType
       }) {
 
@@ -133,6 +134,7 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
         BootpayConfirmCallback? onConfirm,
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
+        String? userAgent, //사용되진 않음
         int? requestType
       }) {
 
@@ -170,6 +172,7 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
         BootpayConfirmCallback? onConfirm,
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
+        String? userAgent, //사용되진 않음
         int? requestType
       }) {
 
@@ -207,6 +210,7 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
         BootpayConfirmCallback? onConfirm,
         BootpayAsyncConfirmCallback? onConfirmAsync,
         BootpayDefaultCallback? onDone,
+        String? userAgent, //사용되진 않음
         int? requestType
       }) {
 

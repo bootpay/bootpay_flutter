@@ -7,6 +7,7 @@ import 'package:bootpay/model/user.dart';
 class ApiProvider extends GetConnect {
   String get defaultUrl {
     return 'https://dev-api.bootpay.co.kr';
+    // return 'https://api.bootpay.co.kr';
   }
 
 
@@ -16,7 +17,7 @@ class ApiProvider extends GetConnect {
       'private_key': privateKey
     };
 
-    String url = "$defaultUrl/v2/request/token";
+    String url = "$defaultUrl/v2/request/token.json";
 
     return post(
         url,
@@ -38,7 +39,7 @@ class ApiProvider extends GetConnect {
       'phone': user.phone,
     };
 
-    String url = "$defaultUrl/v2/request/user/token";
+    String url = "$defaultUrl/v2/request/user/token.json";
 
     return post(
         url,

@@ -119,7 +119,14 @@ class BootpayWebView extends StatefulWidget {
 
     print("transactionConfirm : $script");
 
+    // // Ensure JavaScript is run on the main thread
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   print("transactionConfirm 22 : $script");
+    //   _controller.runJavaScript(script);
+    // });
     _controller.runJavaScript(script);
+    // _controller.
+    // _controller.runJavaScript("alert(1);");
   }
 
   void removePaymentWindow() {
@@ -779,6 +786,7 @@ extension BootpayMethod on BootpayWebViewState {
       requestMethod = 'requestAuthentication';
     } else if(this.widget.requestType == BootpayConstant.REQUEST_TYPE_PASSWORD) {
       this.widget.payload?.method = "카드간편";
+      this.widget.payload?.extra?.separatelyConfirmed = false;
     }
 
     String script = "Bootpay.${requestMethod}(" +
@@ -939,13 +947,13 @@ extension BootpayCallback on BootpayWebViewState {
   }
 
   Future<void> onRedirectJS(JavaScriptMessage message) async {
-    print("message : ${message.message}");
+    print("flutterWebView : ${message.message}");
 
     try {
       // final data = json.decode(message.message);
       Map<String, dynamic> data = jsonDecode(message.message);
 
-      print("onRedirectJS : $data");
+      // print("onRedirectJS : $data");
 
       switch(data["event"]) {
         case "cancel":
