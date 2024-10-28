@@ -1,3 +1,6 @@
+## 4.9.94
+* sdk 버전 낮춰서 재배포 
+
 ## 4.9.93
 * web-useragent bug fixed
 

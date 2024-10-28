@@ -6,8 +6,8 @@ import 'package:bootpay/model/user.dart';
 @Deprecated('예제를 위해 제공되는 클래스입니다. 이 작업은 서버사이드에서 수행되어야 합니다.')
 class ApiProvider extends GetConnect {
   String get defaultUrl {
-    return 'https://dev-api.bootpay.co.kr';
-    // return 'https://api.bootpay.co.kr';
+    // return 'https://dev-api.bootpay.co.kr';
+    return 'https://api.bootpay.co.kr';
   }
 
 
