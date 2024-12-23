@@ -1,3 +1,6 @@
+## 4.9.95
+* android gradle 8 support
+
 ## 4.9.94
 * sdk 버전 낮춰서 재배포 
 

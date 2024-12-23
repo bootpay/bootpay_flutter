@@ -378,22 +378,23 @@ class SecondRoute extends StatelessWidget {
 
   //버튼클릭시 부트페이 결제요청 실행
   void goBootpayTest(BuildContext context) {
-    if(kIsWeb) {
-      //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
-      payload.extra?.openType = 'popup';
-    }
+    // if(kIsWeb) {
+    //   //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
+    //   payload.extra?.openType = 'popup';
+    // }
     payload.extra?.browserOpenType = [
       BrowserOpenType.fromJson({"browser": "naver", "open_type": 'popup'}),
     ];
     // payload.extra?.displaySuccessResult = true;
 
     // print('popup');
-    // payload.extra?.openType = 'popup';
+    payload.extra?.openType = 'iframe';
+    payload.extra?.useBootpayInappSdk = false;
 
     payload.pg = '나이스페이';
-    payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao', 'npay'];
-    payload.orderId = "9ad6906d585328f312808872a801871691c89570f6b42803da5f9ca50f1e08c9.4804ee8dc8d2bd08a3f1572136adb869";
-    // payload.method = "카드";
+    // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao', 'npay'];
+    payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+    payload.method = "카드";
 
     // payload.extra?.cardQuota = "0";
 

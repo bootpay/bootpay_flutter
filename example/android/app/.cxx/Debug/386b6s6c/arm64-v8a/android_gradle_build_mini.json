@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/taesupyoon/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/taesupyoon/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/taesupyoon/bootpay/client/flutter/bootpay_flutter/example/android/app/.cxx/Debug/386b6s6c/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/taesupyoon/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/taesupyoon/bootpay/client/flutter/bootpay_flutter/example/android/app/.cxx/Debug/386b6s6c/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

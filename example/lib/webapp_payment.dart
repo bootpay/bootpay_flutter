@@ -98,7 +98,9 @@ Page resource error:
           );
         },
       )
-      ..loadRequest(Uri.parse('https://dev-js.bootapi.com/test/payment/widget.html'));
+
+    ..loadRequest(Uri.parse('https://flutter.io'));
+      // ..loadRequest(Uri.parse('https://your-server.com/checkout.html'));
 
     _controller = controller;
   }

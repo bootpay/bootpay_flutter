@@ -64,7 +64,6 @@ class WidgetPageState extends State<WidgetPage> {
       });
     };
     _controller.onWidgetChangePayment = (widgetData) {
-      print('onWidgetChangePayment22 : ${widgetData?.toJson()}');
       setState(() {
         _payload?.mergeWidgetData(widgetData);
       });
