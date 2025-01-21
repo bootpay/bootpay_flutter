@@ -1,3 +1,6 @@
+## 4.9.96
+* 의존성 모듈 버전 고정 해제 
+
 ## 4.9.95
 * android gradle 8 support
 
