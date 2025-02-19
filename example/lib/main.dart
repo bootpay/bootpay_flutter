@@ -59,10 +59,15 @@ class SecondRoute extends StatelessWidget {
   SecondRoute({super.key});
 
   Payload payload = Payload();
-  //
+  //production
   String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';
   String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';
   String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+
+  //developement
+  // String webApplicationId = '5b9f51264457636ab9a07cdb';
+  // String androidApplicationId = '5b9f51264457636ab9a07cdc';
+  // String iosApplicationId = '5b9f51264457636ab9a07cdd';
 
   String get applicationId {
     return Bootpay().applicationId(
@@ -159,11 +164,11 @@ class SecondRoute extends StatelessWidget {
 
   void bootpayPasswordTest(BuildContext context, String userToken, User user) {
     payload.userToken = userToken;
-    // if(kIsWeb) {
+    // if(kIsWeb) {로
     //   //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
     //   payload.extra?.openType = 'iframe';
     // }
-    payload.pg = "나이스페이";
+    payload.pg = "스마트로";
     payload.extra?.separatelyConfirmed = false;
 
     Bootpay().requestPassword(
@@ -391,7 +396,7 @@ class SecondRoute extends StatelessWidget {
     payload.extra?.openType = 'iframe';
     payload.extra?.useBootpayInappSdk = false;
 
-    payload.pg = '나이스페이';
+    payload.pg = '스마트로';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao', 'npay'];
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
     payload.method = "카드";
@@ -537,7 +542,7 @@ class SecondRoute extends StatelessWidget {
     // payload.method = 'easy_rebill';
 
 
-    payload.pg = "나이스페이";
+    payload.pg = "스마트로";
     payload.method = "easy_card";
     // payload.extra?.subscriptionComment = '월월 ';
 

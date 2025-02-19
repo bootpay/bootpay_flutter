@@ -41,11 +41,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
-  bootpay_webview_flutter_wkwebview: baf2884591d215ae8bf446f97f1acc282f9527a6
+  bootpay_webview_flutter_wkwebview: 4020fe794c27b0d080fc4abd9f9f39d2b8af67e3
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  fluttertoast: 9f2f8e81bb5ce18facb9748d7855bf5a756fe3db
+  fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
-  package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
+  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   Toast: ec33c32b8688982cecc6348adeae667c1b9938da
 
