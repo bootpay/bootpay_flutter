@@ -16,7 +16,7 @@ class BootpayConfig {
   static const int ENV_STAGE = -2;
   static const int ENV_PROMOTION = 1;
 
-  static const String VERSION = "4.9.98";
+  static const String VERSION = "5.0.0";
 
 
   static bool DISPLAY_WITH_HYBRID_COMPOSITION = false;

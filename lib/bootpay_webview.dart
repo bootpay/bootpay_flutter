@@ -211,7 +211,7 @@ class BootpayWebView extends StatefulWidget {
 
   // final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-rc.15/';
   // final String INAPP_URL = 'https://webview.bootpay.co.kr/4.3.4/';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.2/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.1.0/';
 
   late final String WIDGET_URL = INAPP_URL + 'widget.html';
 
