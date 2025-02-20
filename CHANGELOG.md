@@ -1,3 +1,6 @@
+## 5.0.11
+* webview version update
+
 ## 5.0.1
 * package_info_plus version update
 
