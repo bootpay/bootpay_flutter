@@ -367,6 +367,8 @@ class SecondRoute extends StatelessWidget {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutter';
+    // extra.useBootpayInappSdk = false;
+    // extra.
     // extra.directCardCompany = "국민";
     // extra.directCardQuota = '00'; //directCardCompany 일 경우 할부정보는 필수
     // extra.separatelyConfirmed = true;
@@ -437,6 +439,7 @@ class SecondRoute extends StatelessWidget {
       context: context,
       payload: payload,
       showCloseButton: false,
+      // userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
       onCancel: (String data) {
         print('------- onCancel 1 : $data');
       },
@@ -499,6 +502,7 @@ class SecondRoute extends StatelessWidget {
   void goBootpaySubscriptionTest(BuildContext context) {
     payload.subscriptionId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
     // payload.pg = "토스";
+    payload.pg = '나이스페이';
     // payload.method = "카드정기";
     // payload.extra?.subscribeTestPayment = false;
 
