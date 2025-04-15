@@ -367,6 +367,7 @@ class SecondRoute extends StatelessWidget {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutter';
+    extra.showCloseButton = true;
     // extra.useBootpayInappSdk = false;
     // extra.
     // extra.directCardCompany = "국민";
@@ -410,15 +411,15 @@ class SecondRoute extends StatelessWidget {
     // print('popup');
     payload.extra?.openType = 'iframe';
 
-    payload.pg = '나이스페이';
+    // payload.pg = '나이스페이';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao', 'npay'];
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
-    payload.method = "카드";
+    // payload.method = "카드";
 
     // payload.extra?.cardQuota = "0";
 
-    // payload.pg = '카카오';
-    // payload.method = "간편자동";
+    payload.pg = '나이스페이';
+    payload.method = "카드";
 
 
     // BootpayConfig.IS_FORCE_WEB = true;

@@ -1,3 +1,7 @@
+## 5.0.13
+* android webview version update
+* 카카오뱅크 앱 스키마 추가
+
 ## 5.0.12
 * android webview version update
 

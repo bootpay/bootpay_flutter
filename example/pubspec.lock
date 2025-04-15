@@ -60,23 +60,23 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "5.0.11"
+    version: "5.0.13"
   bootpay_webview_flutter:
     dependency: transitive
     description:
       name: bootpay_webview_flutter
-      sha256: "43a6ff192ecae80fb963ad0cdc941b09219160843b7d08b0241fccb432bb67f6"
+      sha256: f2a1d75acaeb5239a8c36b7716694119cfac849828d165a622b88d287579d276
       url: "https://pub.dev"
     source: hosted
-    version: "4.9.1"
+    version: "4.9.12"
   bootpay_webview_flutter_android:
     dependency: transitive
     description:
       name: bootpay_webview_flutter_android
-      sha256: "45ffe74cb75927c789fb07be8c414f134573b8e5a9d4638a5aeb0d76d9dc52bc"
+      sha256: d6ba532a55a11bed3229cdd2ba617b62896e5a5b0b8aa62c1421f201dd1841ee
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.2"
+    version: "4.3.22"
   bootpay_webview_flutter_platform_interface:
     dependency: transitive
     description:
