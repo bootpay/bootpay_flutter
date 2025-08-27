@@ -1,3 +1,6 @@
+## 5.0.14
+* webview background color white로 변경 
+
 ## 5.0.13
 * android webview version update
 * 카카오뱅크 앱 스키마 추가

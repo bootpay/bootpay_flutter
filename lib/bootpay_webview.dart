@@ -372,6 +372,7 @@ class BootpayWebViewState extends State<BootpayWebView> {
       );
     } else {
       params = PlatformWebViewControllerCreationParams(
+        // useHybridComposition: BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION,
       );
     }
 
@@ -409,6 +410,7 @@ class BootpayWebViewState extends State<BootpayWebView> {
           },
           onPageFinished: (String url) async {
             debugPrint('Page finished loading: $url');
+            // debugPrint'user agent : ${controller.");}');
 
             //300ms 뒤에 실행
             // Future.delayed(Duration(milliseconds: 700), () {
@@ -538,7 +540,7 @@ class BootpayWebViewState extends State<BootpayWebView> {
           .setMediaPlaybackRequiresUserGesture(false);
     }
 
-    widget._controller = controller;
+    widget._controller = controller..setBackgroundColor(Colors.white);
   }
 
   //

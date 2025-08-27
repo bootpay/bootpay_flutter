@@ -399,6 +399,8 @@ class SecondRoute extends StatelessWidget {
 
   //버튼클릭시 부트페이 결제요청 실행
   void goBootpayTest(BuildContext context) {
+
+    // set
     // if(kIsWeb) {
     //   //flutter web은 cors 이슈를 설정으로 먼저 해결해주어야 한다.
     //   payload.extra?.openType = 'popup';
@@ -417,9 +419,9 @@ class SecondRoute extends StatelessWidget {
     // payload.method = "카드";
 
     // payload.extra?.cardQuota = "0";
-
+    BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
     payload.pg = '나이스페이';
-    payload.method = "카드";
+    // payload.method = "카드";
 
 
     // BootpayConfig.IS_FORCE_WEB = true;
@@ -508,6 +510,7 @@ class SecondRoute extends StatelessWidget {
     // payload.extra?.subscribeTestPayment = false;
 
 
+
     Bootpay().requestSubscription(
       context: context,
       payload: payload,
@@ -571,6 +574,7 @@ class SecondRoute extends StatelessWidget {
       "callbackParam3" : "value56",
       "callbackParam4" : "value78",
     }; // 전달할 파라미터, 결제 후 되돌려 주는 값
+
 
     Bootpay().requestSubscription(
       context: context,
