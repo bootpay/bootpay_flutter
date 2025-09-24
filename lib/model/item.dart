@@ -1,3 +1,5 @@
+import '../extension/json_query_string.dart';
+
 class Item {
   String? name = '';
   int? qty = 0;
@@ -87,7 +89,7 @@ class Item {
 
     void addPart(String key, dynamic value) {
       if (value != null) {
-        String formattedValue = value is String ? "'${value.replaceAll("'", "\\'")}'" : value.toString();
+        String formattedValue = value is String ? "'${value.queryReplace()}'" : value.toString();
         parts.add("$key: $formattedValue");
       }
     }

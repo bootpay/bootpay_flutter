@@ -60,7 +60,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "5.0.13"
+    version: "5.0.15"
   bootpay_webview_flutter:
     dependency: transitive
     description:

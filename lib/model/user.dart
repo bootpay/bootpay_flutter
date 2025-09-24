@@ -1,3 +1,5 @@
+import '../extension/json_query_string.dart';
+
 class User {
   String? id = '';
   String? username = '';
@@ -35,7 +37,25 @@ class User {
   };
 
   String toString() {
-    return "{id: '${reVal(id)}', username: '${reVal(username)}', email: '${reVal(email)}', gender: ${reVal(gender)}, birth: '${reVal(birth)}', phone: '${reVal(phone?.replaceAll("-", ""))}', area: '${reVal(area)}', addr: '${reVal(addr)}'}";
+    List<String> parts = [];
+
+    void addPart(String key, dynamic value) {
+      if (value != null) {
+        String formattedValue = value is String ? "'${value.queryReplace()}'" : value.toString();
+        parts.add("$key: $formattedValue");
+      }
+    }
+
+    addPart('id', id);
+    addPart('username', username);
+    addPart('email', email);
+    addPart('gender', gender);
+    addPart('birth', birth);
+    addPart('phone', phone?.replaceAll("-", ""));
+    addPart('area', area);
+    addPart('addr', addr);
+
+    return "{${parts.join(', ')}}";
   }
 
   dynamic reVal(dynamic value) {
@@ -43,7 +63,7 @@ class User {
       if (value.isEmpty) {
         return '';
       }
-      return value.replaceAll("\"", "'").replaceAll("'", "\\'");
+      return value.queryReplace();
     } else {
       return value;
     }

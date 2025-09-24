@@ -1,4 +1,5 @@
 
+import '../../extension/json_query_string.dart';
 
 class WidgetData {
   String? pg;
@@ -78,7 +79,7 @@ class WidgetTerm {
 
     void addPart(String key, dynamic value) {
       if (value != null) {
-        String formattedValue = value is String ? "'${value.replaceAll("'", "\\'")}'" : value.toString();
+        String formattedValue = value is String ? "'${value.queryReplace()}'" : value.toString();
         parts.add("$key: $formattedValue");
       }
     }

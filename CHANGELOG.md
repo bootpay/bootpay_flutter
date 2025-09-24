@@ -1,3 +1,6 @@
+## 5.0.15
+* JavaScript 문자열 이스케이프 처리 개선으로 특수 문자 포함 시 발생하는 문법 오류 수정
+
 ## 5.0.14
 * webview background color white로 변경 
 

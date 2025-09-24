@@ -1,4 +1,5 @@
 import 'package:bootpay/model/browser_open_type.dart';
+import '../extension/json_query_string.dart';
 
 import 'extra_card_easy_option.dart';
 import 'onestore.dart';
@@ -253,7 +254,7 @@ class Extra {
 
     void addPart(String key, dynamic value) {
       if (value != null) {
-        String formattedValue = value is String ? "'${value.replaceAll("'", "\\'")}'" : value.toString();
+        String formattedValue = value is String ? "'${value.queryReplace()}'" : value.toString();
         parts.add("$key: $formattedValue");
       }
     }
