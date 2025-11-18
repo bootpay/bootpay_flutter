@@ -1,6 +1,7 @@
 PODS:
   - bootpay_webview_flutter_wkwebview (0.0.1):
     - Flutter
+    - FlutterMacOS
   - Flutter (1.0.0)
   - fluttertoast (0.0.2):
     - Flutter
@@ -15,7 +16,7 @@ PODS:
   - Toast (4.1.1)
 
 DEPENDENCIES:
-  - bootpay_webview_flutter_wkwebview (from `.symlinks/plugins/bootpay_webview_flutter_wkwebview/ios`)
+  - bootpay_webview_flutter_wkwebview (from `.symlinks/plugins/bootpay_webview_flutter_wkwebview/darwin`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
@@ -28,7 +29,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   bootpay_webview_flutter_wkwebview:
-    :path: ".symlinks/plugins/bootpay_webview_flutter_wkwebview/ios"
+    :path: ".symlinks/plugins/bootpay_webview_flutter_wkwebview/darwin"
   Flutter:
     :path: Flutter
   fluttertoast:
@@ -41,14 +42,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
-  bootpay_webview_flutter_wkwebview: 9b80e1ac2dc82471e0b95f5f45749e066103e328
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  bootpay_webview_flutter_wkwebview: 04029284684914c9183814dfcdc30e6667a89267
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   fluttertoast: 76fea30fcf04176325f6864c87306927bd7d2038
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
 
-PODFILE CHECKSUM: 4772de53f3bcce3a0004a735328bfa2ec1bedcd5
+PODFILE CHECKSUM: 776509bebbd2dddf5c1e73bad346c1cc88a7402e
 
 COCOAPODS: 1.16.2

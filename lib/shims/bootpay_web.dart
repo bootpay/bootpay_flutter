@@ -3,22 +3,16 @@
 library bootpay_api;
 
 import 'dart:convert';
+import 'dart:js_interop';
 
 import 'package:bootpay/api/bootpay_analytics.dart';
 import 'package:bootpay/bootpay_widget_api.dart';
 import 'package:bootpay/model/stat_item.dart';
 import 'package:http/src/response.dart';
-import 'package:js/js.dart';
 import 'package:flutter/material.dart';
 import '../bootpay.dart';
 import '../bootpay_api.dart';
 import '../model/payload.dart';
-
-@JS('Promise')
-class Promise<T> {
-  external Promise (void executor(void resolve(T result), Function reject));
-  external Promise then (void onFulfilled(T result), [Function onRejected]);
-}
 
 @JS()
 external void _jsBeforeLoad();
@@ -34,32 +28,30 @@ external void _setLocale(String locale);
 external void _removePaymentWindow();
 
 @JS()
-external void _dismiss(BuildContext context);
-@JS()
 external void _transactionConfirm();
 @JS()
 external void _addCloseEvent();
 
 @JS('BootpayClose')
-external set _BootpayClose(void Function() f);
+external set _BootpayClose(JSFunction f);
 
 @JS('BootpayCancel')
-external set _BootpayCancel(void Function(String) f);
+external set _BootpayCancel(JSFunction f);
 
 @JS('BootpayDone')
-external set _BootpayDone(void Function(String) f);
+external set _BootpayDone(JSFunction f);
 
 @JS('BootpayIssued')
-external set _BootpayIssued(void Function(String) f);
+external set _BootpayIssued(JSFunction f);
 
 @JS('BootpayConfirm')
-external set _BootpayConfirm(bool Function(String) f);
+external set _BootpayConfirm(JSFunction f);
 
 @JS('BootpayAsyncConfirm')
-external set _BootpayAsyncConfirm(Promise Function(String) f);
+external set _BootpayAsyncConfirm(JSFunction f);
 
 @JS('BootpayError')
-external set _BootpayError(void Function(String) f);
+external set _BootpayError(JSFunction f);
 
 class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
   BootpayDefaultCallback? _callbackCancel;
@@ -71,13 +63,13 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
   BootpayDefaultCallback? _callbackDone;
 
   BootpayPlatform() {
-    _BootpayClose = allowInterop(onClose);
-    _BootpayCancel = allowInterop(onCancel);
-    _BootpayDone = allowInterop(onDone);
-    _BootpayIssued = allowInterop(onIssued);
-    _BootpayConfirm = allowInterop(onConfirm);
-    _BootpayAsyncConfirm = allowInterop(onConfirmAsync); //js에서 BootpayAsyncConfirm 호출시 onConfirmAsync 수행
-    _BootpayError = allowInterop(onError);
+    _BootpayClose = onClose.toJS;
+    _BootpayCancel = onCancel.toJS;
+    _BootpayDone = onDone.toJS;
+    _BootpayIssued = onIssued.toJS;
+    _BootpayConfirm = onConfirm.toJS;
+    _BootpayAsyncConfirm = onConfirmAsync.toJS; //js에서 BootpayAsyncConfirm 호출시 onConfirmAsync 수행
+    _BootpayError = onError.toJS;
   }
 
 
@@ -238,7 +230,6 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
   }
 
   void dismiss(BuildContext context) {
-    _dismiss(context);
     Navigator.of(context).pop();
   }
 
@@ -256,22 +247,18 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
     return false;
   }
 
-  Promise onConfirmAsync(String data)  {
-
-    return Promise<bool>(allowInterop((resolve, reject) async {
+  JSPromise onConfirmAsync(String data)  {
+    return JSPromise(((JSFunction resolve, JSFunction reject) {
       if(this._callbackAsyncConfirm != null) {
-
-        bool result = await this._callbackAsyncConfirm!(data);
-        resolve(result);
+        this._callbackAsyncConfirm!(data).then((bool result) {
+          resolve.callAsFunction(null, result.toJS);
+        }).catchError((error) {
+          reject.callAsFunction(null, error.toString().toJS);
+        });
       } else {
-        resolve(false);
+        resolve.callAsFunction(null, false.toJS);
       }
-
-      // var tmp = Future.delayed(Duration(seconds: 1), () {
-      //   return 'test';
-      // });
-      // tmp.then(resolve, onError: reject);
-    }));
+    }).toJS);
   }
 
   // Future<bool> onConfirmAsync(String data) async {

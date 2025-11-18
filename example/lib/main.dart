@@ -366,7 +366,7 @@ class SecondRoute extends StatelessWidget {
     user.addr = 'null';
 
     Extra extra = Extra(); // 결제 옵션
-    extra.appScheme = 'bootpayFlutter';
+    extra.appScheme = 'bootpayFlutter://pay/done';
     extra.showCloseButton = true;
     // extra.useBootpayInappSdk = false;
     // extra.
@@ -411,7 +411,7 @@ class SecondRoute extends StatelessWidget {
     // payload.extra?.displaySuccessResult = true;
 
     // print('popup');
-    payload.extra?.openType = 'iframe';
+    payload.extra?.openType = 'popup';
 
     // payload.pg = '나이스페이';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao', 'npay'];
