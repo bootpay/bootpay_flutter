@@ -411,7 +411,7 @@ class SecondRoute extends StatelessWidget {
     // payload.extra?.displaySuccessResult = true;
 
     // print('popup');
-    payload.extra?.openType = 'popup';
+    // payload.extra?.openType = 'popup';
 
     // payload.pg = '나이스페이';
     // payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao', 'npay'];
@@ -420,8 +420,8 @@ class SecondRoute extends StatelessWidget {
 
     // payload.extra?.cardQuota = "0";
     BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
-    payload.pg = '나이스페이';
-    // payload.method = "카드";
+    payload.pg = '라이트페이';
+    payload.method = "카드";
 
 
     // BootpayConfig.IS_FORCE_WEB = true;
