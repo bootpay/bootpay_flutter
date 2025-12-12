@@ -51,14 +51,19 @@ class _BootpayWidgetWebViewState extends State<BootpayWidgetWebView> {
   }
 
   void _initWebView() {
+    debugPrint('[BootpayWidgetWebView] _initWebView START');
+    debugPrint('[BootpayWidgetWebView] Platform: ${kIsWeb ? "Web" : Platform.operatingSystem}');
+
     // iOS용 WebKit 설정 (bootpay_webview.dart와 동일)
     late PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is BTWebKitWebViewPlatform) {
+      debugPrint('[BootpayWidgetWebView] Using BTWebKitWebViewPlatform (iOS)');
       params = WebKitWebViewControllerCreationParams(
         allowsInlineMediaPlayback: true,
         mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
       );
     } else {
+      debugPrint('[BootpayWidgetWebView] Using default PlatformWebViewControllerCreationParams');
       params = const PlatformWebViewControllerCreationParams();
     }
 
@@ -67,8 +72,14 @@ class _BootpayWidgetWebViewState extends State<BootpayWidgetWebView> {
       ..setBackgroundColor(Colors.white)
       ..setNavigationDelegate(
         NavigationDelegate(
+          onPageStarted: (url) {
+            debugPrint('[BootpayWidgetWebView] Page started: $url');
+          },
           onPageFinished: _onPageFinished,
           onNavigationRequest: _onNavigationRequest,
+          onWebResourceError: (error) {
+            debugPrint('[BootpayWidgetWebView] WebResourceError: ${error.description}, code: ${error.errorCode}');
+          },
         ),
       )
       ..addJavaScriptChannel(
@@ -76,20 +87,27 @@ class _BootpayWidgetWebViewState extends State<BootpayWidgetWebView> {
         onMessageReceived: _onJavaScriptMessage,
       );
 
+    debugPrint('[BootpayWidgetWebView] WebViewController created');
+
     // 위젯 컨트롤러에 웹뷰 컨트롤러 연결
     widget.controller?._setWebViewController(_webViewController);
     widget.controller?._setPayload(widget.payload);
+    debugPrint('[BootpayWidgetWebView] Controller connected');
 
     // 위젯 URL 로드
     _loadWidgetUrl();
+    debugPrint('[BootpayWidgetWebView] _initWebView END');
   }
 
   void _loadWidgetUrl() {
+    debugPrint('[BootpayWidgetWebView] Loading widget URL: ${_WidgetConstants.WIDGET_URL}');
     _webViewController.loadRequest(Uri.parse(_WidgetConstants.WIDGET_URL));
   }
 
   void _onPageFinished(String url) {
+    debugPrint('[BootpayWidgetWebView] Page finished: $url');
     if (url.contains('webview.bootpay.co.kr') && url.contains('widget.html')) {
+      debugPrint('[BootpayWidgetWebView] Widget page loaded, calling _renderWidget');
       _renderWidget();
     }
   }
@@ -100,12 +118,15 @@ class _BootpayWidgetWebViewState extends State<BootpayWidgetWebView> {
   }
 
   void _onJavaScriptMessage(JavaScriptMessage message) {
+    debugPrint('[BootpayWidgetWebView] ===== JS MESSAGE RECEIVED =====');
+    debugPrint('[BootpayWidgetWebView] Raw message: ${message.message}');
     try {
       final data = jsonDecode(message.message);
       if (data is Map<String, dynamic>) {
         _parseWidgetEvent(data);
       }
     } catch (e) {
+      debugPrint('[BootpayWidgetWebView] JSON parse error: $e');
       // String 메시지 처리
       if (message.message == 'close') {
         widget.controller?._handleClose();
@@ -239,6 +260,8 @@ function flutterBridgePost(message) {
     final resizeWatch = "document.addEventListener('bootpay-widget-resize', function (e) { flutterBridgePost(JSON.stringify({event: 'widget_resize', height: e.detail.height})); });";
     final changeMethodWatch = "document.addEventListener('bootpay-widget-change-payment', function (e) { flutterBridgePost(JSON.stringify({event: 'widget_change_payment', data: e.detail})); });";
     final changeTermsWatch = "document.addEventListener('bootpay-widget-change-terms', function (e) { flutterBridgePost(JSON.stringify({event: 'widget_change_agree_term', data: e.detail})); });";
+    // iOS Swift SDK와 동일하게 bootpayclose 이벤트 리스너 추가
+    final closeWatch = "document.addEventListener('bootpayclose', function (e) { flutterBridgePost('close'); });";
 
     // Android와 동일한 구조: waitForBootpayWidget 내부에서 이벤트 리스너 등록 후 render 호출
     return '''
@@ -249,6 +272,7 @@ waitForBootpayWidget(function() {
   $resizeWatch
   $changeMethodWatch
   $changeTermsWatch
+  $closeWatch
   BootpayWidget.render('#bootpay-widget', ${payload.toString()});
 });
 ''';
@@ -365,15 +389,18 @@ class BootpayWidgetWebViewController {
   /// 결제 요청 실행 (iOS Swift SDK와 동일하게 setDevice, setVersion, setUUID 설정 후 실행)
   Future<void> _executeRequestPayment(Payload payload) async {
     final uuid = await UserInfo.getBootpayUUID();
+    debugPrint('[BootpayWidgetWebViewController] _executeRequestPayment - UUID: $uuid');
 
     // iOS Swift SDK의 getJSWidgetRequestPayment와 동일한 설정
     if (!kIsWeb && !BootpayConfig.IS_FORCE_WEB) {
       if (Platform.isIOS) {
+        debugPrint('[BootpayWidgetWebViewController] Setting iOS device info');
         _webViewController?.runJavaScript("Bootpay.setDevice('IOS');");
         _webViewController?.runJavaScript("Bootpay.setVersion('${BootpayConfig.VERSION}', 'ios_flutter');");
         _webViewController?.runJavaScript("BootpaySDK.setDevice('IOS');");
         _webViewController?.runJavaScript("BootpaySDK.setUUID('$uuid');");
       } else if (Platform.isAndroid) {
+        debugPrint('[BootpayWidgetWebViewController] Setting Android device info');
         _webViewController?.runJavaScript("Bootpay.setDevice('ANDROID');");
         _webViewController?.runJavaScript("Bootpay.setVersion('${BootpayConfig.VERSION}', 'android_flutter');");
         _webViewController?.runJavaScript("BootpaySDK.setDevice('ANDROID');");
@@ -382,10 +409,13 @@ class BootpayWidgetWebViewController {
     }
 
     final script = _getRequestPaymentScript(payload);
+    debugPrint('[BootpayWidgetWebViewController] Running requestPayment script');
+    debugPrint('[BootpayWidgetWebViewController] Script: $script');
     _webViewController?.runJavaScript(script);
   }
 
   /// 결제 요청 스크립트 (iOS/Android 모두 지원)
+  /// iOS Swift SDK의 getWidgetRequestPaymentJson과 동일하게 최소한의 결제 정보만 전달
   String _getRequestPaymentScript(Payload payload) {
     final bridgeName = _WidgetConstants.BRIDGE_NAME;
 
@@ -407,16 +437,88 @@ function flutterBridgePost(message) {
     String errorEventHandler = "if (res.event === 'error') { flutterBridgePost(JSON.stringify(res)); }";
     String cancelEventHandler = "else if (res.event === 'cancel') { flutterBridgePost(JSON.stringify(res)); }";
 
+    // iOS Swift SDK와 동일하게 최소한의 결제 정보만 전달
+    final requestPaymentJson = _getRequestPaymentJson(payload);
+    debugPrint('[BootpayWidgetWebViewController] RequestPayment JSON: $requestPaymentJson');
+
     return "$bridgeHelper"
-        "BootpayWidget.requestPayment(${payload.toString()})"
+        "BootpayWidget.requestPayment($requestPaymentJson)"
         ".then( function (res) {"
+        "console.log('[BootpayWidget] requestPayment response:', res);"
         "$confirmEventHandler"
         "$issuedEventHandler"
         "$doneEventHandler"
         "}, function (res) {"
+        "console.log('[BootpayWidget] requestPayment error:', res);"
         "$errorEventHandler"
         "$cancelEventHandler"
         "})";
+  }
+
+  /// iOS Swift SDK의 getWidgetRequestPaymentJson과 동일한 구조
+  /// render 시 설정된 값 외에 결제 요청에 필요한 정보만 전달
+  String _getRequestPaymentJson(Payload payload) {
+    List<String> parts = [];
+
+    void addPart(String key, dynamic value, {bool isString = true}) {
+      if (value != null && value.toString().isNotEmpty) {
+        if (isString && value is String) {
+          parts.add("$key: '${value.replaceAll("'", "\\'")}'");
+        } else {
+          parts.add("$key: $value");
+        }
+      }
+    }
+
+    // 주문 정보
+    addPart('order_name', payload.orderName);
+    addPart('order_id', payload.orderId);
+    if (payload.metadata != null) {
+      parts.add("metadata: ${payload.metadata}");
+    }
+    addPart('user_token', payload.userToken);
+
+    // Extra (결제 요청용 - redirect_url 필수)
+    List<String> extraParts = [];
+    if (payload.extra?.appScheme != null) {
+      extraParts.add("app_scheme: '${payload.extra!.appScheme}'");
+    }
+    extraParts.add("show_close_button: ${payload.extra?.showCloseButton ?? false}");
+    extraParts.add("display_success_result: ${payload.extra?.displaySuccessResult ?? false}");
+    extraParts.add("display_error_result: ${payload.extra?.displayErrorResult ?? true}");
+    if (payload.extra?.separatelyConfirmed == true) {
+      extraParts.add("separately_confirmed: true");
+    }
+    // redirect_url 필수 (iOS Swift SDK와 동일)
+    extraParts.add("redirect_url: 'https://api.bootpay.co.kr/v2/callback'");
+    parts.add("extra: {${extraParts.join(', ')}}");
+
+    // User
+    if (payload.user != null) {
+      List<String> userParts = [];
+      if (payload.user!.id != null && payload.user!.id!.isNotEmpty) {
+        userParts.add("id: '${payload.user!.id}'");
+      }
+      if (payload.user!.username != null && payload.user!.username!.isNotEmpty) {
+        userParts.add("username: '${payload.user!.username}'");
+      }
+      if (payload.user!.email != null && payload.user!.email!.isNotEmpty) {
+        userParts.add("email: '${payload.user!.email}'");
+      }
+      if (payload.user!.phone != null && payload.user!.phone!.isNotEmpty) {
+        userParts.add("phone: '${payload.user!.phone}'");
+      }
+      if (userParts.isNotEmpty) {
+        parts.add("user: {${userParts.join(', ')}}");
+      }
+    }
+
+    // Items
+    if (payload.items != null && payload.items!.isNotEmpty) {
+      parts.add("items: ${payload.items!.map((e) => e.toString()).toList()}");
+    }
+
+    return "{${parts.join(', ')}}";
   }
 
   /// 결제 확인 (confirm 이벤트에서 호출)

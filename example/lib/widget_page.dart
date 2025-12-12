@@ -18,6 +18,9 @@ class WidgetPageState extends State<WidgetPage> {
   BootpayWidgetController _controller = BootpayWidgetController();
   final ScrollController _scrollController = ScrollController();
 
+  // GlobalKey로 BootpayWidget 상태 유지 (iOS Swift SDK의 expandToFullscreen과 동일)
+  final GlobalKey _bootpayWidgetKey = GlobalKey();
+
   // Application IDs - 부트페이 관리자에서 확인
   String webApplicationId = '5b8f6a4d396fa665fdc2b5e9';
   String androidApplicationId = '5b8f6a4d396fa665fdc2b5ea';
@@ -28,6 +31,9 @@ class WidgetPageState extends State<WidgetPage> {
   static const double PRICE = 1000.0;
 
   double _widgetHeight = Bootpay().WIDGET_HEIGHT;
+
+  // 결제 모드 상태 (전체화면 전환용)
+  bool _isPaymentMode = false;
 
   @override
   void initState() {
@@ -50,7 +56,7 @@ class WidgetPageState extends State<WidgetPage> {
     // Widget 필수 설정
     _payload.widgetKey = 'default-widget';
     _payload.widgetSandbox = true; // 테스트: true, 운영: false
-    _payload.widgetUseTerms = true; // 약관동의 UI 사용 여부 
+    _payload.widgetUseTerms = true; // 약관동의 UI 사용 여부
 
     // User 설정 (선택)
     _payload.user = User();
@@ -113,8 +119,23 @@ class WidgetPageState extends State<WidgetPage> {
     return '${formatter.format(price.toInt())}원';
   }
 
+  /// GlobalKey를 사용한 BootpayWidget (상태 유지)
+  Widget _buildBootpayWidget() {
+    return BootpayWidget(
+      key: _bootpayWidgetKey,
+      payload: _payload,
+      controller: _controller,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // 결제 모드: 전체화면으로 BootpayWidget 표시 (iOS Swift SDK의 expandToFullscreen과 동일)
+    if (_isPaymentMode) {
+      return _buildPaymentModeScreen();
+    }
+
+    // 일반 모드: 상품 정보 + 위젯 + 결제 버튼
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -138,10 +159,7 @@ class WidgetPageState extends State<WidgetPage> {
                     SizedBox(height: 10),
                     SizedBox(
                       height: _widgetHeight,
-                      child: BootpayWidget(
-                        payload: _payload,
-                        controller: _controller,
-                      ),
+                      child: _buildBootpayWidget(),
                     ),
                   ],
                 ),
@@ -150,6 +168,35 @@ class WidgetPageState extends State<WidgetPage> {
             _buildPayButton(),
           ],
         ),
+      ),
+    );
+  }
+
+  /// 결제 모드 화면 (전체화면 웹뷰)
+  Widget _buildPaymentModeScreen() {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text('결제'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black,
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () {
+            debugPrint('[Widget] Payment mode close button pressed');
+            setState(() {
+              _isPaymentMode = false;
+            });
+            // 위젯 재로드
+            Future.delayed(Duration(milliseconds: 300), () {
+              _controller.reloadWidget();
+            });
+          },
+        ),
+      ),
+      body: SafeArea(
+        child: _buildBootpayWidget(),
       ),
     );
   }
@@ -238,41 +285,72 @@ class WidgetPageState extends State<WidgetPage> {
       return;
     }
 
+    debugPrint('[Widget] ===== Go Payment =====');
     debugPrint('[Widget] Request Payment: ${_payload.toJson()}');
 
-    _controller.requestPayment(
-      context: context,
+    // iOS Swift SDK와 동일하게 전체화면 모드로 전환 후 결제 요청
+    setState(() {
+      _isPaymentMode = true;
+    });
+
+    // 전체화면 전환 후 약간의 딜레이를 주고 결제 요청 (iOS와 동일하게 0.4초)
+    Future.delayed(Duration(milliseconds: 400), () {
+      _executePayment();
+    });
+  }
+
+  /// 실제 결제 실행
+  void _executePayment() {
+    debugPrint('[Widget] ===== Execute Payment =====');
+
+    // 기존 웹뷰에서 requestPayment 실행 (iOS Swift SDK와 동일)
+    _controller.requestPaymentDirect(
       payload: _payload,
-      onCancel: (String data) {
-        debugPrint('[Widget] Cancel: $data');
-        // 취소 후 위젯 재로드 (재시도 가능)
-        Future.delayed(Duration(milliseconds: 500), () {
+      onError: (data) {
+        debugPrint('[Widget] onError: $data');
+        // 에러 후 결제 모드 해제 및 위젯 재로드
+        setState(() {
+          _isPaymentMode = false;
+        });
+        Future.delayed(Duration(milliseconds: 300), () {
           _controller.reloadWidget();
         });
       },
-      onError: (String data) {
-        debugPrint('[Widget] Error: $data');
-        // 에러 후 위젯 재로드 (재시도 가능)
-        Future.delayed(Duration(milliseconds: 500), () {
+      onCancel: (data) {
+        debugPrint('[Widget] onCancel: $data');
+        // 취소 후 결제 모드 해제 및 위젯 재로드
+        setState(() {
+          _isPaymentMode = false;
+        });
+        Future.delayed(Duration(milliseconds: 300), () {
           _controller.reloadWidget();
         });
       },
       onClose: () {
-        debugPrint('[Widget] Close');
-        if (!kIsWeb) {
-          Bootpay().dismiss(context);
-        }
+        debugPrint('[Widget] onClose');
+        // 결제 모드 해제
+        setState(() {
+          _isPaymentMode = false;
+        });
+        // 위젯 재로드
+        Future.delayed(Duration(milliseconds: 300), () {
+          _controller.reloadWidget();
+        });
       },
-      onConfirm: (String data) {
-        debugPrint('[Widget] Confirm: $data');
+      onConfirm: (data) {
+        debugPrint('[Widget] onConfirm: $data');
         // 서버에서 결제 정보 검증 후 true/false 반환
         return true;
       },
-      onIssued: (String data) {
-        debugPrint('[Widget] Issued (가상계좌 발급): $data');
+      onIssued: (data) {
+        debugPrint('[Widget] onIssued (가상계좌 발급): $data');
       },
-      onDone: (String data) {
-        debugPrint('[Widget] Done: $data');
+      onDone: (data) {
+        debugPrint('[Widget] onDone: $data');
+        // 결제 모드 해제
+        setState(() {
+          _isPaymentMode = false;
+        });
         // 가맹점 결제 결과 페이지로 이동
         _showPaymentResult(data);
       },

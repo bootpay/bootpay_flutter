@@ -47,34 +47,70 @@ class _BootpayWidgetPaymentPageState extends State<BootpayWidgetPaymentPage> {
   @override
   void initState() {
     super.initState();
+    debugPrint('[WidgetPaymentPage] initState - creating webViewController');
     _webViewController = BootpayWidgetWebViewController();
     _setupCallbacks();
+    debugPrint('[WidgetPaymentPage] initState completed');
   }
 
   void _setupCallbacks() {
+    debugPrint('[WidgetPaymentPage] Setting up callbacks');
+
     // 위젯 준비 완료 시 결제 요청
     _webViewController.onReady = () {
-      debugPrint('[WidgetPaymentPage] Widget Ready - requesting payment');
+      debugPrint('[WidgetPaymentPage] ===== Widget Ready =====');
       if (!_isPaymentRequested) {
         _isPaymentRequested = true;
+        debugPrint('[WidgetPaymentPage] Scheduling requestPayment after 400ms delay');
         // 위젯 렌더링 후 약간의 딜레이를 주고 결제 요청 (iOS와 동일하게 0.4초)
         Future.delayed(Duration(milliseconds: 400), () {
+          debugPrint('[WidgetPaymentPage] Calling requestPayment now');
+          debugPrint('[WidgetPaymentPage] Payload: ${widget.payload.toJson()}');
           _webViewController.requestPayment(payload: widget.payload);
         });
+      } else {
+        debugPrint('[WidgetPaymentPage] Payment already requested, skipping');
       }
     };
 
+    // 위젯 리사이즈 (디버깅용)
+    _webViewController.onResize = (height) {
+      debugPrint('[WidgetPaymentPage] Widget resize: $height');
+    };
+
     // 결제 콜백 설정
-    _webViewController.onCancel = widget.onCancel;
-    _webViewController.onError = widget.onError;
-    _webViewController.onIssued = widget.onIssued;
-    _webViewController.onDone = widget.onDone;
-    _webViewController.onClose = widget.onClose;
+    _webViewController.onCancel = (data) {
+      debugPrint('[WidgetPaymentPage] ===== Cancel =====');
+      debugPrint('[WidgetPaymentPage] Data: $data');
+      widget.onCancel?.call(data);
+    };
+    _webViewController.onError = (data) {
+      debugPrint('[WidgetPaymentPage] ===== Error =====');
+      debugPrint('[WidgetPaymentPage] Data: $data');
+      widget.onError?.call(data);
+    };
+    _webViewController.onIssued = (data) {
+      debugPrint('[WidgetPaymentPage] ===== Issued =====');
+      debugPrint('[WidgetPaymentPage] Data: $data');
+      widget.onIssued?.call(data);
+    };
+    _webViewController.onDone = (data) {
+      debugPrint('[WidgetPaymentPage] ===== Done =====');
+      debugPrint('[WidgetPaymentPage] Data: $data');
+      widget.onDone?.call(data);
+    };
+    _webViewController.onClose = () {
+      debugPrint('[WidgetPaymentPage] ===== Close =====');
+      widget.onClose?.call();
+    };
 
     // confirm 콜백 처리
     if (widget.onConfirmAsync != null) {
       _webViewController.onConfirm = (data) {
+        debugPrint('[WidgetPaymentPage] ===== Confirm (Async) =====');
+        debugPrint('[WidgetPaymentPage] Data: $data');
         widget.onConfirmAsync!(data).then((result) {
+          debugPrint('[WidgetPaymentPage] Async confirm result: $result');
           if (result) {
             _webViewController.transactionConfirm();
           }
@@ -82,8 +118,14 @@ class _BootpayWidgetPaymentPageState extends State<BootpayWidgetPaymentPage> {
         return false;
       };
     } else if (widget.onConfirm != null) {
-      _webViewController.onConfirm = widget.onConfirm;
+      _webViewController.onConfirm = (data) {
+        debugPrint('[WidgetPaymentPage] ===== Confirm =====');
+        debugPrint('[WidgetPaymentPage] Data: $data');
+        return widget.onConfirm!(data);
+      };
     }
+
+    debugPrint('[WidgetPaymentPage] Callbacks setup completed');
   }
 
   void _handleClose() {
