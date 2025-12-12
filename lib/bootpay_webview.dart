@@ -142,6 +142,11 @@ class BootpayWebView extends StatefulWidget {
     );
   }
 
+  /// 위젯 재로드 (에러/취소 후 재시도 시 사용)
+  void reloadWidget() {
+    _controller.loadRequest(Uri.parse(WIDGET_URL));
+  }
+
   // 위젯용 결제 요청 함수
   Future<void> requestPayment({
     Payload? payload,
@@ -211,7 +216,7 @@ class BootpayWebView extends StatefulWidget {
 
   // final String INAPP_URL = 'https://webview.bootpay.co.kr/5.0.0-rc.15/';
   // final String INAPP_URL = 'https://webview.bootpay.co.kr/4.3.4/';
-  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.1.0/';
+  final String INAPP_URL = 'https://webview.bootpay.co.kr/5.1.4/';
 
   late final String WIDGET_URL = INAPP_URL + 'widget.html';
 

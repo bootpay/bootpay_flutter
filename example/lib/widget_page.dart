@@ -1,214 +1,318 @@
 import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/payload.dart';
+import 'package:bootpay/model/user.dart';
 import 'package:bootpay/widget/bootpay_widget.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class WidgetPage extends StatefulWidget {
-
   @override
   State<WidgetPage> createState() => WidgetPageState();
 }
 
-
 class WidgetPageState extends State<WidgetPage> {
-
   Payload _payload = Payload();
   BootpayWidgetController _controller = BootpayWidgetController();
   final ScrollController _scrollController = ScrollController();
 
-  //
-  // String webApplicationId = '59a568d3e13f3336c21bf707';
-  // String androidApplicationId = '59a568d3e13f3336c21bf708';
-  // String iosApplicationId = '59a568d3e13f3336c21bf707';
+  // Application IDs - 부트페이 관리자에서 확인
+  String webApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+  String androidApplicationId = '5b8f6a4d396fa665fdc2b5ea';
+  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
 
-  String webApplicationId = '5b9f51264457636ab9a07cdb';
-  String androidApplicationId = '5b9f51264457636ab9a07cdc';
-  String iosApplicationId = '5b9f51264457636ab9a07cdd';
-
-
-
+  // 결제 정보
+  static const String ORDER_NAME = '테스트 상품';
+  static const double PRICE = 1000.0;
 
   double _widgetHeight = Bootpay().WIDGET_HEIGHT;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _initPayload();
+    _initController();
+  }
 
+  /// Payload 초기화
+  void _initPayload() {
     _payload = Payload();
-    _payload.price = 28200;
-    _payload.orderName = '5월 수강료';
-    _payload.orderId = DateTime.now().millisecondsSinceEpoch.toString();
     _payload.webApplicationId = webApplicationId;
     _payload.androidApplicationId = androidApplicationId;
     _payload.iosApplicationId = iosApplicationId;
-    _payload.price = 1000;
-    _payload.taxFree = 0;
-    _payload.widgetKey = 'default-widget';
-    _payload.widgetSandbox = true;
-    _payload.widgetUseTerms = true;
-    _payload.userToken = "6667b08b04ab6d03f274d32e";
-    _payload.extra?.displaySuccessResult = true;
 
+    _payload.price = PRICE;
+    _payload.orderName = ORDER_NAME;
+    _payload.orderId = DateTime.now().millisecondsSinceEpoch.toString();
+
+    // Widget 필수 설정
+    _payload.widgetKey = 'default-widget';
+    _payload.widgetSandbox = true; // 테스트: true, 운영: false
+    _payload.widgetUseTerms = true; // 약관동의 UI 사용 여부 
+
+    // User 설정 (선택)
+    _payload.user = User();
+    _payload.user?.id = 'test_user_1234';
+    _payload.user?.username = '홍길동';
+    _payload.user?.email = 'test@bootpay.co.kr';
+    _payload.user?.phone = '01012341234';
+
+    // Extra 설정 (선택)
+    _payload.extra = Extra();
+    _payload.extra?.appScheme = 'bootpayFlutterExample';
+    // displaySuccessResult, displayErrorResult 기본값 false (권장)
+    // 가맹점에서 직접 결제 결과 페이지 구현
+  }
+
+  /// WidgetController 초기화
+  void _initController() {
+    // 위젯 준비 완료
+    _controller.onWidgetReady = () {
+      debugPrint('[Widget] ===== READY =====');
+    };
+
+    // 위젯 높이 변경
     _controller.onWidgetResize = (height) {
-      print('onWidgetResize : $height');
-      if(_widgetHeight == height) return;
-      if(_widgetHeight < height) {
-        scrollDown(height - _widgetHeight);
-      }
+      debugPrint('[Widget] ===== RESIZE: $height =====');
+      if (_widgetHeight == height) return;
       setState(() {
         _widgetHeight = height;
       });
     };
+
+    // 결제수단 변경
     _controller.onWidgetChangePayment = (widgetData) {
+      debugPrint('[Widget] ===== CHANGE PAYMENT =====');
+      debugPrint('[Widget] widgetData: ${widgetData?.toJson()}');
+      debugPrint('[Widget] widgetData.termPassed: ${widgetData?.termPassed}');
+      debugPrint('[Widget] widgetData.completed: ${widgetData?.completed}');
       setState(() {
-        _payload?.mergeWidgetData(widgetData);
+        _payload.mergeWidgetData(widgetData);
       });
+      debugPrint('[Widget] After merge - widgetIsCompleted: ${_payload.widgetIsCompleted}');
     };
+
+    // 약관동의 변경
     _controller.onWidgetChangeAgreeTerm = (widgetData) {
-      print('onWidgetChangeAgreeTerm : ${widgetData?.toJson()}');
+      debugPrint('[Widget] ===== CHANGE AGREE TERM =====');
+      debugPrint('[Widget] widgetData: ${widgetData?.toJson()}');
+      debugPrint('[Widget] widgetData.termPassed: ${widgetData?.termPassed}');
+      debugPrint('[Widget] widgetData.completed: ${widgetData?.completed}');
       setState(() {
-        _payload?.mergeWidgetData(widgetData);
+        _payload.mergeWidgetData(widgetData);
       });
-    };
-    _controller.onWidgetReady = () {
-      print('onWidgetReady');
+      debugPrint('[Widget] After merge - widgetIsCompleted: ${_payload.widgetIsCompleted}');
     };
   }
 
-  void scrollDown(double diff) {
-    final double currentPosition = _scrollController.position.pixels;
-    final double targetPosition = currentPosition + diff;
-
-    _scrollController.animateTo(
-      targetPosition,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
+  /// 가격 포맷팅
+  String _formatPrice(double price) {
+    final formatter = NumberFormat('#,###', 'ko_KR');
+    return '${formatter.format(price.toInt())}원';
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
-      // color: Colors.white,
+      appBar: AppBar(
+        title: Text('결제하기'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black,
+      ),
       body: SafeArea(
-
         child: Column(
           children: [
             Expanded(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10),
-                      productWidget(),
-                      SizedBox(height: 10),
-                      SizedBox(
-                        height: _widgetHeight,
-                        child: BootpayWidget(
-                          payload: _payload,
-                          controller: _controller,
-                  
-                        ),
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 10),
+                    _buildProductWidget(),
+                    SizedBox(height: 10),
+                    SizedBox(
+                      height: _widgetHeight,
+                      child: BootpayWidget(
+                        payload: _payload,
+                        controller: _controller,
                       ),
-                    ],
-                  ),
-                )
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Material(
-                color: (_payload?.widgetIsCompleted ?? false) ? Colors.blueAccent : Colors.grey,
-                borderRadius: BorderRadius.circular(10),
-                child: InkWell(
-                  onTap: () {
-                    goBootpayPayment();
-                  },
-                  child: Container(
-                    height: 60,
-                    child: Center(child: Text('28,200원 결제하기', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600))),
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            )
+            ),
+            _buildPayButton(),
           ],
         ),
       ),
     );
   }
 
-  Widget productWidget() {
+  /// 상품 정보 위젯
+  Widget _buildProductWidget() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          // Text('* 모의고사비 등 기타 경비가 포함된 금액입니다. * 정규수업용 교재비는 별도입니다. * 입학금은 별도로 받지 않습니다. * 학급당 학생수는 40명 대 (종로학원 50명 대)입니다. * 등록한 후, 대학에 추가 합격했을 경우 추가 합격을 통지 받은 날로부터 3일 이내에 환불신청서(소정양식)와 합격증을 제시하면 개강 전에는 전액을 환불해주고, 개강 후부터는 수강료 환불 기준에 따라서 환불합니다.'),
-          Text('주문상품', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
-          Container(
-              width: double.infinity,
-              color: Colors.grey[200],
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("\n안녕하세요\n\n더모아실용음악학원입니다\n\n행복한 가정의 달 5월이 시작 되었습니다\n\n벌써 2022년의 반이 지나가려고 하는데요\n\n세삼 시간이 정말 빠르게 흐르면서\n\n이번 2022년 신년에 다짐했던 부분들을\n\n잘 이루고 있는지 다들 궁금합니다\n\n그런 기념으로\n더모아실용음악학원에서 가정의 달 5월을 맞이하여\n\n신규 등록시 첫 달 10,000원 할인 이벤트를 준비했습니다\n\n많은 분들께서 악기, 노래를 한 번 배워보고자\n\n너무 감사하게도\n\n더모아실용음악학원을 찾아주시고 있는 요즘입니다\n\n그에 보답하고자 작은 이벤트를 준비했으니\n\n부담없이 연락을 주시면 감사하겠습니다 ^^!!"),
-              )
+          Text(
+            '주문상품',
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
           ),
-          Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('5월 수강료', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-              Text('28,200원', style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.w600, fontSize: 16)),
-
-            ]
-          ), 
-
+          SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  ORDER_NAME,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  _formatPrice(PRICE),
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  void goBootpayPayment() {
-    if((_payload?.widgetIsCompleted ?? false) == false) return;
+  /// 결제 버튼
+  Widget _buildPayButton() {
+    final isCompleted = _payload.widgetIsCompleted;
 
-    debugPrint("widget request : ${_payload?.toJson()}");
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Material(
+        color: isCompleted ? Colors.blueAccent : Colors.grey,
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          onTap: isCompleted ? _goPayment : null,
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            height: 56,
+            child: Center(
+              child: Text(
+                '${_formatPrice(PRICE)} 결제하기',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 결제 요청
+  void _goPayment() {
+    if (!_payload.widgetIsCompleted) {
+      _showAlert('알림', '결제수단 선택과 약관동의를 완료해주세요.');
+      return;
+    }
+
+    debugPrint('[Widget] Request Payment: ${_payload.toJson()}');
 
     _controller.requestPayment(
       context: context,
       payload: _payload,
       onCancel: (String data) {
-        print('------- onCancel 2 : $data');
+        debugPrint('[Widget] Cancel: $data');
+        // 취소 후 위젯 재로드 (재시도 가능)
+        Future.delayed(Duration(milliseconds: 500), () {
+          _controller.reloadWidget();
+        });
       },
       onError: (String data) {
-        print('------- onError: $data');
+        debugPrint('[Widget] Error: $data');
+        // 에러 후 위젯 재로드 (재시도 가능)
+        Future.delayed(Duration(milliseconds: 500), () {
+          _controller.reloadWidget();
+        });
       },
       onClose: () {
-        print('------- onClose');
+        debugPrint('[Widget] Close');
         if (!kIsWeb) {
-          Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
+          Bootpay().dismiss(context);
         }
       },
-      onConfirm: (String data)  {
-        print('------- onConfirm: $data');
+      onConfirm: (String data) {
+        debugPrint('[Widget] Confirm: $data');
+        // 서버에서 결제 정보 검증 후 true/false 반환
         return true;
       },
       onIssued: (String data) {
-        print('------- onIssued: $data');
+        debugPrint('[Widget] Issued (가상계좌 발급): $data');
       },
       onDone: (String data) {
-        print('------- onDone: $data');
-        // FlutterToast.showToast(msg: '결제가 완료되었습니다.');
+        debugPrint('[Widget] Done: $data');
+        // 가맹점 결제 결과 페이지로 이동
+        _showPaymentResult(data);
       },
     );
   }
 
+  /// 결제 완료 결과 표시
+  void _showPaymentResult(String data) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('결제 완료'),
+        content: Text('결제가 성공적으로 완료되었습니다.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop(); // 이전 화면으로 이동
+            },
+            child: Text('확인'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 알림 다이얼로그
+  void _showAlert(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('확인'),
+          ),
+        ],
+      ),
+    );
+  }
 }

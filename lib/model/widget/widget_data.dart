@@ -11,20 +11,48 @@ class WidgetData {
   bool? completed;
   WidgetExtra? extra;
 
-  WidgetData({this.pg, this.method, this.walletId, this.selectTerms, this.currency, this.termPassed, this.completed, this.extra});
+  // 네이티브 SDK와 호환을 위한 추가 필드
+  String? methodOriginSymbol; // 결제수단 원본 심볼
+  String? methodSymbol; // 결제수단 심볼
+  String? easyPay; // 간편결제 종류
+  String? cardQuota; // 할부 개월 (extra.cardQuota와 동일)
+
+  WidgetData({
+    this.pg,
+    this.method,
+    this.walletId,
+    this.selectTerms,
+    this.currency,
+    this.termPassed,
+    this.completed,
+    this.extra,
+    this.methodOriginSymbol,
+    this.methodSymbol,
+    this.easyPay,
+    this.cardQuota,
+  });
 
   WidgetData.fromJson(Map<String, dynamic> json) {
     pg = json["pg"];
     method = json["method"];
+    walletId = json["wallet_id"];
+    currency = json["currency"];
     if (json["select_terms"] != null) {
       selectTerms = [];
       json["select_terms"].forEach((v) {
         selectTerms?.add(WidgetTerm.fromJson(v));
       });
     }
-    termPassed = json["term_passed"];
-    completed = json["completed"];
+    // iOS Swift SDK와 동일하게 null일 경우 false로 처리
+    termPassed = json["term_passed"] ?? false;
+    completed = json["completed"] ?? false;
     extra = json["extra"] != null ? WidgetExtra.fromJson(json["extra"]) : null;
+
+    // 추가 필드 파싱
+    methodOriginSymbol = json["method_origin_symbol"];
+    methodSymbol = json["method_symbol"];
+    easyPay = json["easy_pay"];
+    cardQuota = json["card_quota"]?.toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -36,6 +64,10 @@ class WidgetData {
       'term_passed': termPassed,
       'completed': completed,
       'extra': extra?.toJson(),
+      'method_origin_symbol': methodOriginSymbol,
+      'method_symbol': methodSymbol,
+      'easy_pay': easyPay,
+      'card_quota': cardQuota,
     };
 
     if (selectTerms != null) {

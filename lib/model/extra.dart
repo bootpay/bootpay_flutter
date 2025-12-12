@@ -30,7 +30,7 @@ class Extra {
   bool? confirmOnlyRestApi = false; // REST API로만 승인 처리
   String? openType = 'redirect'; //페이지 오픈 type, [iframe, popup, redirect] 중 택 1
   bool? useBootpayInappSdk = true; //native app에서는 redirect를 완성도있게 지원하기 위한 옵션
-  String? redirectUrl = 'https://api.bootpay.co.kr/v2'; //open_type이 redirect일 경우 페이지 이동할 URL (  오류 및 결제 완료 모두 수신 가능 )
+  String? redirectUrl = 'https://api.bootpay.co.kr/v2/callback'; //open_type이 redirect일 경우 페이지 이동할 URL (  오류 및 결제 완료 모두 수신 가능 )
   bool? displaySuccessResult = false; // 결제 완료되면 부트페이가 제공하는 완료창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
   bool? displayErrorResult = true; // 결제 실패되면 부트페이가 제공하는 실패창으로 보여주기 ( open_type이 iframe, popup 일때만 가능 )
   bool? subscribeTestPayment = true; //100원 결제 후 취소
@@ -116,7 +116,7 @@ class Extra {
     this.locale = this.locale ?? 'ko';
     this.openType = this.openType ?? 'redirect';
     this.useBootpayInappSdk = this.useBootpayInappSdk ?? true;
-    this.redirectUrl = this.redirectUrl ?? 'https://api.bootpay.co.kr/v2';
+    this.redirectUrl = this.redirectUrl ?? 'https://api.bootpay.co.kr/v2/callback';
     this.displayErrorResult = this.displayErrorResult ?? true;
     this.subscribeTestPayment = this.subscribeTestPayment ?? true;
     this.confirmGraceSeconds = this.confirmGraceSeconds ?? 10;
