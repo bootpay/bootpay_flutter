@@ -144,3 +144,42 @@ function _transactionConfirm() {
 function _dismiss(context) {
     Bootpay.destroy();
 }
+
+// ========== Widget 관련 함수 ==========
+
+// Widget 컨테이너 생성
+function _createWidgetContainer(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        container.style.width = '100%';
+        container.style.minHeight = '300px';
+    }
+    return container;
+}
+
+// Widget 렌더링
+function _renderWidget(containerId, payload) {
+    var container = _createWidgetContainer(containerId);
+    if (typeof BootpayWidget !== 'undefined') {
+        BootpayWidget.render('#' + containerId, JSON.parse(payload));
+    } else {
+        console.error('BootpayWidget is not loaded');
+    }
+}
+
+// Widget 업데이트
+function _updateWidget(payload, refresh) {
+    if (typeof BootpayWidget !== 'undefined') {
+        BootpayWidget.update(JSON.parse(payload), refresh);
+    }
+}
+
+// Widget 결제 요청
+function _widgetRequestPayment(payload) {
+    if (typeof BootpayWidget !== 'undefined') {
+        return BootpayWidget.requestPayment(JSON.parse(payload));
+    }
+    return Promise.reject({event: 'error', error: 'BootpayWidget is not loaded'});
+}

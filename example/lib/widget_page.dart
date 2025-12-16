@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/payload.dart';
@@ -22,9 +24,9 @@ class WidgetPageState extends State<WidgetPage> {
   final GlobalKey _bootpayWidgetKey = GlobalKey();
 
   // Application IDs - 부트페이 관리자에서 확인
-  String webApplicationId = '5b8f6a4d396fa665fdc2b5e9';
-  String androidApplicationId = '5b8f6a4d396fa665fdc2b5ea';
-  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';
+  String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';  // Web용
+  String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';  // Android용
+  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';  // iOS용
 
   // 결제 정보
   static const String ORDER_NAME = '테스트 상품';
@@ -68,6 +70,11 @@ class WidgetPageState extends State<WidgetPage> {
     // Extra 설정 (선택)
     _payload.extra = Extra();
     _payload.extra?.appScheme = 'bootpayFlutterExample';
+
+    // Web에서는 iframe 또는 popup으로 설정해야 콜백을 받을 수 있음
+    if (kIsWeb) {
+      _payload.extra?.openType = 'iframe';
+    }
     // displaySuccessResult, displayErrorResult 기본값 false (권장)
     // 가맹점에서 직접 결제 결과 페이지 구현
   }
@@ -359,22 +366,14 @@ class WidgetPageState extends State<WidgetPage> {
 
   /// 결제 완료 결과 표시
   void _showPaymentResult(String data) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('결제 완료'),
-        content: Text('결제가 성공적으로 완료되었습니다.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop(); // 이전 화면으로 이동
-            },
-            child: Text('확인'),
-          ),
-        ],
+    debugPrint('[Widget] _showPaymentResult called');
+    // 결과 페이지로 이동
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => PaymentResultPage(data: data),
       ),
     );
+    debugPrint('[Widget] Navigator.pushReplacement called');
   }
 
   /// 알림 다이얼로그
@@ -388,6 +387,132 @@ class WidgetPageState extends State<WidgetPage> {
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text('확인'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 결제 결과 페이지
+class PaymentResultPage extends StatelessWidget {
+  final String data;
+
+  const PaymentResultPage({Key? key, required this.data}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // JSON 파싱
+    Map<String, dynamic>? parsedData;
+    try {
+      parsedData = json.decode(data);
+    } catch (e) {
+      parsedData = null;
+    }
+
+    final eventData = parsedData?['data'] as Map<String, dynamic>?;
+    final receiptId = eventData?['receipt_id'] ?? '';
+    final orderId = eventData?['order_id'] ?? '';
+    final orderName = eventData?['order_name'] ?? '';
+    final price = eventData?['price'] ?? 0;
+    final status = eventData?['status_locale'] ?? '';
+    final method = eventData?['method'] ?? '';
+    final pg = eventData?['pg'] ?? '';
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text('결제 완료'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black,
+        automaticallyImplyLeading: false,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 80,
+                    ),
+                    SizedBox(height: 24),
+                    Text(
+                      '결제가 완료되었습니다',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 32),
+                    _buildInfoRow('주문명', orderName),
+                    _buildInfoRow('결제금액', '${NumberFormat('#,###').format(price)}원'),
+                    _buildInfoRow('결제수단', '$pg - $method'),
+                    _buildInfoRow('상태', status),
+                    _buildInfoRow('주문번호', orderId),
+                    _buildInfoRow('영수증ID', receiptId),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    '확인',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 14,
+            ),
+          ),
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
