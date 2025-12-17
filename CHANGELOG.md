@@ -1,3 +1,8 @@
+## 5.0.18
+* 결제 콜백 플로우 개선 - onDone/onClose 처리 방식 변경
+* 외부 결제 앱에서 앱 스키마로 복귀 시 Navigator 꼬임 방지
+* BootpayAppPage에 WidgetsBindingObserver 추가하여 앱 복귀 시 깜빡임 방지
+
 ## 5.0.17
 * intl 의존성 버전 범위 확장 (^0.19.0 -> >=0.19.0 <1.0.0) - intl 0.20.x 호환성 지원
 
