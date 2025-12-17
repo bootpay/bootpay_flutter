@@ -14,7 +14,8 @@ import '../user_info.dart';
 class _WidgetConstants {
   static const String INAPP_URL = 'https://webview.bootpay.co.kr/5.2.2/';
   static const String WIDGET_URL = '${INAPP_URL}widget.html';
-  static const String BRIDGE_NAME = 'Bootpay';
+  // Bootpay SDK가 이미 window.Bootpay를 사용하므로 다른 이름 사용
+  static const String BRIDGE_NAME = 'BootpayFlutterBridge';
 }
 
 /// 위젯 이벤트 콜백 타입 정의 (내부 사용, bootpay.dart의 typedef와 충돌 방지)
@@ -82,9 +83,67 @@ class _BootpayWidgetWebViewState extends State<BootpayWidgetWebView> {
           },
         ),
       )
+      // 위젯 이벤트용 브릿지
       ..addJavaScriptChannel(
         _WidgetConstants.BRIDGE_NAME,
         onMessageReceived: _onJavaScriptMessage,
+      )
+      // 결제 이벤트용 브릿지 (bootpay_webview.dart와 동일)
+      ..addJavaScriptChannel(
+        'BootpayDone',
+        onMessageReceived: (message) {
+          debugPrint('[BootpayWidgetWebView] BootpayDone: ${message.message}');
+          widget.controller?._handleDone(message.message);
+        },
+      )
+      ..addJavaScriptChannel(
+        'BootpayConfirm',
+        onMessageReceived: (message) {
+          debugPrint('[BootpayWidgetWebView] BootpayConfirm: ${message.message}');
+          final shouldConfirm = widget.controller?._handleConfirm(message.message) ?? true;
+          if (shouldConfirm) {
+            _transactionConfirm();
+          }
+        },
+      )
+      ..addJavaScriptChannel(
+        'BootpayCancel',
+        onMessageReceived: (message) {
+          debugPrint('[BootpayWidgetWebView] BootpayCancel: ${message.message}');
+          widget.controller?._handleCancel(message.message);
+        },
+      )
+      ..addJavaScriptChannel(
+        'BootpayError',
+        onMessageReceived: (message) {
+          debugPrint('[BootpayWidgetWebView] BootpayError: ${message.message}');
+          widget.controller?._handleError(message.message);
+        },
+      )
+      ..addJavaScriptChannel(
+        'BootpayIssued',
+        onMessageReceived: (message) {
+          debugPrint('[BootpayWidgetWebView] BootpayIssued: ${message.message}');
+          widget.controller?._handleIssued(message.message);
+        },
+      )
+      ..addJavaScriptChannel(
+        'BootpayClose',
+        onMessageReceived: (message) {
+          debugPrint('[BootpayWidgetWebView] BootpayClose: ${message.message}');
+          widget.controller?._handleClose();
+        },
+      )
+      // 리다이렉트 방식 결제 결과 처리 (bootpay_webview.dart와 동일)
+      ..addJavaScriptChannel(
+        'BootpayFlutterWebView',
+        onMessageReceived: _onRedirectJS,
+      )
+      ..addJavaScriptChannel(
+        'FlutterConsole',
+        onMessageReceived: (message) {
+          debugPrint('[WebView Console] ${message.message}');
+        },
       );
 
     debugPrint('[BootpayWidgetWebView] WebViewController created');
@@ -247,63 +306,131 @@ function waitForBootpayWidget(callback) {
     // iOS/Android 모두 지원하는 브릿지 호출 헬퍼 함수
     final bridgeHelper = '''
 function flutterBridgePost(message) {
+  console.log('[flutterBridgePost] Attempting to send message:', message);
+  console.log('[flutterBridgePost] window.webkit:', typeof window.webkit);
+  console.log('[flutterBridgePost] window.$bridgeName:', typeof window.$bridgeName);
+
   if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.$bridgeName) {
+    console.log('[flutterBridgePost] Using iOS bridge (webkit)');
     window.webkit.messageHandlers.$bridgeName.postMessage(message);
   } else if (window.$bridgeName && window.$bridgeName.postMessage) {
+    console.log('[flutterBridgePost] Using Android bridge (window.$bridgeName)');
     window.$bridgeName.postMessage(message);
+  } else {
+    console.log('[flutterBridgePost] ERROR: No bridge found!');
+    console.log('[flutterBridgePost] Available window keys:', Object.keys(window).filter(k => k.toLowerCase().includes('boot') || k.toLowerCase().includes('flutter')));
   }
 }
 ''';
 
-    // 이벤트 리스너 스크립트 (iOS/Android 모두 지원)
-    final readyWatch = "document.addEventListener('bootpay-widget-ready', function (e) { flutterBridgePost(JSON.stringify({event: 'widget_ready', data: e.detail})); });";
-    final resizeWatch = "document.addEventListener('bootpay-widget-resize', function (e) { flutterBridgePost(JSON.stringify({event: 'widget_resize', height: e.detail.height})); });";
-    final changeMethodWatch = "document.addEventListener('bootpay-widget-change-payment', function (e) { flutterBridgePost(JSON.stringify({event: 'widget_change_payment', data: e.detail})); });";
-    final changeTermsWatch = "document.addEventListener('bootpay-widget-change-terms', function (e) { flutterBridgePost(JSON.stringify({event: 'widget_change_agree_term', data: e.detail})); });";
+    // 이벤트 리스너 스크립트 (iOS/Android 모두 지원) - console.log 추가하여 디버깅
+    final readyWatch = "document.addEventListener('bootpay-widget-ready', function (e) { console.log('[Flutter Widget] bootpay-widget-ready event fired', e.detail); flutterBridgePost(JSON.stringify({event: 'widget_ready', data: e.detail})); });";
+    final resizeWatch = "document.addEventListener('bootpay-widget-resize', function (e) { console.log('[Flutter Widget] bootpay-widget-resize event fired', e.detail); flutterBridgePost(JSON.stringify({event: 'widget_resize', height: e.detail.height})); });";
+    final changeMethodWatch = "document.addEventListener('bootpay-widget-change-payment', function (e) { console.log('[Flutter Widget] bootpay-widget-change-payment event fired', e.detail); flutterBridgePost(JSON.stringify({event: 'widget_change_payment', data: e.detail})); });";
+    final changeTermsWatch = "document.addEventListener('bootpay-widget-change-terms', function (e) { console.log('[Flutter Widget] bootpay-widget-change-terms event fired', e.detail); flutterBridgePost(JSON.stringify({event: 'widget_change_agree_term', data: e.detail})); });";
     // iOS Swift SDK와 동일하게 bootpayclose 이벤트 리스너 추가
-    final closeWatch = "document.addEventListener('bootpayclose', function (e) { flutterBridgePost('close'); });";
+    final closeWatch = "document.addEventListener('bootpayclose', function (e) { console.log('[Flutter Widget] bootpayclose event fired'); flutterBridgePost('close'); });";
+
+    // 디버깅: console.log를 Flutter로 전달
+    const consoleOverride = '''
+// console.log를 Flutter로 전달
+(function() {
+  var originalLog = console.log;
+  console.log = function() {
+    var args = Array.prototype.slice.call(arguments);
+    var message = args.map(function(arg) {
+      try { return typeof arg === 'object' ? JSON.stringify(arg) : String(arg); }
+      catch(e) { return String(arg); }
+    }).join(' ');
+    if (window.FlutterConsole && window.FlutterConsole.postMessage) {
+      window.FlutterConsole.postMessage(message);
+    }
+    originalLog.apply(console, arguments);
+  };
+})();
+''';
+
+    // 디버깅: 모든 bootpay 관련 이벤트를 감시
+    const eventDebugger = '''
+// 디버깅: 모든 bootpay 이벤트 감시
+['bootpay-widget-ready', 'bootpay-widget-resize', 'bootpay-widget-change-payment', 'bootpay-widget-change-terms', 'bootpayclose', 'bootpay-widget-change-method', 'change-payment', 'widget-change-payment'].forEach(function(eventName) {
+  document.addEventListener(eventName, function(e) {
+    console.log('[Flutter Debug] Event detected: ' + eventName, e.detail);
+  });
+});
+''';
 
     // Android와 동일한 구조: waitForBootpayWidget 내부에서 이벤트 리스너 등록 후 render 호출
     return '''
+$consoleOverride
 $waitForBootpayWidget
 $bridgeHelper
+$eventDebugger
 waitForBootpayWidget(function() {
+  console.log('[Flutter Widget] BootpayWidget found, registering event listeners...');
   $readyWatch
   $resizeWatch
   $changeMethodWatch
   $changeTermsWatch
   $closeWatch
+  console.log('[Flutter Widget] Event listeners registered, rendering widget...');
+  console.log('[Flutter Widget] Payload: ${payload.toString().replaceAll("'", "\\'")}');
   BootpayWidget.render('#bootpay-widget', ${payload.toString()});
+  console.log('[Flutter Widget] Widget render called');
 });
 ''';
   }
 
   void _transactionConfirm() {
-    final bridgeName = _WidgetConstants.BRIDGE_NAME;
-    final script = '''
-      function flutterBridgePost(message) {
-        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.$bridgeName) {
-          window.webkit.messageHandlers.$bridgeName.postMessage(message);
-        } else if (window.$bridgeName && window.$bridgeName.postMessage) {
-          window.$bridgeName.postMessage(message);
-        }
-      }
-      window.Bootpay.confirm()
-        .then(function(res) {
-          if(res.event === 'issued') {
-            flutterBridgePost(JSON.stringify({event: 'issued', data: res}));
-          } else if(res.event === 'done') {
-            flutterBridgePost(JSON.stringify({event: 'done', data: res}));
-          }
-        }, function(res) {
-          if(res.event === 'error') {
-            flutterBridgePost(JSON.stringify({event: 'error', data: res}));
-          } else if(res.event === 'cancel') {
-            flutterBridgePost(JSON.stringify({event: 'cancel', data: res}));
-          }
-        });
-    ''';
+    // bootpay_webview.dart와 동일한 transactionConfirm 스크립트
+    const script = "Bootpay.confirm().then(function(confirmRes) { "
+        "if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(confirmRes)); } "
+        "}, function(confirmRes) { "
+        "if (confirmRes.event === 'error') { if (window.BootpayError && window.BootpayError.postMessage) { BootpayError.postMessage(JSON.stringify(confirmRes)); } } "
+        "else if (confirmRes.event === 'cancel') { if (window.BootpayCancel && window.BootpayCancel.postMessage) { BootpayCancel.postMessage(JSON.stringify(confirmRes)); } } "
+        "})";
+    debugPrint('[BootpayWidgetWebView] transactionConfirm: $script');
     _webViewController.runJavaScript(script);
+  }
+
+  /// 리다이렉트 방식 결제 결과 처리 (bootpay_webview.dart의 onRedirectJS와 동일)
+  void _onRedirectJS(JavaScriptMessage message) {
+    debugPrint('[BootpayWidgetWebView] _onRedirectJS: ${message.message}');
+
+    try {
+      final data = jsonDecode(message.message) as Map<String, dynamic>;
+      final event = data['event'] as String?;
+
+      debugPrint('[BootpayWidgetWebView] Redirect event: $event');
+
+      switch (event) {
+        case 'cancel':
+          widget.controller?._handleCancel(message.message);
+          break;
+        case 'error':
+          widget.controller?._handleError(message.message);
+          break;
+        case 'close':
+          widget.controller?._handleClose();
+          break;
+        case 'issued':
+          widget.controller?._handleIssued(message.message);
+          break;
+        case 'confirm':
+          debugPrint('[BootpayWidgetWebView] Handling confirm event from redirect');
+          final shouldConfirm = widget.controller?._handleConfirm(message.message) ?? true;
+          if (shouldConfirm) {
+            debugPrint('[BootpayWidgetWebView] Calling transactionConfirm');
+            _transactionConfirm();
+          }
+          break;
+        case 'done':
+          widget.controller?._handleDone(message.message);
+          break;
+      }
+    } catch (e) {
+      debugPrint('[BootpayWidgetWebView] Error parsing redirect JSON: $e');
+    }
   }
 
   @override
@@ -414,35 +541,22 @@ class BootpayWidgetWebViewController {
     _webViewController?.runJavaScript(script);
   }
 
-  /// 결제 요청 스크립트 (iOS/Android 모두 지원)
-  /// iOS Swift SDK의 getWidgetRequestPaymentJson과 동일하게 최소한의 결제 정보만 전달
+  /// 결제 요청 스크립트 (bootpay_webview.dart와 동일한 방식)
+  /// 각 이벤트별로 별도의 JavaScript Channel 사용
   String _getRequestPaymentScript(Payload payload) {
-    final bridgeName = _WidgetConstants.BRIDGE_NAME;
-
-    // iOS/Android 모두 지원하는 브릿지 호출 헬퍼 함수
-    String bridgeHelper = '''
-function flutterBridgePost(message) {
-  if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.$bridgeName) {
-    window.webkit.messageHandlers.$bridgeName.postMessage(message);
-  } else if (window.$bridgeName && window.$bridgeName.postMessage) {
-    window.$bridgeName.postMessage(message);
-  }
-}
-''';
-
-    // iOS/Android 모두 지원하는 이벤트 핸들러
-    String confirmEventHandler = "if (res.event === 'confirm') { flutterBridgePost(JSON.stringify(res)); }";
-    String issuedEventHandler = "else if (res.event === 'issued') { flutterBridgePost(JSON.stringify(res)); }";
-    String doneEventHandler = "else if (res.event === 'done') { flutterBridgePost(JSON.stringify(res)); }";
-    String errorEventHandler = "if (res.event === 'error') { flutterBridgePost(JSON.stringify(res)); }";
-    String cancelEventHandler = "else if (res.event === 'cancel') { flutterBridgePost(JSON.stringify(res)); }";
+    // bootpay_webview.dart와 동일한 이벤트 핸들러
+    const confirmEventHandler = "if (res.event === 'confirm') { if (window.BootpayConfirm && window.BootpayConfirm.postMessage) { BootpayConfirm.postMessage(JSON.stringify(res)); } }";
+    const issuedEventHandler = "else if (res.event === 'issued') { if (window.BootpayIssued && window.BootpayIssued.postMessage) { BootpayIssued.postMessage(JSON.stringify(res)); } }";
+    const doneEventHandler = "else if (res.event === 'done') { if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(res)); } }";
+    const errorEventHandler = "if (res.event === 'error') { if (window.BootpayError && window.BootpayError.postMessage) { BootpayError.postMessage(JSON.stringify(res)); } }";
+    const cancelEventHandler = "else if (res.event === 'cancel') { if (window.BootpayCancel && window.BootpayCancel.postMessage) { BootpayCancel.postMessage(JSON.stringify(res)); } }";
 
     // iOS Swift SDK와 동일하게 최소한의 결제 정보만 전달
     final requestPaymentJson = _getRequestPaymentJson(payload);
     debugPrint('[BootpayWidgetWebViewController] RequestPayment JSON: $requestPaymentJson');
 
-    return "$bridgeHelper"
-        "BootpayWidget.requestPayment($requestPaymentJson)"
+    // bootpay_webview.dart와 동일한 스크립트 구조
+    final script = "BootpayWidget.requestPayment($requestPaymentJson)"
         ".then( function (res) {"
         "console.log('[BootpayWidget] requestPayment response:', res);"
         "$confirmEventHandler"
@@ -453,6 +567,8 @@ function flutterBridgePost(message) {
         "$errorEventHandler"
         "$cancelEventHandler"
         "})";
+
+    return script;
   }
 
   /// iOS Swift SDK의 getWidgetRequestPaymentJson과 동일한 구조
@@ -523,30 +639,14 @@ function flutterBridgePost(message) {
 
   /// 결제 확인 (confirm 이벤트에서 호출)
   void transactionConfirm() {
-    final bridgeName = _WidgetConstants.BRIDGE_NAME;
-    final script = '''
-      function flutterBridgePost(message) {
-        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.$bridgeName) {
-          window.webkit.messageHandlers.$bridgeName.postMessage(message);
-        } else if (window.$bridgeName && window.$bridgeName.postMessage) {
-          window.$bridgeName.postMessage(message);
-        }
-      }
-      window.Bootpay.confirm()
-        .then(function(res) {
-          if(res.event === 'issued') {
-            flutterBridgePost(JSON.stringify({event: 'issued', data: res}));
-          } else if(res.event === 'done') {
-            flutterBridgePost(JSON.stringify({event: 'done', data: res}));
-          }
-        }, function(res) {
-          if(res.event === 'error') {
-            flutterBridgePost(JSON.stringify({event: 'error', data: res}));
-          } else if(res.event === 'cancel') {
-            flutterBridgePost(JSON.stringify({event: 'cancel', data: res}));
-          }
-        });
-    ''';
+    // bootpay_webview.dart와 동일한 transactionConfirm 스크립트
+    const script = "Bootpay.confirm().then(function(confirmRes) { "
+        "if (window.BootpayDone && window.BootpayDone.postMessage) { BootpayDone.postMessage(JSON.stringify(confirmRes)); } "
+        "}, function(confirmRes) { "
+        "if (confirmRes.event === 'error') { if (window.BootpayError && window.BootpayError.postMessage) { BootpayError.postMessage(JSON.stringify(confirmRes)); } } "
+        "else if (confirmRes.event === 'cancel') { if (window.BootpayCancel && window.BootpayCancel.postMessage) { BootpayCancel.postMessage(JSON.stringify(confirmRes)); } } "
+        "})";
+    debugPrint('[BootpayWidgetWebViewController] transactionConfirm: $script');
     _webViewController?.runJavaScript(script);
   }
 
