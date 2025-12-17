@@ -31,6 +31,10 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
   final List<String> _pgList = ['나이스페이', '토스', 'KG이니시스', '다날'];
   final List<String> _methodList = ['카드', '계좌이체', '가상계좌', '휴대폰'];
 
+  // 결제 완료 플래그 및 결과 데이터
+  bool _isPaymentDone = false;
+  String? _paymentResultData;
+
   double get _totalPrice => _productPrice * _quantity;
 
   @override
@@ -236,8 +240,8 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
 
     // 추가 설정
     Extra extra = Extra();
-    extra.appScheme = 'bootpayFlutterExample';
     extra.cardQuota = '0,2,3,4,5,6';
+    extra.appScheme = "bootpayFlutterExampleV2://end";
     payload.extra = extra;
 
     Bootpay().requestPayment(
@@ -251,8 +255,19 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
         debugPrint('------- onError: $data');
       },
       onClose: () {
-        debugPrint('------- onClose');
-        if (!kIsWeb) Bootpay().dismiss(context);
+        debugPrint('------- onClose, _isPaymentDone: $_isPaymentDone');
+        // 결제 완료 후에는 결과 페이지로 이동
+        if (_isPaymentDone && _paymentResultData != null) {
+          debugPrint('------- onClose -> show result page');
+          Future.microtask(() {
+            if (mounted) {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => _PaymentResultPage(data: _paymentResultData!)),
+              );
+            }
+          });
+        }
+        // dismiss 호출하지 않음 - Bootpay 내부에서 자동 처리됨
       },
       onIssued: (String data) {
         debugPrint('------- onIssued: $data');
@@ -263,14 +278,10 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
       },
       onDone: (String data) {
         debugPrint('------- onDone: $data');
-        _showPaymentResult(data);
+        _isPaymentDone = true;
+        _paymentResultData = data; // 결과 데이터 저장
+        // dismiss 호출하지 않음 - Bootpay 내부에서 자동으로 onClose 호출됨
       },
-    );
-  }
-
-  void _showPaymentResult(String data) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => _PaymentResultPage(data: data)),
     );
   }
 }
@@ -283,6 +294,7 @@ class _PaymentResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('####### PaymentResultPage BUILD #######');
     Map<String, dynamic>? parsedData;
     try {
       parsedData = json.decode(data);

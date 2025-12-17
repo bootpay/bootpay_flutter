@@ -19,10 +19,11 @@ class BootpayAppPage extends StatefulWidget {
   _BootpayAppPageState createState() => _BootpayAppPageState();
 }
 
-class _BootpayAppPageState extends State<BootpayAppPage> {
+class _BootpayAppPageState extends State<BootpayAppPage> with WidgetsBindingObserver {
   DebounceCloseController closeController = Get.find();
   DateTime? currentBackPressTime = DateTime.now();
   bool isProgressShow = false;
+  bool _isResuming = false; // 외부 앱에서 복귀 시 깜빡임 방지
 
   double _height = 0;
 
@@ -31,6 +32,9 @@ class _BootpayAppPageState extends State<BootpayAppPage> {
     // TODO: implement initState
     // closeController.isBootpayShow = true;
     super.initState();
+
+    // 앱 상태 변화 감지 등록
+    WidgetsBinding.instance.addObserver(this);
 
     closeController.isFireCloseEvent = false;
     closeController.isDebounceShow = true;
@@ -42,6 +46,22 @@ class _BootpayAppPageState extends State<BootpayAppPage> {
       // });
     };
 
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // 외부 앱에서 돌아올 때 - 깜빡임 방지를 위해 약간의 딜레이
+      _isResuming = true;
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) {
+          setState(() {
+            _isResuming = false;
+          });
+        }
+      });
+    }
   }
 
 
@@ -78,6 +98,7 @@ class _BootpayAppPageState extends State<BootpayAppPage> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     bootpayClose();
     super.dispose();
   }
@@ -93,9 +114,10 @@ class _BootpayAppPageState extends State<BootpayAppPage> {
     if(Platform.isAndroid) {
       return WillPopScope(
         child: Scaffold(
+            backgroundColor: Colors.white, // 외부 앱 복귀 시 깜빡임 방지
             body: SafeArea(
               child: Container(
-                  color: Colors.black26,
+                  color: Colors.white, // 배경색 통일
                   child: Padding(
                     padding: EdgeInsets.all(paddingValue),
                     child: widget.webView ?? Container(),
@@ -116,11 +138,12 @@ class _BootpayAppPageState extends State<BootpayAppPage> {
       );
     } else {
       return Scaffold(
+          backgroundColor: Colors.white, // 외부 앱 복귀 시 깜빡임 방지
           body: SafeArea(
             child: Stack(
               children: [
                 Container(
-                    color: Colors.black26,
+                    color: Colors.white, // 배경색 통일
                     child: Padding(
                       padding: EdgeInsets.all(paddingValue),
                       child: widget.webView ?? Container(),

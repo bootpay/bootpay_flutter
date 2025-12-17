@@ -71,7 +71,7 @@ class _WidgetPaymentScreenState extends State<WidgetPaymentScreen> {
     _payload.user?.phone = '01012341234';
 
     _payload.extra = Extra();
-    _payload.extra?.appScheme = 'bootpayFlutterExample';
+    _payload.extra?.appScheme = 'bootpayFlutterExampleV2';
 
     if (kIsWeb) {
       _payload.extra?.openType = 'iframe';
@@ -307,9 +307,7 @@ class _WidgetPaymentScreenState extends State<WidgetPaymentScreen> {
       onIssued: (data) => debugPrint('[Widget] onIssued: $data'),
       onDone: (data) {
         debugPrint('[Widget] onDone: $data');
-        setState(() {
-          _isPaymentMode = false;
-        });
+        // 결과 페이지로 바로 이동 (setState 없이)
         _showPaymentResult(data);
       },
     );

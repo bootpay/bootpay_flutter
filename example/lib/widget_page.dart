@@ -69,7 +69,7 @@ class WidgetPageState extends State<WidgetPage> {
 
     // Extra 설정 (선택)
     _payload.extra = Extra();
-    _payload.extra?.appScheme = 'bootpayFlutterExample';
+    _payload.extra?.appScheme = 'bootpayFlutterExampleV2';
 
     // Web에서는 iframe 또는 popup으로 설정해야 콜백을 받을 수 있음
     if (kIsWeb) {
@@ -354,11 +354,7 @@ class WidgetPageState extends State<WidgetPage> {
       },
       onDone: (data) {
         debugPrint('[Widget] onDone: $data');
-        // 결제 모드 해제
-        setState(() {
-          _isPaymentMode = false;
-        });
-        // 가맹점 결제 결과 페이지로 이동
+        // 결과 페이지로 바로 이동 (setState 없이 - 화면 깜빡임 방지)
         _showPaymentResult(data);
       },
     );

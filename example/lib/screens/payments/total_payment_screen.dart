@@ -5,7 +5,6 @@ import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/user.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../utils/bootpay_helper.dart';
@@ -26,6 +25,10 @@ class _TotalPaymentScreenState extends State<TotalPaymentScreen> {
 
   String _selectedPg = '나이스페이';
   final List<String> _pgList = ['나이스페이', '토스', 'KG이니시스', '다날'];
+
+  // 결제 완료 플래그 및 결과 데이터
+  bool _isPaymentDone = false;
+  String? _paymentResultData;
 
   double get _totalPrice => _productPrice * _quantity;
 
@@ -217,7 +220,7 @@ class _TotalPaymentScreenState extends State<TotalPaymentScreen> {
     payload.user = user;
 
     Extra extra = Extra();
-    extra.appScheme = 'bootpayFlutterExample';
+    extra.appScheme = 'bootpayFlutterExampleV2';
     payload.extra = extra;
 
     Bootpay().requestPayment(
@@ -227,20 +230,30 @@ class _TotalPaymentScreenState extends State<TotalPaymentScreen> {
       onCancel: (String data) => debugPrint('------- onCancel: $data'),
       onError: (String data) => debugPrint('------- onError: $data'),
       onClose: () {
-        debugPrint('------- onClose');
-        if (!kIsWeb) Bootpay().dismiss(context);
+        debugPrint('------- onClose, _isPaymentDone: $_isPaymentDone');
+        // 결제 완료 후에는 결과 페이지로 이동
+        if (_isPaymentDone && _paymentResultData != null) {
+          Future.microtask(() {
+            if (mounted) {
+              _showPaymentResult(_paymentResultData!);
+            }
+          });
+        }
+        // dismiss 호출하지 않음 - Bootpay 내부에서 자동 처리됨
       },
       onIssued: (String data) => debugPrint('------- onIssued: $data'),
       onConfirmAsync: (String data) async => true,
       onDone: (String data) {
         debugPrint('------- onDone: $data');
-        _showPaymentResult(data);
+        _isPaymentDone = true;
+        _paymentResultData = data;
+        // dismiss 호출하지 않음 - Bootpay 내부에서 자동으로 onClose 호출됨
       },
     );
   }
 
   void _showPaymentResult(String data) {
-    Navigator.of(context).pushReplacement(
+    Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => _PaymentResultPage(data: data)),
     );
   }

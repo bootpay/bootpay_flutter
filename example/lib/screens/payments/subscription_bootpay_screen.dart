@@ -191,7 +191,7 @@ class _SubscriptionBootpayScreenState extends State<SubscriptionBootpayScreen> {
     payload.user = user;
 
     Extra extra = Extra();
-    extra.appScheme = 'bootpayFlutterExample';
+    extra.appScheme = 'bootpayFlutterExampleV2';
     payload.extra = extra;
 
     Bootpay().requestSubscription(

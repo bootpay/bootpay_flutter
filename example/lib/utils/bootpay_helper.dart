@@ -84,7 +84,7 @@ class BootpayHelper {
 
     // Extra 설정
     final extra = Extra();
-    extra.appScheme = 'bootpayFlutterExample';
+    extra.appScheme = 'bootpayFlutterExampleV2';
     extra.cardQuota = '0,2,3,4,5,6';
     payload.extra = extra;
 

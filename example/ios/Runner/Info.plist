@@ -29,7 +29,7 @@
 			<string>kr.co.bootpay</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>bootpayFlutter</string>
+				<string>bootpayFlutterExampleV2</string>
 			</array>
 		</dict>
 	</array>

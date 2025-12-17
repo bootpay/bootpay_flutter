@@ -28,6 +28,10 @@ class _PasswordPaymentScreenState extends State<PasswordPaymentScreen> {
   int _quantity = 1;
   bool _isLoading = false;
 
+  // 결제 완료 플래그 및 결과 데이터
+  bool _isPaymentDone = false;
+  String? _paymentResultData;
+
   double get _totalPrice => _productPrice * _quantity;
 
   @override
@@ -242,7 +246,7 @@ class _PasswordPaymentScreenState extends State<PasswordPaymentScreen> {
     payload.user = _generateUser();
 
     Extra extra = Extra();
-    extra.appScheme = 'bootpayFlutterExample';
+    extra.appScheme = 'bootpayFlutterExampleV2';
     extra.separatelyConfirmed = false;
     payload.extra = extra;
 
@@ -253,14 +257,24 @@ class _PasswordPaymentScreenState extends State<PasswordPaymentScreen> {
       onCancel: (String data) => debugPrint('------- onCancel: $data'),
       onError: (String data) => debugPrint('------- onError: $data'),
       onClose: () {
-        debugPrint('------- onClose');
-        Bootpay().dismiss(context);
+        debugPrint('------- onClose, _isPaymentDone: $_isPaymentDone');
+        // 결제 완료 후에는 결과 페이지로 이동
+        if (_isPaymentDone && _paymentResultData != null) {
+          Future.microtask(() {
+            if (mounted) {
+              _showPaymentResult(_paymentResultData!);
+            }
+          });
+        }
+        // dismiss 호출하지 않음 - Bootpay 내부에서 자동 처리됨
       },
       onIssued: (String data) => debugPrint('------- onIssued: $data'),
       onConfirmAsync: (String data) async => true,
       onDone: (String data) {
         debugPrint('------- onDone: $data');
-        _showPaymentResult(data);
+        _isPaymentDone = true;
+        _paymentResultData = data;
+        // dismiss 호출하지 않음 - Bootpay 내부에서 자동으로 onClose 호출됨
       },
     );
   }
@@ -268,10 +282,10 @@ class _PasswordPaymentScreenState extends State<PasswordPaymentScreen> {
   void _showPaymentResult(String data) {
     debugPrint('[PasswordPayment] _showPaymentResult called');
     debugPrint('[PasswordPayment] data: $data');
-    Navigator.of(context).pushReplacement(
+    Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => _PaymentResultPage(data: data)),
     );
-    debugPrint('[PasswordPayment] Navigator.pushReplacement called');
+    debugPrint('[PasswordPayment] Navigator.push called');
   }
 
   void _showErrorDialog(String title, String message) {
