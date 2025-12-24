@@ -1,3 +1,7 @@
+## 5.0.19
+* BootpayCommerce 기능 추가 (Commerce 결제 지원)
+* onIssued 콜백 추가 (가상계좌 발급 이벤트)
+
 ## 5.0.18
 * 결제 콜백 플로우 개선 - onDone/onClose 처리 방식 변경
 * 외부 결제 앱에서 앱 스키마로 복귀 시 Navigator 꼬임 방지
