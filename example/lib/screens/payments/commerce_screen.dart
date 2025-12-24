@@ -11,9 +11,6 @@ class CommerceScreen extends StatefulWidget {
 }
 
 class _CommerceScreenState extends State<CommerceScreen> {
-  // 결제 결과 저장 (onClose에서 사용)
-  Map<String, dynamic>? _paymentResult;
-
   // 환경별 설정
   final Map<String, Map<String, dynamic>> envConfig = {
     'development': {
@@ -439,28 +436,27 @@ class _CommerceScreenState extends State<CommerceScreen> {
     // 환경 설정
     BootpayCommerce.setEnvironmentMode(currentEnv);
 
-    // 결제 요청 (React Native 방식: 콜백에서 직접 결과 화면 표시)
+    // 결제 요청 (Bootpay.requestPayment와 동일한 API 패턴)
     BootpayCommerce.requestCheckout(
       context: context,
       payload: payload,
       showCloseButton: false,
-    )
-        .setOnDone((data) {
-          debugPrint('-- Commerce done: $data');
-          _showPaymentResult(data);  // 직접 결과 화면 표시
-        })
-        .setOnError((data) {
-          debugPrint('-- Commerce error: $data');
-          _showPaymentResult(data);  // 직접 결과 화면 표시
-        })
-        .setOnCancel((data) {
-          debugPrint('-- Commerce cancel: $data');
-          _showPaymentResult(data);  // 직접 결과 화면 표시
-        })
-        .setOnClose(() {
-          debugPrint('-- Commerce close');
-          // React Native와 동일: onClose에서는 아무것도 하지 않음
-        });
+      onDone: (data) {
+        debugPrint('-- Commerce done: $data');
+        _showPaymentResult(data);
+      },
+      onError: (data) {
+        debugPrint('-- Commerce error: $data');
+        _showPaymentResult(data);
+      },
+      onCancel: (data) {
+        debugPrint('-- Commerce cancel: $data');
+        _showPaymentResult(data);
+      },
+      onClose: () {
+        debugPrint('-- Commerce close');
+      },
+    );
   }
 
   void _showPaymentResult(Map<String, dynamic> data) {

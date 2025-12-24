@@ -7,7 +7,7 @@ typedef CommerceDefaultCallback = void Function(Map<String, dynamic> data);
 typedef CommerceCloseCallback = void Function();
 
 /// Commerce 결제 요청을 위한 메인 클래스
-/// iOS Swift SDK의 BootpayCommerce와 동일한 API를 제공합니다.
+/// Bootpay.requestPayment와 동일한 API 패턴을 사용합니다.
 class BootpayCommerce {
   static final BootpayCommerce _instance = BootpayCommerce._internal();
   factory BootpayCommerce() => _instance;
@@ -19,12 +19,6 @@ class BootpayCommerce {
   /// 현재 Payload
   CommercePayload? payload;
 
-  /// 콜백 함수들
-  CommerceDefaultCallback? onDone;
-  CommerceDefaultCallback? onError;
-  CommerceDefaultCallback? onCancel;
-  CommerceCloseCallback? onClose;
-
   /// Commerce CDN URL
   static const String COMMERCE_URL =
       'https://webview.bootpay.co.kr/commerce/1.0.5/index.html';
@@ -35,15 +29,16 @@ class BootpayCommerce {
   }
 
   /// Commerce 결제 요청 (requestCheckout)
-  /// [context] - BuildContext
-  /// [payload] - CommercePayload 인스턴스
-  /// [showCloseButton] - 닫기 버튼 표시 여부
-  /// [closeButton] - 커스텀 닫기 버튼 위젯
-  static BootpayCommerce requestCheckout({
+  /// Bootpay.requestPayment와 동일한 API 패턴
+  static void requestCheckout({
     required BuildContext context,
     required CommercePayload payload,
     bool showCloseButton = false,
     Widget? closeButton,
+    CommerceDefaultCallback? onDone,
+    CommerceDefaultCallback? onError,
+    CommerceDefaultCallback? onCancel,
+    CommerceCloseCallback? onClose,
   }) {
     _instance.payload = payload;
 
@@ -55,57 +50,16 @@ class BootpayCommerce {
           environmentMode: _instance.environmentMode,
           showCloseButton: showCloseButton,
           closeButton: closeButton,
-          onDone: (data) {
-            _instance.onDone?.call(data);
-          },
-          onError: (data) {
-            _instance.onError?.call(data);
-          },
-          onCancel: (data) {
-            _instance.onCancel?.call(data);
-          },
+          onDone: onDone,
+          onError: onError,
+          onCancel: onCancel,
           onClose: () {
-            _instance.onClose?.call();
-            _instance._clearCallbacks();
+            onClose?.call();
+            _instance.payload = null;
           },
         ),
       ),
     );
-
-    return _instance;
-  }
-
-  /// 결제 완료 콜백 설정
-  BootpayCommerce setOnDone(CommerceDefaultCallback callback) {
-    onDone = callback;
-    return this;
-  }
-
-  /// 결제 에러 콜백 설정
-  BootpayCommerce setOnError(CommerceDefaultCallback callback) {
-    onError = callback;
-    return this;
-  }
-
-  /// 결제 취소 콜백 설정
-  BootpayCommerce setOnCancel(CommerceDefaultCallback callback) {
-    onCancel = callback;
-    return this;
-  }
-
-  /// 결제창 닫힘 콜백 설정
-  BootpayCommerce setOnClose(CommerceCloseCallback callback) {
-    onClose = callback;
-    return this;
-  }
-
-  /// 콜백 초기화
-  void _clearCallbacks() {
-    onDone = null;
-    onError = null;
-    onCancel = null;
-    onClose = null;
-    payload = null;
   }
 
   /// 결제창 닫기 (BuildContext가 필요한 경우)
