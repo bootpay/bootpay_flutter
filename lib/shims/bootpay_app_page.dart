@@ -38,6 +38,7 @@ class _BootpayAppPageState extends State<BootpayAppPage> with WidgetsBindingObse
 
     closeController.isFireCloseEvent = false;
     closeController.isDebounceShow = true;
+    print("BootpayAppPage.initState() - isDebounceShow set to true");
 
     widget.webView?.onProgressShow = (isShow) {
       print(isShow);

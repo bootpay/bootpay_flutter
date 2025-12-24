@@ -643,6 +643,11 @@ class BootpayWebViewState extends State<BootpayWebView> {
     // TODO: implement initState
     super.initState();
 
+    // Ensure isDebounceShow is true when webview is ready to receive close events
+    // This is a safety measure in case BootpayAppPage.initState() doesn't run or runs late
+    widget.closeController.isDebounceShow = true;
+    print("BootpayWebViewState.initState() - isDebounceShow set to true");
+
     init();
     // if(widget.isWidget ?? false) { initWidgetEvent(); }
   }
@@ -829,7 +834,17 @@ extension BootpayMethod on BootpayWebViewState {
       // this.widget.onCloseWidget!();
       widget.closeController.bootpayClose(this.widget.onCloseWidget);
     } else {
-      widget.closeController.bootpayClose(this.widget.onClose);
+      // Non-widget mode: wrap onClose to also pop the navigator
+      widget.closeController.bootpayClose(() {
+        // Call user's onClose callback first
+        if(this.widget.onClose != null) {
+          this.widget.onClose!();
+        }
+        // Then pop the navigator to dismiss Bootpay UI
+        if(context.mounted) {
+          Navigator.of(context).pop();
+        }
+      });
     }
     // widget.paymentResult = BootpayPaymentResult.NONE;
     // widget.closeController.bootpayClose(this.widget.onClose);

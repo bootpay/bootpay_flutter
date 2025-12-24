@@ -14,7 +14,7 @@ class DebounceCloseController extends GetxController {
 
   void bootpayClose(BootpayCloseCallback? onClose) {
 
-    print("DebounceCloseController called : ${_debounce?.isActive}, ${isDebounceShow}");
+    print("DebounceCloseController called : ${_debounce?.isActive}, ${isDebounceShow}, hashCode: $hashCode");
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 100), () {
 
