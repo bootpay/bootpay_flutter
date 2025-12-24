@@ -38,6 +38,7 @@ class BootpayCommerce {
     CommerceDefaultCallback? onDone,
     CommerceDefaultCallback? onError,
     CommerceDefaultCallback? onCancel,
+    CommerceDefaultCallback? onIssued,
     CommerceCloseCallback? onClose,
   }) {
     _instance.payload = payload;
@@ -53,6 +54,7 @@ class BootpayCommerce {
           onDone: onDone,
           onError: onError,
           onCancel: onCancel,
+          onIssued: onIssued,
           onClose: () {
             onClose?.call();
             _instance.payload = null;

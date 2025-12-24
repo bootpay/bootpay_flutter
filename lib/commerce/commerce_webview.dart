@@ -18,6 +18,7 @@ class CommerceWebViewPage extends StatefulWidget {
   final CommerceDefaultCallback? onDone;
   final CommerceDefaultCallback? onError;
   final CommerceDefaultCallback? onCancel;
+  final CommerceDefaultCallback? onIssued;
   final CommerceCloseCallback? onClose;
 
   const CommerceWebViewPage({
@@ -29,6 +30,7 @@ class CommerceWebViewPage extends StatefulWidget {
     this.onDone,
     this.onError,
     this.onCancel,
+    this.onIssued,
     this.onClose,
   }) : super(key: key);
 
@@ -221,6 +223,7 @@ class _CommerceWebViewPageState extends State<CommerceWebViewPage> {
     final onDone = widget.onDone;
     final onCancel = widget.onCancel;
     final onError = widget.onError;
+    final onIssued = widget.onIssued;
     final event = data['event'] as String? ?? '';
 
     // 먼저 WebView 닫기
@@ -236,6 +239,9 @@ class _CommerceWebViewPageState extends State<CommerceWebViewPage> {
         break;
       case 'error':
         onError?.call(data);
+        break;
+      case 'issued':
+        onIssued?.call(data);
         break;
       default:
         // event가 없으면 receipt_id로 판단
@@ -273,6 +279,7 @@ class _CommerceWebViewPageState extends State<CommerceWebViewPage> {
     final onDone = widget.onDone;
     final onCancel = widget.onCancel;
     final onError = widget.onError;
+    final onIssued = widget.onIssued;
 
     if (event == null) {
       // event가 없으면 done 이벤트로 처리 (receipt_id가 있는 경우)
@@ -298,6 +305,11 @@ class _CommerceWebViewPageState extends State<CommerceWebViewPage> {
       case 'done':
         _removePaymentWindow();  // 먼저 WebView 닫기
         onDone?.call(data);      // 그 다음 콜백 호출
+        _debounceCloseCallback();
+        break;
+      case 'issued':
+        _removePaymentWindow();  // 먼저 WebView 닫기
+        onIssued?.call(data);    // 그 다음 콜백 호출
         _debounceCloseCallback();
         break;
       case 'close':
