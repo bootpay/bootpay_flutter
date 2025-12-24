@@ -453,6 +453,10 @@ class _CommerceScreenState extends State<CommerceScreen> {
         debugPrint('-- Commerce cancel: $data');
         _showPaymentResult(data);
       },
+      onIssued: (data) {
+        debugPrint('-- Commerce issued: $data');
+        _showPaymentResult(data);
+      },
       onClose: () {
         debugPrint('-- Commerce close');
       },
@@ -508,6 +512,13 @@ class _CommerceResultPage extends StatelessWidget {
         title = '결제 실패';
         subtitle = message.isNotEmpty ? message : '결제 처리 중 오류가 발생했습니다.';
         buttonColor = Colors.red;
+        break;
+      case 'issued':
+        statusIcon = Icons.account_balance;
+        statusColor = Colors.blue;
+        title = '가상계좌 발급 완료';
+        subtitle = message.isNotEmpty ? message : '가상계좌가 발급되었습니다. 입금을 완료해 주세요.';
+        buttonColor = Colors.blue;
         break;
       default:
         // event가 없으면 receipt_id로 판단
