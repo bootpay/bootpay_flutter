@@ -23,8 +23,8 @@ class _SubscriptionBootpayScreenState extends State<SubscriptionBootpayScreen> {
   final String _productDescription = '매월 자동으로 결제되는 베이직 멤버십입니다.\n기본적인 서비스를 이용할 수 있습니다.';
   final double _productPrice = 4900;
 
-  String _selectedPg = '나이스페이';
-  final List<String> _pgList = ['나이스페이', '토스', 'KG이니시스'];
+  String _selectedPg = '라이트페이';
+  final List<String> _pgList = ['라이트페이', '나이스페이', 'KG이니시스'];
 
   @override
   Widget build(BuildContext context) {

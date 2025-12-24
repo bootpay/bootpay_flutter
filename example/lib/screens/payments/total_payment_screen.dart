@@ -23,8 +23,8 @@ class _TotalPaymentScreenState extends State<TotalPaymentScreen> {
   final double _productPrice = 1000;
   int _quantity = 1;
 
-  String _selectedPg = '나이스페이';
-  final List<String> _pgList = ['나이스페이', '토스', 'KG이니시스', '다날'];
+  String _selectedPg = '라이트페이';
+  final List<String> _pgList = ['라이트페이', '나이스페이', 'KG이니시스', '다날'];
 
   // 결제 완료 플래그 및 결과 데이터
   bool _isPaymentDone = false;

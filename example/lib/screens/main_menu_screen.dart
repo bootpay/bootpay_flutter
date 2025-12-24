@@ -7,6 +7,7 @@ import 'payments/authentication_screen.dart';
 import 'payments/password_payment_screen.dart';
 import 'payments/widget_payment_screen.dart';
 import 'payments/webapp_payment_screen.dart';
+import 'payments/commerce_screen.dart';
 
 /// 메인 메뉴 화면 (Android MainActivity / iOS ViewController)
 class MainMenuScreen extends StatelessWidget {
@@ -81,6 +82,11 @@ class MainMenuScreen extends StatelessWidget {
                     number: 8,
                     title: '웹앱으로 연동하기',
                     onTap: () => _navigateTo(context, const WebAppPaymentScreen()),
+                  ),
+                  _MenuButton(
+                    number: 9,
+                    title: 'Commerce 구독 결제',
+                    onTap: () => _navigateTo(context, const CommerceScreen()),
                   ),
                 ],
               ),

@@ -11,6 +11,13 @@ import 'bootpay_api.dart';
 import 'model/payload.dart';
 import 'package:http/http.dart' as http;
 
+// Commerce exports
+export 'commerce/bootpay_commerce.dart';
+export 'model/commerce/commerce_payload.dart';
+export 'model/commerce/commerce_user.dart';
+export 'model/commerce/commerce_product.dart';
+export 'model/commerce/commerce_extra.dart';
+
 
 typedef void BootpayProgressBarCallback(bool isShow);
 // typedef void ShowHeaderCallback(bool showHeader);

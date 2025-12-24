@@ -23,8 +23,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   final String _productDescription = '매월 자동으로 결제되는 프리미엄 멤버십입니다.\n다양한 혜택과 할인을 제공합니다.';
   final double _productPrice = 9900;
 
-  String _selectedPg = '나이스페이';
-  final List<String> _pgList = ['나이스페이', '토스', 'KG이니시스'];
+  String _selectedPg = '라이트페이';
+  final List<String> _pgList = ['라이트페이', '나이스페이', 'KG이니시스'];
 
   @override
   Widget build(BuildContext context) {
