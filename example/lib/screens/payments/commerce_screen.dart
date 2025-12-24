@@ -622,7 +622,7 @@ class _CommerceResultPage extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: buttonColor,
                     shape: RoundedRectangleBorder(
