@@ -1,9 +1,10 @@
 ## 5.0.21
-* WebView 프리워밍 API 추가 (Bootpay.warmUp(), Bootpay.releaseWarmUp())
+* WebView 자동 프리워밍 기능 추가 (iOS/macOS)
+  - SDK 초기화 시 자동으로 프리워밍 수행 (개발자 호출 불필요)
   - iOS WKWebView 첫 로딩 시 3-7초 소요되는 프로세스 초기화를 앱 시작 시 백그라운드에서 미리 수행
   - 첫 결제 화면 로딩 속도 대폭 개선
   - ProcessPool 공유 구조 개선으로 세션/쿠키 유지 및 프로세스 재사용 지원
-  - releaseWarmUp()으로 메모리 부족 시 리소스 해제 가능
+  - Bootpay.releaseWarmUp()으로 메모리 부족 시 리소스 해제 가능 (선택사항)
 
 ## 5.0.20
 * iOS 세션 유지 및 크래시 방지 수정
