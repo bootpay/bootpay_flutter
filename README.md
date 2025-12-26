@@ -77,6 +77,41 @@ flutter web 빌드하면 web/index.html 파일이 생성됩니다. 해당 파일
 <img src="https://github.com/bootpay/git-open-resources/blob/main/flutter-web-config.png?raw=true" width="840px" height="525px" title="Github_Logo"/>
 위 설정을 완료하면 flutter web에서도 동일한 문법으로 bootpay를 사용할 수 있습니다.
 
+## iOS WebView 프리워밍 (자동)
+
+iOS의 WKWebView는 첫 로딩 시 GPU, Networking, WebContent 프로세스 초기화로 4-6초 지연이 발생할 수 있습니다.
+
+**Bootpay Flutter SDK는 플러그인 등록 시 자동으로 프리워밍이 시작됩니다.** 별도의 설정 없이도 첫 결제 화면 로딩 속도가 개선됩니다.
+
+### 수동 호출 (선택사항)
+
+특별한 타이밍에 프리워밍을 시작하고 싶다면 수동으로 호출할 수 있습니다:
+
+```dart
+import 'package:bootpay/bootpay_warmup.dart';
+
+// 기본 호출 (0.1초 딜레이)
+await BootpayWarmUp.warmUp();
+
+// UI가 버벅이면 딜레이 증가
+await BootpayWarmUp.warmUp(delay: 0.5);
+
+// 프리워밍 상태 확인
+bool isReady = await BootpayWarmUp.checkIsWarmedUp();
+
+// 메모리 부족 시 리소스 해제
+await BootpayWarmUp.releaseWarmUp();
+```
+
+| API | 설명 |
+|-----|------|
+| `BootpayWarmUp.warmUp()` | WebView 프로세스 미리 초기화 (자동 실행됨) |
+| `BootpayWarmUp.warmUp(delay: 0.5)` | 커스텀 딜레이로 프리워밍 |
+| `BootpayWarmUp.checkIsWarmedUp()` | 프리워밍 완료 여부 확인 |
+| `BootpayWarmUp.releaseWarmUp()` | 프리워밍 리소스 해제 |
+
+> **참고**: Android와 Web에서는 이 기능이 no-op으로 동작합니다 (iOS/macOS 전용).
+
 ## 위젯 설정 
 [부트페이 관리자](https://developers.bootpay.co.kr/pg/guides/widget)에서 위젯을 생성하셔야만 사용이 가능합니다. 
 
@@ -518,30 +553,30 @@ PG에서 거래 승인 이후에 호출 되는 함수입니다. 결제 완료 �
 
 ## WebView 프리워밍 (iOS/macOS)
 
-iOS에서 WKWebView는 처음 로딩 시 GPU, Networking, WebContent 프로세스를 생성하는데 3-7초가 소요됩니다. `warmUp()` 메서드를 사용하면 앱 시작 시 백그라운드에서 프로세스를 미리 생성하여 첫 결제 화면 로딩 속도를 개선할 수 있습니다.
+iOS에서 WKWebView는 처음 로딩 시 GPU, Networking, WebContent 프로세스를 생성하는데 3-7초가 소요됩니다. Bootpay SDK는 **자동으로** 앱 시작 시 백그라운드에서 프로세스를 미리 생성하여 첫 결제 화면 로딩 속도를 개선합니다.
 
-### 사용법
+### 자동 프리워밍
 
-앱 시작 시 가능한 빨리 호출하세요:
+SDK 초기화 시(첫 번째 `Bootpay()` 호출 시) 자동으로 프리워밍이 수행됩니다. 개발자가 별도로 호출할 필요가 없습니다.
 
-```dart
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // WebView 프리워밍 (iOS/macOS에서만 동작, Android/Web에서는 no-op)
-  Bootpay.warmUp();
-
-  runApp(MyApp());
-}
-```
-
-### 메모리 관리
+### 메모리 관리 (선택사항)
 
 메모리 부족 시 프리워밍된 리소스를 해제할 수 있습니다:
 
 ```dart
-// 메모리 경고 수신 시
+// 메모리 경고 수신 시 (선택사항)
 Bootpay.releaseWarmUp();
+```
+
+iOS AppDelegate에서 메모리 경고 시 자동 해제하도록 설정할 수도 있습니다:
+```swift
+// AppDelegate.swift
+import bootpay_webview_flutter_wkwebview
+
+override func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+  super.applicationDidReceiveMemoryWarning(application)
+  BootpayWarmUpManager.shared.releaseWarmUp()
+}
 ```
 
 ### 효과
@@ -553,11 +588,11 @@ Bootpay.releaseWarmUp();
 | WebContent 프로세스 초기화 | 1-3초 단축 |
 | **총 개선 효과** | **3-7초 단축** |
 
-### 주의사항
+### 참고사항
 
-- iOS/macOS에서만 동작합니다. Android와 Web에서는 호출해도 아무 동작을 하지 않습니다.
-- 선택 사항입니다. 호출하지 않아도 결제 기능은 정상 작동합니다.
-- 두 번째 결제부터는 자동으로 빠릅니다 (ProcessPool 공유).
+- iOS/macOS에서만 동작합니다. Android와 Web에서는 자동으로 무시됩니다.
+- 프리워밍은 자동으로 수행되므로 별도 설정이 필요 없습니다.
+- 두 번째 결제부터는 ProcessPool 공유로 자동으로 빠릅니다.
 
 ## Documentation
 

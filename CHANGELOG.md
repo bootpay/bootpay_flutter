@@ -1,3 +1,7 @@
+## 5.0.22
+* Android: 오래된 Flutter 프로젝트에서 빌드 실패 문제 해결
+  - compileSdkVersion fallback 추가
+
 ## 5.0.21
 * WebView 자동 프리워밍 기능 추가 (iOS/macOS)
   - SDK 초기화 시 자동으로 프리워밍 수행 (개발자 호출 불필요)

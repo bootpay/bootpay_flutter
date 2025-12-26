@@ -4,11 +4,7 @@ import 'screens/main_menu_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // WebView 프리워밍 (iOS/macOS에서만 동작)
-  // 첫 결제 화면 로딩 속도를 3-7초 단축합니다.
-  Bootpay.warmUp();
-
+  // WebView 프리워밍은 SDK 초기화 시 자동으로 수행됩니다 (iOS/macOS)
   runApp(const BootpayExampleApp());
 }
 

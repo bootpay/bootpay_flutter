@@ -42,7 +42,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
-  bootpay_webview_flutter_wkwebview: 04029284684914c9183814dfcdc30e6667a89267
+  bootpay_webview_flutter_wkwebview: 220869320a60b1b06a91ad439eb8b32165158d15
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   fluttertoast: 76fea30fcf04176325f6864c87306927bd7d2038
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e

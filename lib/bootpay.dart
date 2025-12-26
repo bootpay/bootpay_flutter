@@ -44,69 +44,38 @@ class Bootpay extends BootpayApi {
       MethodChannel('kr.co.bootpay/webview_warmup');
 
   static bool _isWarmedUp = false;
+  static bool _autoWarmUpCalled = false;
 
   /// Whether the WebView has been warmed up
   static bool get isWarmedUp => _isWarmedUp;
 
-  /// Pre-warms the WebView by creating an invisible instance (iOS/macOS only)
-  ///
-  /// This method initializes WKWebView's internal processes in the background:
-  /// - GPU process initialization (1-2 seconds saved)
-  /// - Networking process initialization (1-2 seconds saved)
-  /// - WebContent process initialization (1-3 seconds saved)
-  /// - **Total: 3-7 seconds faster first payment screen loading**
-  ///
-  /// ## Usage
-  ///
-  /// Call this as early as possible in your app lifecycle:
-  ///
-  /// ```dart
-  /// void main() {
-  ///   WidgetsFlutterBinding.ensureInitialized();
-  ///   Bootpay.warmUp();  // Pre-warm WebView
-  ///   runApp(MyApp());
-  /// }
-  /// ```
-  ///
-  /// **Note**: This is a no-op on Android and Web platforms.
-  ///
-  /// Returns `true` if warm-up was initiated successfully.
-  static Future<bool> warmUp() async {
-    // Only supported on iOS and macOS
-    if (kIsWeb) return false;
-    if (!Platform.isIOS && !Platform.isMacOS) return false;
+  /// Automatically warms up the WebView when SDK is first used.
+  /// This is called internally - users don't need to call this manually.
+  static void _autoWarmUp() {
+    if (_autoWarmUpCalled) return;
+    _autoWarmUpCalled = true;
 
-    try {
-      final result = await _warmUpChannel.invokeMethod<bool>('warmUp');
+    // Only supported on iOS and macOS
+    if (kIsWeb) return;
+    if (!Platform.isIOS && !Platform.isMacOS) return;
+
+    // Call warmUp asynchronously without blocking
+    _warmUpChannel.invokeMethod<bool>('warmUp').then((result) {
       _isWarmedUp = result ?? false;
-      return _isWarmedUp;
-    } on PlatformException catch (e) {
-      debugPrint('[Bootpay] WarmUp failed: ${e.message}');
-      return false;
-    } on MissingPluginException {
-      return false;
-    }
+      if (_isWarmedUp) {
+        debugPrint('[Bootpay] WebView auto warm-up completed');
+      }
+    }).catchError((e) {
+      // Silently ignore errors - warmUp is optional optimization
+    });
   }
 
   /// Releases the pre-warmed WebView to free memory (iOS/macOS only)
   ///
-  /// Call this method when:
-  /// - Receiving memory warnings
-  /// - WebView is no longer needed in the app
-  /// - App is going to background for extended period
-  ///
-  /// ## Usage
-  ///
-  /// ```dart
-  /// @override
-  /// void didReceiveMemoryWarning() {
-  ///   Bootpay.releaseWarmUp();
-  /// }
-  /// ```
+  /// Call this method when receiving memory warnings.
+  /// Note: This is optional. The SDK handles memory efficiently by default.
   ///
   /// **Note**: This is a no-op on Android and Web platforms.
-  ///
-  /// Returns `true` if release was successful.
   static Future<bool> releaseWarmUp() async {
     // Only supported on iOS and macOS
     if (kIsWeb) return false;
@@ -133,6 +102,8 @@ class Bootpay extends BootpayApi {
   }
   Bootpay._internal() {
     _platform = BootpayPlatform();
+    // Auto warm-up WebView on iOS/macOS for faster first payment
+    _autoWarmUp();
   }
 
   late BootpayPlatform _platform;
