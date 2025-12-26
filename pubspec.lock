@@ -53,10 +53,10 @@ packages:
     dependency: "direct main"
     description:
       name: bootpay_webview_flutter
-      sha256: "35ec0582aa601fbe33e20769e1d791c097dcd2c803319dabab7d54df3b2fd6eb"
+      sha256: e2e560a6b29733ce3c8653ea1a4d80b666bc63cc9b24373d4e6864a9b04e1c21
       url: "https://pub.dev"
     source: hosted
-    version: "4.12.2"
+    version: "4.12.3"
   bootpay_webview_flutter_android:
     dependency: "direct main"
     description:
@@ -77,10 +77,10 @@ packages:
     dependency: "direct main"
     description:
       name: bootpay_webview_flutter_wkwebview
-      sha256: cb0f2c018844e6fa5f38efe5934dfcabc6f9750c8c3e172d9f19a3bce0e3671f
+      sha256: c3d920cde10b847d2c22a45d70d2ffa14fe8946e9a4331abb53e0b0404c3852c
       url: "https://pub.dev"
     source: hosted
-    version: "3.23.24"
+    version: "3.23.26"
   build:
     dependency: transitive
     description:

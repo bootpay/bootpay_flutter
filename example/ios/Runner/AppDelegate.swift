@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import bootpay_webview_flutter_wkwebview
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -24,5 +25,11 @@ import Flutter
       return true // URL 처리했음을 알리지만 아무것도 하지 않음
     }
     return super.application(app, open: url, options: options)
+  }
+
+  // 메모리 경고 시 프리워밍 리소스 해제
+  override func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+    super.applicationDidReceiveMemoryWarning(application)
+    BootpayWarmUpManager.shared.releaseWarmUp()
   }
 }

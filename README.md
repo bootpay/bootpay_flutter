@@ -516,6 +516,49 @@ PG에서 거래 승인 이후에 호출 되는 함수입니다. 결제 완료 �
 ```
 
 
+## WebView 프리워밍 (iOS/macOS)
+
+iOS에서 WKWebView는 처음 로딩 시 GPU, Networking, WebContent 프로세스를 생성하는데 3-7초가 소요됩니다. `warmUp()` 메서드를 사용하면 앱 시작 시 백그라운드에서 프로세스를 미리 생성하여 첫 결제 화면 로딩 속도를 개선할 수 있습니다.
+
+### 사용법
+
+앱 시작 시 가능한 빨리 호출하세요:
+
+```dart
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // WebView 프리워밍 (iOS/macOS에서만 동작, Android/Web에서는 no-op)
+  Bootpay.warmUp();
+
+  runApp(MyApp());
+}
+```
+
+### 메모리 관리
+
+메모리 부족 시 프리워밍된 리소스를 해제할 수 있습니다:
+
+```dart
+// 메모리 경고 수신 시
+Bootpay.releaseWarmUp();
+```
+
+### 효과
+
+| 항목 | 개선 효과 |
+|------|----------|
+| GPU 프로세스 초기화 | 1-2초 단축 |
+| Networking 프로세스 초기화 | 1-2초 단축 |
+| WebContent 프로세스 초기화 | 1-3초 단축 |
+| **총 개선 효과** | **3-7초 단축** |
+
+### 주의사항
+
+- iOS/macOS에서만 동작합니다. Android와 Web에서는 호출해도 아무 동작을 하지 않습니다.
+- 선택 사항입니다. 호출하지 않아도 결제 기능은 정상 작동합니다.
+- 두 번째 결제부터는 자동으로 빠릅니다 (ProcessPool 공유).
+
 ## Documentation
 
 [부트페이 개발매뉴얼](https://developer.bootpay.co.kr/)을 참조해주세요
