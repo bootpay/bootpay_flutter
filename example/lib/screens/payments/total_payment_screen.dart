@@ -5,6 +5,7 @@ import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/user.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../utils/bootpay_helper.dart';
@@ -221,6 +222,9 @@ class _TotalPaymentScreenState extends State<TotalPaymentScreen> {
 
     Extra extra = Extra();
     extra.appScheme = 'bootpayFlutterExampleV2';
+    if (kIsWeb) {
+      extra.openType = 'iframe';
+    }
     payload.extra = extra;
 
     Bootpay().requestPayment(

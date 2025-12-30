@@ -6,6 +6,7 @@ import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/user.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../utils/bootpay_helper.dart';
@@ -248,6 +249,9 @@ class _PasswordPaymentScreenState extends State<PasswordPaymentScreen> {
     Extra extra = Extra();
     extra.appScheme = 'bootpayFlutterExampleV2';
     extra.separatelyConfirmed = false;
+    if (kIsWeb) {
+      extra.openType = 'iframe';
+    }
     payload.extra = extra;
 
     Bootpay().requestPassword(

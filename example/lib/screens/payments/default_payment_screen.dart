@@ -242,6 +242,9 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
     Extra extra = Extra();
     extra.cardQuota = '0,2,3,4,5,6';
     extra.appScheme = "bootpayFlutterExampleV2://end";
+    if (kIsWeb) {
+      extra.openType = 'iframe';
+    }
     payload.extra = extra;
 
     Bootpay().requestPayment(
@@ -256,6 +259,7 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
       },
       onClose: () {
         debugPrint('------- onClose, _isPaymentDone: $_isPaymentDone');
+        // 웹에서는 결제창을 명시적으로 닫아야 함
         // 결제 완료 후에는 결과 페이지로 이동
         if (_isPaymentDone && _paymentResultData != null) {
           debugPrint('------- onClose -> show result page');
@@ -267,7 +271,6 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
             }
           });
         }
-        // dismiss 호출하지 않음 - Bootpay 내부에서 자동 처리됨
       },
       onIssued: (String data) {
         debugPrint('------- onIssued: $data');

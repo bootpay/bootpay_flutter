@@ -175,7 +175,9 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
 
     Extra extra = Extra();
     extra.openType = 'iframe';
+    extra.showCloseButton = true;
     payload.extra = extra;
+    
 
     Bootpay().requestAuthentication(
       context: context,

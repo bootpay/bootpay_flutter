@@ -4,6 +4,7 @@ import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/user.dart';
+import 'package:flutter/foundation.dart';
 import '../models/cart.dart';
 import '../models/cart_item.dart';
 
@@ -86,6 +87,9 @@ class BootpayHelper {
     final extra = Extra();
     extra.appScheme = 'bootpayFlutterExampleV2';
     extra.cardQuota = '0,2,3,4,5,6';
+    if (kIsWeb) {
+      extra.openType = 'iframe';
+    }
     payload.extra = extra;
 
     // 메타데이터

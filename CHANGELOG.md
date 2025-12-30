@@ -1,3 +1,8 @@
+## 5.0.23
+* Android: Kotlin 1.7.0+ 호환성 개선
+  - Kotlin 1.7.x, 1.8.x, 1.9.x, 2.0.x 모두 지원
+  - 호스트 앱의 kotlin_version 자동 사용
+
 ## 5.0.22
 * Android: 오래된 Flutter 프로젝트에서 빌드 실패 문제 해결
   - compileSdkVersion fallback 추가

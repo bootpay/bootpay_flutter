@@ -55,35 +55,39 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "5.0.20"
+    version: "5.0.23"
   bootpay_webview_flutter:
     dependency: transitive
     description:
-      path: "../../bootpay_flutter_webview/bootpay_webview_flutter"
-      relative: true
-    source: path
+      name: bootpay_webview_flutter
+      sha256: e2e560a6b29733ce3c8653ea1a4d80b666bc63cc9b24373d4e6864a9b04e1c21
+      url: "https://pub.dev"
+    source: hosted
     version: "4.12.3"
   bootpay_webview_flutter_android:
     dependency: transitive
     description:
-      path: "../../bootpay_flutter_webview/bootpay_webview_flutter_android"
-      relative: true
-    source: path
-    version: "4.10.56"
+      name: bootpay_webview_flutter_android
+      sha256: f10327c1a1a5cd35ea0967ae5299b2bf1a449bb85de579fc88db63d26c38282d
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.10.58"
   bootpay_webview_flutter_platform_interface:
     dependency: transitive
     description:
-      path: "../../bootpay_flutter_webview/bootpay_webview_flutter_platform_interface"
-      relative: true
-    source: path
+      name: bootpay_webview_flutter_platform_interface
+      sha256: f714d8cba3d17d771005a310b97cda7878e1a8c4f7407f475ab078cbbabe21c2
+      url: "https://pub.dev"
+    source: hosted
     version: "2.14.2"
   bootpay_webview_flutter_wkwebview:
     dependency: transitive
     description:
-      path: "../../bootpay_flutter_webview/bootpay_webview_flutter_wkwebview"
-      relative: true
-    source: path
-    version: "3.23.26"
+      name: bootpay_webview_flutter_wkwebview
+      sha256: "786ef7e6451eeebca454a8fe3f2881a7e9f1a779ee4a78127b20c518e3eab492"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.23.27"
   build:
     dependency: transitive
     description:

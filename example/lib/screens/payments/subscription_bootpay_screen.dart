@@ -192,6 +192,9 @@ class _SubscriptionBootpayScreenState extends State<SubscriptionBootpayScreen> {
 
     Extra extra = Extra();
     extra.appScheme = 'bootpayFlutterExampleV2';
+    if (kIsWeb) {
+      extra.openType = 'iframe';
+    }
     payload.extra = extra;
 
     Bootpay().requestSubscription(
