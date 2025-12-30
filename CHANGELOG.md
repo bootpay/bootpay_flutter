@@ -1,3 +1,9 @@
+## 5.0.24
+* Flutter Web: dart:js_interop 마이그레이션
+  - deprecated된 package:js에서 dart:js_interop으로 전환
+  - Dart 3.x 호환성 개선
+  - 결제 콜백 (onClose, onCancel, onDone 등) 정상 동작
+
 ## 5.0.23
 * Android: Kotlin 1.7.0+ 호환성 개선
   - Kotlin 1.7.x, 1.8.x, 1.9.x, 2.0.x 모두 지원
