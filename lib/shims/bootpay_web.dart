@@ -11,6 +11,7 @@ import 'package:http/src/response.dart';
 import 'package:flutter/material.dart';
 import '../bootpay.dart';
 import '../bootpay_api.dart';
+import '../model/extra.dart';
 import '../model/payload.dart';
 
 @JS()
@@ -111,6 +112,12 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
     this._callbackDone = onDone;
 
     if(payload != null) {
+      // Flutter Web에서는 useBootpayInappSdk = false로 설정하여 Promise 방식 사용
+      if (payload.extra == null) {
+        payload.extra = Extra();
+      }
+      payload.extra!.useBootpayInappSdk = false;
+
       _jsBeforeLoad();
       _requestPayment(jsonEncode(payload.toJson()));
     }
@@ -149,6 +156,13 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
       if(payload.subscriptionId == null || payload.subscriptionId?.length == 0) {
         payload.subscriptionId = payload.orderId ?? "";
       }
+      // Flutter Web에서는 useBootpayInappSdk = false로 설정하여 Promise 방식 사용
+      if (payload.extra == null) {
+        payload.extra = Extra();
+      }
+      payload.extra!.useBootpayInappSdk = false;
+      debugPrint('[BootpayWeb] requestSubscription - useBootpayInappSdk: ${payload.extra!.useBootpayInappSdk}');
+
       _jsBeforeLoad();
       _requestSubscription(jsonEncode(payload.toJson()));
     }
@@ -187,6 +201,12 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
       if(payload.subscriptionId == null || payload.subscriptionId?.length == 0) {
         payload.subscriptionId = payload.orderId ?? "";
       }
+      // Flutter Web에서는 useBootpayInappSdk = false로 설정하여 Promise 방식 사용
+      if (payload.extra == null) {
+        payload.extra = Extra();
+      }
+      payload.extra!.useBootpayInappSdk = false;
+
       _jsBeforeLoad();
       _requestAuthentication(jsonEncode(payload.toJson()));
     }
@@ -222,6 +242,12 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
 
     if(payload != null) {
       payload.method = "카드간편";
+
+      // Flutter Web에서는 useBootpayInappSdk = false로 설정하여 Promise 방식 사용
+      if (payload.extra == null) {
+        payload.extra = Extra();
+      }
+      payload.extra!.useBootpayInappSdk = false;
 
       _jsBeforeLoad();
       _requestPayment(jsonEncode(payload.toJson()));

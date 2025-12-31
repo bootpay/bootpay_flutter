@@ -1,3 +1,10 @@
+## 5.0.25
+* Flutter Web: useBootpayInappSdk=false 기본 설정
+  - Promise 방식으로 결제 결과 처리
+  - requestPayment, requestSubscription, requestAuthentication, requestPassword에 적용
+* Flutter Web: 조건부 import 수정 (dart.library.html → dart.library.js_interop)
+* bootpay_webview_flutter_android 4.10.60 업그레이드
+
 ## 5.0.24
 * Flutter Web: dart:js_interop 마이그레이션
   - deprecated된 package:js에서 dart:js_interop으로 전환

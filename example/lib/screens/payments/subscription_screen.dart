@@ -23,7 +23,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   final String _productDescription = '매월 자동으로 결제되는 프리미엄 멤버십입니다.\n다양한 혜택과 할인을 제공합니다.';
   final double _productPrice = 9900;
 
-  String _selectedPg = '라이트페이';
+  String _selectedPg = '나이스페이';
   final List<String> _pgList = ['라이트페이', '나이스페이', 'KG이니시스'];
 
   @override
@@ -197,6 +197,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     }
     payload.extra = extra;
 
+
     Bootpay().requestSubscription(
       context: context,
       payload: payload,
@@ -204,13 +205,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       onCancel: (String data) => debugPrint('------- onCancel: $data'),
       onError: (String data) => debugPrint('------- onError: $data'),
       onClose: () {
-        debugPrint('------- onClose');
         if (!kIsWeb) Bootpay().dismiss(context);
       },
       onIssued: (String data) => debugPrint('------- onIssued: $data'),
       onConfirm: (String data) => true,
       onDone: (String data) {
-        debugPrint('------- onDone: $data');
         _showSubscriptionResult(data);
       },
     );

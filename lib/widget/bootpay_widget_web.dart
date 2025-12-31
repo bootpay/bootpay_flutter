@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:web/web.dart' as web;
 
 import '../bootpay.dart';
+import '../model/extra.dart';
 import '../model/payload.dart';
 import '../model/widget/widget_data.dart';
 
@@ -43,6 +44,10 @@ external JSPromise _jsBootpayConfirm();
 
 @JS('console.log')
 external void _jsConsoleLog(String message);
+
+// 위젯용 redirect 이벤트 핸들러 등록
+@JS('BootpayWidgetRedirectHandler')
+external set _bootpayWidgetRedirectHandler(JSFunction? f);
 
 int _widgetIdCounter = 0;
 
@@ -427,6 +432,12 @@ class BootpayWidgetController {
       _onError?.call('{"error": "BootpayWidget JS SDK not loaded"}');
       return;
     }
+
+    // Flutter Web에서는 useBootpayInappSdk = false로 설정하여 Promise 방식 사용
+    if (payload.extra == null) {
+      payload.extra = Extra();
+    }
+
 
     try {
       final payloadJson = jsonEncode(payload.toJson());

@@ -1,1 +1,1 @@
-export 'bootpay_app.dart' if (dart.library.html) 'bootpay_web.dart';
+export 'bootpay_app.dart' if (dart.library.js_interop) 'bootpay_web.dart';
