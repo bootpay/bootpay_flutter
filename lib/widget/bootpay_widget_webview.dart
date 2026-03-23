@@ -12,7 +12,7 @@ import '../user_info.dart';
 
 /// 위젯 URL 상수
 class _WidgetConstants {
-  static const String INAPP_URL = 'https://webview.bootpay.co.kr/5.2.2/';
+  static const String INAPP_URL = 'https://webview.bootpay.co.kr/5.3.0/';
   static const String WIDGET_URL = '${INAPP_URL}widget.html';
   // Bootpay SDK가 이미 window.Bootpay를 사용하므로 다른 이름 사용
   static const String BRIDGE_NAME = 'BootpayFlutterBridge';

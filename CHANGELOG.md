@@ -1,3 +1,10 @@
+## 5.1.0
+* webview CDN URL을 5.3.0으로 업데이트
+* client_key 인증 방식 추가 (기존 application_id 방식과 병행 지원)
+* Flutter 최소 요구 버전 3.3.0 → 3.24.0으로 상향
+* Dart SDK 최소 요구 버전 2.18.0 → 3.5.0으로 상향
+* getMetadataString(), getMethods() 논리 오류 수정
+
 ## 5.0.25
 * Flutter Web: useBootpayInappSdk=false 기본 설정
   - Promise 방식으로 결제 결과 처리

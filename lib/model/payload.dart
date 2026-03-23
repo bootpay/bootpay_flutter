@@ -15,6 +15,7 @@ class Payload {
   String? webApplicationId = '';
   String? androidApplicationId = '';
   String? iosApplicationId = '';
+  String? clientKey;
 
   String? pg = '';
   String? method = '';
@@ -62,6 +63,7 @@ class Payload {
     this.webApplicationId,
     this.androidApplicationId,
     this.iosApplicationId,
+    this.clientKey,
     this.pg,
     this.method,
     this.methods,
@@ -91,6 +93,7 @@ class Payload {
   Payload.fromJson(Map<String, dynamic> json) {
     androidApplicationId = json["android_application_id"];
     iosApplicationId = json["ios_application_id"];
+    clientKey = json["client_key"];
 
     pg = json["pg"];
     method = json["method"];
@@ -136,8 +139,13 @@ class Payload {
 
   //web에서 사용됨
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> result = {
-      'application_id': getApplicationId(),
+    Map<String, dynamic> result = {};
+    if(clientKey != null && clientKey!.isNotEmpty) {
+      result['client_key'] = clientKey;
+    } else {
+      result['application_id'] = getApplicationId();
+    }
+    result.addAll({
       'pg': pg,
       'order_name': orderName,
       'price': price,
@@ -155,7 +163,7 @@ class Payload {
       'key': widgetKey,
       'sandbox': widgetSandbox,
       'use_terms': widgetUseTerms,
-    };
+    });
     if(this.methods != null && this.methods!.length > 0) {
       if(kIsWeb) result['method'] = this.methods;
       else result['method'] = getMethodValue();
@@ -208,7 +216,11 @@ class Payload {
       }
     }
 
-    addPart('application_id', getApplicationId());
+    if(clientKey != null && clientKey!.isNotEmpty) {
+      addPart('client_key', clientKey);
+    } else {
+      addPart('application_id', getApplicationId());
+    }
     addPart('pg', pg);
     addPart('method', getMethodValue(), isOriginal: true);
     addPart('order_name', orderName);
@@ -297,7 +309,7 @@ class Payload {
   }
 
   String getMetadataString() {
-    if (metadata != null || metadata!.isEmpty) return "{}";
+    if (metadata == null || metadata!.isEmpty) return "{}";
     return reVal(metadata.toString());
   }
 
@@ -313,7 +325,7 @@ class Payload {
   }
 
   String getMethods() {
-    if (methods != null || methods!.isEmpty) return '';
+    if (methods == null || methods!.isEmpty) return '';
     String result = '';
     for (String method in methods!) {
       if (result.length > 0) result += ',';

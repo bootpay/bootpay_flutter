@@ -29,6 +29,13 @@ class BootpayHelper {
         : '5b8f6a4d396fa665fdc2b5e9';
   }
 
+  // Commerce API Client Key
+  static String get clientKey {
+    return BootpayConfig.ENV == BootpayConfig.ENV_DEBUG
+        ? 'hxS-Up--5RvT6oU6QJE0JA'
+        : 'sEN72kYZBiyMNytA8nUGxQ';
+  }
+
   static String get applicationId {
     return Bootpay().applicationId(
       webApplicationId,

@@ -1,6 +1,8 @@
 import 'package:bootpay/bootpay.dart';
+import 'package:bootpay/config/bootpay_config.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../utils/bootpay_helper.dart';
 
 /// Commerce 구독 결제 화면 (iOS CommerceExampleController 참조)
 class CommerceScreen extends StatefulWidget {
@@ -14,7 +16,7 @@ class _CommerceScreenState extends State<CommerceScreen> {
   // 환경별 설정
   final Map<String, Map<String, dynamic>> envConfig = {
     'development': {
-      'client_key': 'hxS-Up--5RvT6oU6QJE0JA',
+      'client_key': BootpayHelper.clientKey,
       'plans': {
         'starter': {
           'monthly_product_id': '69268625d8df8fa1837cf661',
@@ -31,7 +33,7 @@ class _CommerceScreenState extends State<CommerceScreen> {
       },
     },
     'production': {
-      'client_key': 'sEN72kYZBiyMNytA8nUGxQ',
+      'client_key': BootpayHelper.clientKey,
       'plans': {
         'starter': {
           'monthly_product_id': '6927d893ff30795ff003d374',
