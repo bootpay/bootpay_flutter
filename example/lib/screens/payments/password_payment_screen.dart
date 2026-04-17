@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:bootpay/bootpay.dart';
-import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
@@ -9,6 +8,7 @@ import 'package:bootpay/model/user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../config/bootpay_env.dart';
 import '../../utils/bootpay_helper.dart';
 import 'package:bootpay_flutter_example/deprecated/api_provider.dart';
 
@@ -204,16 +204,8 @@ class _PasswordPaymentScreenState extends State<PasswordPaymentScreen> {
   }
 
   Future<String> _getUserToken() async {
-    String restApplicationId = "";
-    String pk = "";
-
-    if (BootpayConfig.ENV == BootpayConfig.ENV_PROMOTION) {
-      restApplicationId = "5b8f6a4d396fa665fdc2b5ea";
-      pk = "rm6EYECr6aroQVG2ntW0A6LpWnkTgP4uQ3H18sDDUYw=";
-    } else {
-      restApplicationId = "5b9f51264457636ab9a07cde";
-      pk = "sfilSOSVakw+PZA+PRux4Iuwm7a//9CXXudCq9TMDHk=";
-    }
+    final String restApplicationId = BootpayEnvConfig.restApplicationId;
+    final String pk = BootpayEnvConfig.privateKey;
 
     try {
       var res = await _provider.getRestToken(restApplicationId, pk);

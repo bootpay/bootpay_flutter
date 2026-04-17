@@ -69,7 +69,7 @@ dependencies:
 flutter web 빌드하면 web/index.html 파일이 생성됩니다. 해당 파일 header에 아래 script를 추가해주세요.
 ```html 
 <!-- bootpay-최신버전-js 를 참조하여 추가합니다 -->
-<script src="https://js.bootpay.co.kr/bootpay-5.0.0.min.js"></script> 
+<script src="https://js.bootpay.co.kr/bootpay-5.3.0.min.js"></script> 
 <script src="bootpay_api.js" defer></script>
 ```
 [bootpay_api](https://github.com/bootpay/bootpay_flutter/blob/main/example/web/bootpay_api.js) 파일을 프로젝트에 추가합니다.

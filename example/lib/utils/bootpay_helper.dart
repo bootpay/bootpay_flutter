@@ -1,40 +1,24 @@
 import 'package:bootpay/bootpay.dart';
-import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/user.dart';
 import 'package:flutter/foundation.dart';
+import '../config/bootpay_env.dart';
 import '../models/cart.dart';
 import '../models/cart_item.dart';
 
 /// Bootpay 관련 설정 및 유틸리티
+///
+/// 환경 키는 BootpayEnvConfig (.env → production fallback) 에서 가져옵니다.
 class BootpayHelper {
   // Application IDs
-  static String get webApplicationId {
-    return BootpayConfig.ENV == BootpayConfig.ENV_DEBUG
-        ? '5b9f51264457636ab9a07cdb'
-        : '5b8f6a4d396fa665fdc2b5e7';
-  }
-
-  static String get androidApplicationId {
-    return BootpayConfig.ENV == BootpayConfig.ENV_DEBUG
-        ? '5b9f51264457636ab9a07cdc'
-        : '5b8f6a4d396fa665fdc2b5e8';
-  }
-
-  static String get iosApplicationId {
-    return BootpayConfig.ENV == BootpayConfig.ENV_DEBUG
-        ? '5b9f51264457636ab9a07cdd'
-        : '5b8f6a4d396fa665fdc2b5e9';
-  }
+  static String get webApplicationId => BootpayEnvConfig.webApplicationId;
+  static String get androidApplicationId => BootpayEnvConfig.androidApplicationId;
+  static String get iosApplicationId => BootpayEnvConfig.iosApplicationId;
 
   // Commerce API Client Key
-  static String get clientKey {
-    return BootpayConfig.ENV == BootpayConfig.ENV_DEBUG
-        ? 'hxS-Up--5RvT6oU6QJE0JA'
-        : 'sEN72kYZBiyMNytA8nUGxQ';
-  }
+  static String get clientKey => BootpayEnvConfig.clientKey;
 
   static String get applicationId {
     return Bootpay().applicationId(

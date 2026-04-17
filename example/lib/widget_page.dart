@@ -10,6 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'config/bootpay_env.dart';
+
 class WidgetPage extends StatefulWidget {
   @override
   State<WidgetPage> createState() => WidgetPageState();
@@ -23,10 +25,10 @@ class WidgetPageState extends State<WidgetPage> {
   // GlobalKey로 BootpayWidget 상태 유지 (iOS Swift SDK의 expandToFullscreen과 동일)
   final GlobalKey _bootpayWidgetKey = GlobalKey();
 
-  // Application IDs - 부트페이 관리자에서 확인
-  String webApplicationId = '5b8f6a4d396fa665fdc2b5e7';  // Web용
-  String androidApplicationId = '5b8f6a4d396fa665fdc2b5e8';  // Android용
-  String iosApplicationId = '5b8f6a4d396fa665fdc2b5e9';  // iOS용
+  // Application IDs - .env (BootpayEnvConfig) 기반, 미설정 시 production fallback
+  String webApplicationId = BootpayEnvConfig.webApplicationId;
+  String androidApplicationId = BootpayEnvConfig.androidApplicationId;
+  String iosApplicationId = BootpayEnvConfig.iosApplicationId;
 
   // 결제 정보
   static const String ORDER_NAME = '테스트 상품';
