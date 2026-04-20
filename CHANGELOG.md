@@ -1,3 +1,17 @@
+## 5.1.1
+* fix: 통합결제(Union 위젯) iOS 진입 실패 해결
+  - JS SDK 5.3.0 의 신규 Union 위젯이 `use_bootpay_inapp_sdk=true` 환경에서
+    `redirect` / `moveRedirectUrl` 이벤트를 `BootpayFlutterWebView` 네이티브
+    브릿지로 송신하는데, `onRedirectJS` 가 해당 이벤트를 구현하지 않아
+    webview 가 iframe 안에 머무르며 진행이 멈추던 문제 수정
+  - 추가로 `showPayment/hidePayment/showProgress/hideProgress/resize/`
+    `iFrameStyle/windowStyle/polling/setConfirmParameters` 는 명시적 no-op
+* `bootpay_webview_flutter_wkwebview` 의존성 `^3.23.30` 으로 상향 (iOS
+  NavigationDelegate URL 판정 화이트리스트 패치 반영)
+* chore(example/ios): signing 설정을 `$(BOOTPAY_EXAMPLE_BUNDLE_ID)` /
+  `$(BOOTPAY_DEVELOPMENT_TEAM)` 변수화 + `Flutter/LocalSigning.xcconfig`
+  (gitignored) 기반 개인 팀 override 구조 추가
+
 ## 5.1.0
 * webview CDN URL을 5.3.0으로 업데이트
 * client_key 인증 방식 추가 (기존 application_id 방식과 병행 지원)

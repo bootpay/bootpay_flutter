@@ -1050,6 +1050,37 @@ extension BootpayCallback on BootpayWebViewState {
           print("bootpayWidgetRevertScreen called");
           if (this.widget.onRevertScreen != null) this.widget.onRevertScreen!(message.message);
           break;
+
+        // Union(통합결제) 위젯은 use_bootpay_inapp_sdk=true 상태에서 이벤트를 JS window.parent
+        // 대신 이 채널로 바로 보낸다. redirect 는 "webview 전체를 이 URL 로 이동시켜라" 지시로,
+        // SDK 호스트 페이지에서 처리되던 `location.href = url` 동작을 Flutter 네이티브에서 대체한다.
+        case "redirect":
+          final dynamic urlValue = data["data"] is Map ? (data["data"] as Map)["url"] : data["url"];
+          if (urlValue is String && urlValue.isNotEmpty) {
+            widget._controller.loadRequest(Uri.parse(urlValue));
+          }
+          break;
+
+        case "moveRedirectUrl":
+          final dynamic payload = data["data"] is Map ? data["data"] as Map : data;
+          final dynamic urlValue = payload["url"];
+          if (urlValue is String && urlValue.isNotEmpty) {
+            widget._controller.loadRequest(Uri.parse(urlValue));
+          }
+          break;
+
+        // UI 제어 이벤트는 SDK 호스트 페이지의 AlfredProgress / iframe 크기 조정 용도로 사용되며
+        // Flutter webview 에는 동등한 대상 DOM 이 없으므로 조용히 무시한다.
+        case "showPayment":
+        case "hidePayment":
+        case "showProgress":
+        case "hideProgress":
+        case "resize":
+        case "iFrameStyle":
+        case "windowStyle":
+        case "polling":
+        case "setConfirmParameters":
+          break;
       }
     } catch (e) {
       print("Error parsing JSON: $e");

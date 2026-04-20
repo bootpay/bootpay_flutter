@@ -44,6 +44,18 @@ dev_dependencies:
     sdk: flutter
 #  bootpay_webview_flutter_platform_interface: 2.0.16
 
+# 로컬 webview 서브모듈 (multi-sdk/client/flutter/bootpay-flutter-webview/*) 을
+# example 빌드에서 바로 쓰고 싶을 때 아래 블록을 해제. 배포 커밋에는 포함 금지.
+# dependency_overrides:
+#   bootpay_webview_flutter:
+#     path: ../../bootpay-flutter-webview/bootpay_webview_flutter
+#   bootpay_webview_flutter_android:
+#     path: ../../bootpay-flutter-webview/bootpay_webview_flutter_android
+#   bootpay_webview_flutter_wkwebview:
+#     path: ../../bootpay-flutter-webview/bootpay_webview_flutter_wkwebview
+#   bootpay_webview_flutter_platform_interface:
+#     path: ../../bootpay-flutter-webview/bootpay_webview_flutter_platform_interface
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

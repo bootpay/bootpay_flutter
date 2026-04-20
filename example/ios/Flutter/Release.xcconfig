@@ -1,2 +1,9 @@
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
 #include "Generated.xcconfig"
+
+// Bootpay example signing — defaults (shared).
+// 개인 계정으로 빌드할 때는 `Flutter/LocalSigning.xcconfig` (gitignored) 에서 덮어쓴다.
+BOOTPAY_EXAMPLE_BUNDLE_ID = kr.co.bootpay.flutterExample
+BOOTPAY_DEVELOPMENT_TEAM = L4JEYZGQBD
+
+#include? "LocalSigning.xcconfig"
