@@ -1,3 +1,8 @@
+## 5.1.2
+* **Dependency Update**: iOS 라우팅 보강 (삼성 모니모 App Store fallback)
+  - `bootpay_webview_flutter` 의존성 `^4.12.6`
+  - `bootpay_webview_flutter_wkwebview` 의존성 `^3.23.31`
+
 ## 5.1.1
 * fix: 통합결제(Union 위젯) iOS 진입 실패 해결
   - JS SDK 5.3.0 의 신규 Union 위젯이 `use_bootpay_inapp_sdk=true` 환경에서
