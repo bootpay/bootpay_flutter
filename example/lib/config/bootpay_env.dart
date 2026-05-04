@@ -40,7 +40,14 @@ class BootpayEnvConfig {
 
   static String _envOrEmpty(String key) {
     try {
-      return dotenv.maybeGet(key) ?? '';
+      final value = (dotenv.maybeGet(key) ?? '').trim();
+      if (value.isEmpty ||
+          value == 'undefined' ||
+          value == 'null' ||
+          (value.startsWith(r'$(') && value.endsWith(')'))) {
+        return '';
+      }
+      return value;
     } catch (_) {
       return '';
     }
