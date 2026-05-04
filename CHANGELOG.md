@@ -1,3 +1,7 @@
+## Unreleased
+- example: .env 기반 client_key/server_key 예제로 정리하고 production fallback 유지
+- legacy application_id/private_key REST 예제는 호환용으로 유지
+
 ## 5.1.2
 * **Dependency Update**: iOS 라우팅 보강 (삼성 모니모 App Store fallback)
   - `bootpay_webview_flutter` 의존성 `^4.12.6`

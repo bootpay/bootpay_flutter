@@ -21,7 +21,10 @@ class BootpayEnvConfig {
   static const String _prodAndroid = '5b8f6a4d396fa665fdc2b5e8';
   static const String _prodIos = '5b8f6a4d396fa665fdc2b5e9';
   static const String _prodRest = '5b8f6a4d396fa665fdc2b5ea';
-  static const String _prodPrivateKey = 'rm6EYECr6aroQVG2ntW0A6LpWnkTgP4uQ3H18sDDUYw=';
+  static const String _prodPrivateKey =
+      'rm6EYECr6aroQVG2ntW0A6LpWnkTgP4uQ3H18sDDUYw=';
+  static const String _prodServerKey =
+      'rnZLJamENRgfwTccwmI_Uu9cxsPpAV9X2W-Htg73yfU=';
   static const String _prodClientKey = 'sEN72kYZBiyMNytA8nUGxQ';
 
   // ===== Development 기본값 =====
@@ -29,7 +32,10 @@ class BootpayEnvConfig {
   static const String _devAndroid = '5b9f51264457636ab9a07cdc';
   static const String _devIos = '5b9f51264457636ab9a07cdd';
   static const String _devRest = '59b731f084382614ebf72215';
-  static const String _devPrivateKey = 'WwDv0UjfwFa04wYG0LJZZv1xwraQnlhnHE375n52X0U=';
+  static const String _devPrivateKey =
+      'WwDv0UjfwFa04wYG0LJZZv1xwraQnlhnHE375n52X0U=';
+  static const String _devServerKey =
+      'r5zxvDcQJiAP2PBQ0aJjSHQtblNmYFt6uFoEMhti_mg=';
   static const String _devClientKey = 'hxS-Up--5RvT6oU6QJE0JA';
 
   static String _envOrEmpty(String key) {
@@ -47,7 +53,8 @@ class BootpayEnvConfig {
 
   static bool get isDevelopment => env == 'development';
 
-  static String _resolve(String devKey, String prodKey, String devFallback, String prodFallback) {
+  static String _resolve(
+      String devKey, String prodKey, String devFallback, String prodFallback) {
     final fromEnv = _envOrEmpty(isDevelopment ? devKey : prodKey);
     if (fromEnv.isNotEmpty) return fromEnv;
     return isDevelopment ? devFallback : prodFallback;
@@ -81,6 +88,14 @@ class BootpayEnvConfig {
         _prodRest,
       );
 
+  static String get serverKey => _resolve(
+        'BOOTPAY_SERVER_KEY_DEV',
+        'BOOTPAY_SERVER_KEY_PROD',
+        _devServerKey,
+        _prodServerKey,
+      );
+
+  /// Legacy alias. 기존 예제/사용자 코드 호환을 위해 유지합니다.
   static String get privateKey => _resolve(
         'BOOTPAY_PRIVATE_KEY_DEV',
         'BOOTPAY_PRIVATE_KEY_PROD',

@@ -25,11 +25,11 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
   final double _productPrice = 1000;
   int _quantity = 1;
 
-  String _selectedPg = '라이트페이';
-  String _selectedMethod = '카드';
+  String _selectedPg = '토스';
+  String _selectedMethod = '토스';
 
-  final List<String> _pgList = ['라이트페이', '나이스페이', 'KG이니시스', '다날'];
-  final List<String> _methodList = ['카드', '계좌이체', '가상계좌', '휴대폰'];
+  final List<String> _pgList = ['토스', '라이트페이', '나이스페이', 'KG이니시스', '다날'];
+  final List<String> _methodList = ['토스', '카드', '계좌이체', '가상계좌', '휴대폰'];
 
   // 결제 완료 플래그 및 결과 데이터
   bool _isPaymentDone = false;
