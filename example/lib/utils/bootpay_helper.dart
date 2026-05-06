@@ -14,7 +14,8 @@ import '../models/cart_item.dart';
 class BootpayHelper {
   // Application IDs
   static String get webApplicationId => BootpayEnvConfig.webApplicationId;
-  static String get androidApplicationId => BootpayEnvConfig.androidApplicationId;
+  static String get androidApplicationId =>
+      BootpayEnvConfig.androidApplicationId;
   static String get iosApplicationId => BootpayEnvConfig.iosApplicationId;
 
   // Commerce API Client Key
@@ -52,9 +53,7 @@ class BootpayHelper {
   }) {
     final payload = Payload();
 
-    payload.webApplicationId = webApplicationId;
-    payload.androidApplicationId = androidApplicationId;
-    payload.iosApplicationId = iosApplicationId;
+    payload.clientKey = clientKey;
 
     payload.price = price;
     payload.orderName = orderName;

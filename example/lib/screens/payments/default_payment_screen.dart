@@ -11,6 +11,8 @@ import 'package:intl/intl.dart';
 import '../../utils/bootpay_helper.dart';
 
 /// 일반 결제 화면 (Android DefaultPaymentActivity / iOS DefaultPaymentController)
+enum PaymentAuthMode { clientKey, legacyApplicationId, missingKey }
+
 class DefaultPaymentScreen extends StatefulWidget {
   const DefaultPaymentScreen({Key? key}) : super(key: key);
 
@@ -21,7 +23,8 @@ class DefaultPaymentScreen extends StatefulWidget {
 class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
   // 상품 정보
   final String _productName = '프리미엄 무선 마우스';
-  final String _productDescription = '인체공학적 디자인의 고급 무선 마우스입니다.\n정밀한 트래킹과 편안한 그립감을 제공합니다.';
+  final String _productDescription =
+      '인체공학적 디자인의 고급 무선 마우스입니다.\n정밀한 트래킹과 편안한 그립감을 제공합니다.';
   final double _productPrice = 1000;
   int _quantity = 1;
 
@@ -34,6 +37,7 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
   // 결제 완료 플래그 및 결과 데이터
   bool _isPaymentDone = false;
   String? _paymentResultData;
+  PaymentAuthMode _authMode = PaymentAuthMode.clientKey;
 
   double get _totalPrice => _productPrice * _quantity;
 
@@ -70,7 +74,8 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
                   // 상품명
                   Text(
                     _productName,
-                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   // 가격
@@ -86,7 +91,8 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
                   // 상품 설명
                   Text(
                     _productDescription,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600], height: 1.5),
+                    style: TextStyle(
+                        fontSize: 14, color: Colors.grey[600], height: 1.5),
                   ),
                   const SizedBox(height: 24),
                   const Divider(),
@@ -94,32 +100,68 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
                   // 수량 선택
                   Row(
                     children: [
-                      const Text('수량', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                      const Text('수량',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600)),
                       const Spacer(),
                       _buildQuantitySelector(),
                     ],
                   ),
                   const SizedBox(height: 24),
                   // PG사 선택
-                  const Text('PG사 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  const Text('PG사 선택',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: _pgList.map((pg) => _buildChip(pg, _selectedPg == pg, () {
-                      setState(() => _selectedPg = pg);
-                    })).toList(),
+                    children: _pgList
+                        .map((pg) => _buildChip(pg, _selectedPg == pg, () {
+                              setState(() => _selectedPg = pg);
+                            }))
+                        .toList(),
                   ),
                   const SizedBox(height: 20),
                   // 결제수단 선택
-                  const Text('결제수단 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  const Text('결제수단 선택',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: _methodList.map((method) => _buildChip(method, _selectedMethod == method, () {
-                      setState(() => _selectedMethod = method);
-                    })).toList(),
+                    children: _methodList
+                        .map((method) =>
+                            _buildChip(method, _selectedMethod == method, () {
+                              setState(() => _selectedMethod = method);
+                            }))
+                        .toList(),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('인증 방식 검증',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      _buildChip(
+                          'client_key', _authMode == PaymentAuthMode.clientKey,
+                          () {
+                        setState(() => _authMode = PaymentAuthMode.clientKey);
+                      }),
+                      _buildChip('legacy application_id',
+                          _authMode == PaymentAuthMode.legacyApplicationId, () {
+                        setState(() =>
+                            _authMode = PaymentAuthMode.legacyApplicationId);
+                      }),
+                      _buildChip(
+                          '키 없음', _authMode == PaymentAuthMode.missingKey, () {
+                        setState(() => _authMode = PaymentAuthMode.missingKey);
+                      }),
+                    ],
                   ),
                 ],
               ),
@@ -149,7 +191,10 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
           ),
           SizedBox(
             width: 40,
-            child: Text('$_quantity', textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            child: Text('$_quantity',
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
           ),
           IconButton(
             icon: const Icon(Icons.add, size: 20),
@@ -167,7 +212,10 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
           color: selected ? Theme.of(context).primaryColor : Colors.white,
-          border: Border.all(color: selected ? Theme.of(context).primaryColor : Colors.grey[300]!),
+          border: Border.all(
+              color: selected
+                  ? Theme.of(context).primaryColor
+                  : Colors.grey[300]!),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
@@ -187,7 +235,10 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5)),
+          BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -5)),
         ],
       ),
       child: SafeArea(
@@ -198,11 +249,15 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
             onPressed: _requestPayment,
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
             child: Text(
               '${formatter.format(_totalPrice.toInt())}원 결제하기',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
+              style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white),
             ),
           ),
         ),
@@ -212,9 +267,7 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
 
   void _requestPayment() {
     Payload payload = Payload();
-    payload.webApplicationId = BootpayHelper.webApplicationId;
-    payload.androidApplicationId = BootpayHelper.androidApplicationId;
-    payload.iosApplicationId = BootpayHelper.iosApplicationId;
+    _applyAuth(payload, _authMode);
 
     payload.pg = _selectedPg;
     payload.method = _selectedMethod;
@@ -266,7 +319,9 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
           Future.microtask(() {
             if (mounted) {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => _PaymentResultPage(data: _paymentResultData!)),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        _PaymentResultPage(data: _paymentResultData!)),
               );
             }
           });
@@ -286,6 +341,22 @@ class _DefaultPaymentScreenState extends State<DefaultPaymentScreen> {
         // dismiss 호출하지 않음 - Bootpay 내부에서 자동으로 onClose 호출됨
       },
     );
+  }
+
+  void _applyAuth(Payload payload, PaymentAuthMode authMode) {
+    switch (authMode) {
+      case PaymentAuthMode.clientKey:
+        payload.clientKey = BootpayHelper.clientKey;
+        break;
+      case PaymentAuthMode.legacyApplicationId:
+        payload.webApplicationId = BootpayHelper.webApplicationId;
+        payload.androidApplicationId = BootpayHelper.androidApplicationId;
+        payload.iosApplicationId = BootpayHelper.iosApplicationId;
+        break;
+      case PaymentAuthMode.missingKey:
+        // NEED_CLIENT_KEY 검증용
+        break;
+    }
   }
 }
 
@@ -331,12 +402,16 @@ class _PaymentResultPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.check_circle, color: Colors.green, size: 80),
+                    const Icon(Icons.check_circle,
+                        color: Colors.green, size: 80),
                     const SizedBox(height: 24),
-                    const Text('결제가 완료되었습니다', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    const Text('결제가 완료되었습니다',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 32),
                     _buildInfoRow('주문명', orderName),
-                    _buildInfoRow('결제금액', '${NumberFormat('#,###').format(price)}원'),
+                    _buildInfoRow(
+                        '결제금액', '${NumberFormat('#,###').format(price)}원'),
                     _buildInfoRow('결제수단', '$pg - $method'),
                     _buildInfoRow('주문번호', orderId),
                     _buildInfoRow('영수증ID', receiptId),
@@ -347,12 +422,18 @@ class _PaymentResultPage extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
+                  onPressed: () =>
+                      Navigator.of(context).popUntil((route) => route.isFirst),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
-                  child: const Text('확인', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white)),
+                  child: const Text('확인',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white)),
                 ),
               ),
             ],
@@ -370,7 +451,11 @@ class _PaymentResultPage extends StatelessWidget {
         children: [
           Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
           Flexible(
-            child: Text(value, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14), textAlign: TextAlign.right, overflow: TextOverflow.ellipsis),
+            child: Text(value,
+                style:
+                    const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.ellipsis),
           ),
         ],
       ),
