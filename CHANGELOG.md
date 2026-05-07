@@ -10,7 +10,7 @@
   - 로컬 테스트는 `Bootpay.setEnvironmentMode('development' | 'stage')` 런타임 호출
 * chore(example): `.env` 기반 client_key 예제로 정리, production fallback 유지
   - legacy `application_id` / `private_key` REST 예제는 호환용으로 유지
-  - `BOOTPAY_SERVER_KEY` 등 secret 는 클라이언트 예제에서 제거
+  - `BOOTPAY_SECRET_KEY` 등 secret 는 클라이언트 예제에서 제거
 
 ## 5.1.2
 * **Dependency Update**: iOS 라우팅 보강 (삼성 모니모 App Store fallback)

@@ -19,8 +19,8 @@ class ApiProvider extends GetConnect {
   }
 
   Future<Response> getRestTokenWithClientKey(
-      String clientKey, String serverKey) async {
-    var payload = {'client_key': clientKey, 'server_key': serverKey};
+      String clientKey, String secretKey) async {
+    var payload = {'client_key': clientKey, 'secret_key': secretKey};
 
     String url = "$defaultUrl/v2/request/token";
 

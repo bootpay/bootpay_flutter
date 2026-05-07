@@ -237,13 +237,13 @@ class _PasswordPaymentScreenState extends State<PasswordPaymentScreen> {
   }
 
   Future<String> _getUserToken() async {
-    // 주의: server_key (secret) 는 클라이언트에 절대 포함하지 말 것 — 서버 SDK 에서만 사용.
+    // 주의: secret_key (secret) 는 클라이언트에 절대 포함하지 말 것 — 서버 SDK 에서만 사용.
     // 아래 호출은 서버에서 받은 토큰을 직접 주입하도록 변경하세요.
-    const String serverKey = '';
+    const String secretKey = '';
 
     try {
       var res = await _provider.getRestTokenWithClientKey(
-          BootpayEnvConfig.clientKey, serverKey);
+          BootpayEnvConfig.clientKey, secretKey);
       res = await _provider.getEasyPayUserToken(
           res.body['access_token'], _generateUser());
       return res.body["user_token"] ?? "";
