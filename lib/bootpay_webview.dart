@@ -320,6 +320,8 @@ class BootpayWebView extends StatefulWidget {
 
       if(BootpayConfig.ENV == BootpayConfig.ENV_DEBUG) {
         _controller.runJavaScript("BootpayWidget.setEnvironmentMode('development');");
+      } else if(BootpayConfig.ENV == BootpayConfig.ENV_STAGE) {
+        _controller.runJavaScript("BootpayWidget.setEnvironmentMode('stage');");
       }
       //
       // widget._controller.runJavaScript(allAgreeWatch);

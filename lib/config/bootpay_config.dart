@@ -7,10 +7,11 @@ void BootpayPrint(Object? object) {
 }
 
 class BootpayConfig {
-  static int ENV = ENV_PROMOTION; //-1: debug, -2: stage, 0보다 크면 실서버
+  /// WebView 결제 환경. ENV_DEBUG(-1) | ENV_STAGE(-2) | ENV_PROMOTION(1=production).
+  /// 기본값은 항상 ENV_PROMOTION. 배포 시 절대 변경하지 말 것.
+  /// 로컬 테스트는 `Bootpay.setEnvironmentMode('development')` 등을 런타임에 호출.
+  static int ENV = ENV_PROMOTION;
   static bool IS_FORCE_WEB = false; // 강제로 웹시나리오로 결제를 태울지 말지
-
-  // static const int ENV = ENV_STAGE; //-1: debug, -2: stage, 0보다 크면 실서버
 
   static const int ENV_DEBUG = -1;
   static const int ENV_STAGE = -2;

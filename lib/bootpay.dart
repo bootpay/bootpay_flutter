@@ -94,6 +94,33 @@ class Bootpay extends BootpayApi {
   }
 
   // ============================================
+  // Environment Mode
+  // ============================================
+
+  /// WebView 결제 환경을 설정합니다. 기본값은 production 입니다.
+  ///
+  /// 다른 SDK (JS / iOS / Android / RN) 와 일관된 API 로,
+  /// 내부적으로는 [BootpayConfig.ENV] 값을 매핑합니다.
+  ///
+  /// - `'development'` → `BootpayConfig.ENV_DEBUG`
+  /// - `'stage'` → `BootpayConfig.ENV_STAGE`
+  /// - `'production'` (그 외 값 포함) → `BootpayConfig.ENV_PROMOTION`
+  static void setEnvironmentMode(String mode) {
+    switch (mode) {
+      case 'development':
+        BootpayConfig.ENV = BootpayConfig.ENV_DEBUG;
+        break;
+      case 'stage':
+        BootpayConfig.ENV = BootpayConfig.ENV_STAGE;
+        break;
+      case 'production':
+      default:
+        BootpayConfig.ENV = BootpayConfig.ENV_PROMOTION;
+        break;
+    }
+  }
+
+  // ============================================
   // Singleton Instance
   // ============================================
   static final Bootpay _bootpay = Bootpay._internal();

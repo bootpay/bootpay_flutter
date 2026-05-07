@@ -237,7 +237,9 @@ class _PasswordPaymentScreenState extends State<PasswordPaymentScreen> {
   }
 
   Future<String> _getUserToken() async {
-    final String serverKey = BootpayEnvConfig.serverKey;
+    // 주의: server_key (secret) 는 클라이언트에 절대 포함하지 말 것 — 서버 SDK 에서만 사용.
+    // 아래 호출은 서버에서 받은 토큰을 직접 주입하도록 변경하세요.
+    const String serverKey = '';
 
     try {
       var res = await _provider.getRestTokenWithClientKey(
