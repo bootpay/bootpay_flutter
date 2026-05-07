@@ -1,6 +1,16 @@
-## Unreleased
-- example: .env 기반 client_key/server_key 예제로 정리하고 production fallback 유지
-- legacy application_id/private_key REST 예제는 호환용으로 유지
+## 5.2.0
+* feat: 통합 환경 모드 API `Bootpay.setEnvironmentMode(String)` 추가
+  - 다른 SDK (JS / iOS / Android / RN) 와 일관된 인터페이스
+  - `'development'` | `'stage'` | `'production'` (그 외 값은 production fallback)
+  - 내부적으로 `BootpayConfig.ENV` (ENV_DEBUG / ENV_STAGE / ENV_PROMOTION) 와 매핑
+* feat: 결제 위젯 stage 환경 지원
+  - `BootpayConfig.ENV == ENV_STAGE` 일 때 WebView 측 `BootpayWidget.setEnvironmentMode('stage')` 자동 주입
+* chore: `BootpayConfig.ENV` 기본값을 `ENV_PROMOTION` (production) 으로 명시
+  - 배포 안전성 강화 — 별도 호출 없이도 항상 실서비스로 동작
+  - 로컬 테스트는 `Bootpay.setEnvironmentMode('development' | 'stage')` 런타임 호출
+* chore(example): `.env` 기반 client_key 예제로 정리, production fallback 유지
+  - legacy `application_id` / `private_key` REST 예제는 호환용으로 유지
+  - `BOOTPAY_SERVER_KEY` 등 secret 는 클라이언트 예제에서 제거
 
 ## 5.1.2
 * **Dependency Update**: iOS 라우팅 보강 (삼성 모니모 App Store fallback)
