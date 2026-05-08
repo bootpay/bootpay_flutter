@@ -6,3 +6,6 @@
 
 build/
 .playwright-mcp/
+
+# omj automation runtime
+.omj/
