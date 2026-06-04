@@ -23,6 +23,10 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
+  # 팝업 닫기바 테스트 스크린에서 fork WebView(WebViewWidget/WebViewController)를
+  # 직접 import 하기 위한 의존성. 실제 빌드 대상 버전은 아래 dependency_overrides 가 결정.
+  bootpay_webview_flutter: ^4.12.6
+
 #  bootpay_webview_flutter_android: 3.2.13
 #  bootpay_webview_flutter_wkwebview: 3.0.25
 
@@ -46,6 +50,8 @@ dev_dependencies:
 
 # 로컬 webview 서브모듈 (multi-sdk/client/flutter/bootpay-flutter-webview/*) 을
 # example 빌드에서 바로 쓰고 싶을 때 아래 블록을 해제. 배포 커밋에는 포함 금지.
+# 5.3.0 의 팝업 닫기 ✕ 기능은 pub.dev (android 4.10.64 / wkwebview 3.23.32) 에 배포 완료 —
+# 평소엔 pub.dev 버전으로 빌드되고, 아직 배포 안 된 fork 변경을 테스트할 때만 아래 블록을 해제.
 # dependency_overrides:
 #   bootpay_webview_flutter:
 #     path: ../../bootpay-flutter-webview/bootpay_webview_flutter

@@ -1,3 +1,12 @@
+## 5.3.0
+* feat: 팝업 닫기(✕) 버튼 + 광고 도메인/모드/프로그래매틱 닫기 API 추가 — 광고 등 `window.close()`를 호출하지 않는 새 창(window.open / target="_blank")에 사용자가 갇히던 문제 해결
+  - 결제창은 기존 그대로 닫기 UI 없이(full-bleed) 표시되고, 팝업 위에 **반투명 플로팅 ✕ 버튼 하나**가 겹쳐 떠 수동 탈출구만 제공 (상단 바 없음). 광고는 인앱에 그대로 표시(수익 유지)
+  - `Bootpay.addPopupAdHosts(List<String>)`: 기본 광고 도메인 목록(`doubleclick.net` / `googleadservices.com` / `googlesyndication.com` 등) 내장 + 런타임 확장. 팝업/광고를 차단하지 않고 ✕ 노출 여부만 결정
+  - `Bootpay.setPopupCloseButtonMode(BootpayPopupCloseButtonMode.auto | always | never)`: ✕ 노출 모드 — `auto`(기본, 광고 도메인 팝업에만) / `always`(모든 팝업) / `never`(미노출)
+  - `Bootpay.closePopupWebView()`: 현재 떠 있는 팝업을 코드로 즉시 닫기 — 개발자가 광고 종료 이벤트를 받았을 때 호출
+  - 모두 iOS/Android 전용 (Web no-op)
+* chore: webview 포크 의존성 동기화 — `bootpay_webview_flutter_android` `^4.10.64`, `bootpay_webview_flutter_wkwebview` `^3.23.32`
+
 ## 5.2.0
 * feat: 통합 환경 모드 API `Bootpay.setEnvironmentMode(String)` 추가
   - 다른 SDK (JS / iOS / Android / RN) 와 일관된 인터페이스

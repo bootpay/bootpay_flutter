@@ -594,6 +594,66 @@ override func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
 - 프리워밍은 자동으로 수행되므로 별도 설정이 필요 없습니다.
 - 두 번째 결제부터는 ProcessPool 공유로 자동으로 빠릅니다.
 
+## 팝업 닫기(✕) 버튼 (iOS/Android)
+
+결제창 안에서 `window.open` 또는 `target="_blank"` 로 열리는 팝업(주로 광고)은
+앱 안에서 그대로 표시됩니다. 이런 팝업은 우측 상단에 뜨는 **반투명 ✕ 버튼**으로
+사용자가 직접 닫을 수 있습니다.
+
+> **광고는 차단되지 않습니다.** 광고는 항상 인앱에 그대로 노출되며, 아래 설정은
+> "✕ 버튼을 언제 보여줄지"와 "팝업을 코드로 닫는 방법"만 제어합니다.
+> 결제 PG 팝업은 `window.close()` 로 스스로 닫히므로 기본적으로 ✕ 가 붙지 않습니다.
+
+`import 'package:bootpay/bootpay.dart';` 후 아래 정적 메서드를 사용합니다.
+
+### ✕ 버튼 노출 모드 설정
+
+```dart
+// 기본값(auto): 광고 도메인으로 분류된 팝업에만 ✕ 노출
+Bootpay.setPopupCloseButtonMode(BootpayPopupCloseButtonMode.auto);
+
+// 모든 팝업에 ✕ 노출
+Bootpay.setPopupCloseButtonMode(BootpayPopupCloseButtonMode.always);
+
+// ✕ 를 절대 노출하지 않음 (window.close 또는 closePopupWebView 로만 닫기)
+Bootpay.setPopupCloseButtonMode(BootpayPopupCloseButtonMode.never);
+```
+
+| 모드 | 동작 |
+|------|------|
+| `BootpayPopupCloseButtonMode.auto` | **기본값.** 광고 도메인(`addPopupAdHosts` 목록)으로 분류된 팝업에만 ✕ 노출 |
+| `BootpayPopupCloseButtonMode.always` | 모든 팝업에 ✕ 노출 |
+| `BootpayPopupCloseButtonMode.never` | ✕ 를 노출하지 않음 |
+
+### 광고 도메인 추가 (`auto` 모드용)
+
+`auto` 모드에서 ✕ 를 띄울 광고 도메인을 런타임에 추가합니다. SDK 는
+`doubleclick.net` / `googleadservices.com` / `googlesyndication.com` 등 주요
+광고 네트워크 도메인을 기본 내장하고 있으며, 그 외 도메인을 더 넣고 싶을 때 사용합니다.
+
+```dart
+// host 의 부분 문자열로 대소문자 구분 없이 매칭됩니다.
+Bootpay.addPopupAdHosts(['ads.example.com', 'partner-ad.net']);
+```
+
+### 팝업을 코드로 닫기
+
+광고 SDK 의 "광고 종료" 이벤트 등을 받았을 때, 사용자가 ✕ 를 누르지 않아도
+현재 떠 있는 팝업을 닫을 수 있습니다. 메인 결제 WebView 에는 영향이 없으며,
+열린 팝업이 없으면 아무 동작도 하지 않습니다.
+
+```dart
+Bootpay.closePopupWebView();
+```
+
+| API | 설명 |
+|-----|------|
+| `Bootpay.setPopupCloseButtonMode(mode)` | ✕ 버튼 노출 모드 설정 (`auto`/`always`/`never`) |
+| `Bootpay.addPopupAdHosts(List<String> hosts)` | `auto` 모드에서 ✕ 를 띄울 광고 도메인 추가 |
+| `Bootpay.closePopupWebView()` | 현재 떠 있는 팝업을 프로그래매틱하게 닫기 |
+
+> **참고**: iOS / Android 전용입니다. Web 에서는 모두 no-op 으로 동작합니다.
+
 ## Documentation
 
 [부트페이 개발매뉴얼](https://developer.bootpay.co.kr/)을 참조해주세요

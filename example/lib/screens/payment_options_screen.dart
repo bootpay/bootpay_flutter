@@ -8,7 +8,6 @@ import 'payments/subscription_bootpay_screen.dart';
 import 'payments/authentication_screen.dart';
 import 'payments/webapp_payment_screen.dart';
 import 'payments/widget_payment_screen.dart';
-import 'payments/password_payment_screen.dart';
 
 /// 결제 옵션 선택 화면 (Android MainActivity / iOS ViewController 역할)
 class PaymentOptionsScreen extends StatelessWidget {
@@ -110,20 +109,14 @@ class PaymentOptionsScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 const _SectionHeader(title: '기타 결제'),
                 _PaymentOptionCard(
-                  icon: Icons.password,
-                  title: '6. 비밀번호 결제',
-                  description: '간편 비밀번호 결제',
-                  onTap: () => _navigateTo(context, const PasswordPaymentScreen()),
-                ),
-                _PaymentOptionCard(
                   icon: Icons.widgets,
-                  title: '7. 위젯 결제',
+                  title: '6. 위젯 결제',
                   description: '결제 위젯 UI 사용',
                   onTap: () => _navigateTo(context, const WidgetPaymentScreen()),
                 ),
                 _PaymentOptionCard(
                   icon: Icons.web,
-                  title: '8. 웹앱 연동',
+                  title: '7. 웹앱 연동',
                   description: '웹뷰로 결제 연동',
                   onTap: () => _navigateTo(context, const WebAppPaymentScreen()),
                 ),

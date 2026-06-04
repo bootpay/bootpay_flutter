@@ -4,10 +4,10 @@ import 'payments/total_payment_screen.dart';
 import 'payments/subscription_screen.dart';
 import 'payments/subscription_bootpay_screen.dart';
 import 'payments/authentication_screen.dart';
-import 'payments/password_payment_screen.dart';
 import 'payments/widget_payment_screen.dart';
 import 'payments/webapp_payment_screen.dart';
 import 'payments/commerce_screen.dart';
+import 'popup_ad_test_screen.dart';
 
 /// 메인 메뉴 화면 (Android MainActivity / iOS ViewController)
 class MainMenuScreen extends StatelessWidget {
@@ -70,23 +70,23 @@ class MainMenuScreen extends StatelessWidget {
                   ),
                   _MenuButton(
                     number: 6,
-                    title: '비밀번호 결제 테스트',
-                    onTap: () => _navigateTo(context, const PasswordPaymentScreen()),
-                  ),
-                  _MenuButton(
-                    number: 7,
                     title: '위젯 결제 테스트',
                     onTap: () => _navigateTo(context, const WidgetPaymentScreen()),
                   ),
                   _MenuButton(
-                    number: 8,
+                    number: 7,
                     title: '웹앱으로 연동하기',
                     onTap: () => _navigateTo(context, const WebAppPaymentScreen()),
                   ),
                   _MenuButton(
-                    number: 9,
+                    number: 8,
                     title: 'Commerce 구독 결제',
                     onTap: () => _navigateTo(context, const CommerceScreen()),
+                  ),
+                  _MenuButton(
+                    number: 9,
+                    title: '팝업 닫기 ✕ 버튼 테스트',
+                    onTap: () => _navigateTo(context, const PopupAdTestScreen()),
                   ),
                 ],
               ),

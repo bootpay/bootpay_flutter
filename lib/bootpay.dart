@@ -34,6 +34,16 @@ typedef WidgetResizeCallback = void Function(double height);
 typedef WidgetChangePaymentCallback = void Function(WidgetData? data);
 
 
+/// 팝업(window.open / target="_blank") 위에 뜨는 반투명 닫기(✕) 버튼의 노출 모드.
+///
+/// - [auto]   : 기본값. 광고 도메인(`addPopupAdHosts` 목록)으로 분류된 팝업에만 ✕ 노출.
+///              결제 팝업 등 그 외 팝업은 버튼 없이 표시되고 `window.close()` 로 닫힌다.
+/// - [always] : 모든 팝업에 ✕ 노출.
+/// - [never]  : ✕ 를 절대 노출하지 않음. 닫기는 `window.close()` 또는
+///              [Bootpay.closePopupWebView] 로만 처리.
+enum BootpayPopupCloseButtonMode { auto, always, never }
+
+
 class Bootpay extends BootpayApi {
 
   // ============================================
@@ -90,6 +100,86 @@ class Bootpay extends BootpayApi {
       return false;
     } on MissingPluginException {
       return false;
+    }
+  }
+
+  // ============================================
+  // Popup Ad Filter (iOS/Android only)
+  // ============================================
+
+  static const MethodChannel _popupChannel =
+      MethodChannel('kr.co.bootpay/webview_popup');
+
+  /// 광고 팝업(window.open / target="_blank")에서만 닫기 바를 노출하기 위한
+  /// 광고 도메인 목록을 런타임에 확장합니다.
+  ///
+  /// 팝업이나 광고를 차단하지 않습니다 — 광고는 항상 인앱에 그대로 표시되고,
+  /// 이 목록은 "닫기 바를 띄울 광고 도메인"을 식별하는 용도일 뿐입니다.
+  /// SDK 는 기본적으로 doubleclick.net / googleadservices.com /
+  /// googlesyndication.com 등 주요 광고 네트워크 도메인을 내장하고 있습니다.
+  /// 이 메서드로 광고 도메인 조각(host substring)을 추가 주입할 수 있습니다.
+  /// 결제창은 동적 PG gateway 도메인을 사용하므로 목록에 매칭되지 않아
+  /// 기존처럼 바 없이(full-bleed) 표시됩니다.
+  ///
+  /// [hosts] 는 host 의 부분 문자열로 대소문자 구분 없이 매칭됩니다.
+  /// (예: `['ads.example.com', 'partner-ad.net']`)
+  ///
+  /// **Note**: iOS / Android 전용. Web 에서는 no-op 입니다.
+  static Future<void> addPopupAdHosts(List<String> hosts) async {
+    if (kIsWeb) return;
+    if (!Platform.isIOS && !Platform.isAndroid) return;
+    if (hosts.isEmpty) return;
+
+    try {
+      await _popupChannel.invokeMethod<bool>('addAdHosts', hosts);
+    } on PlatformException catch (e) {
+      debugPrint('[Bootpay] addPopupAdHosts failed: ${e.message}');
+    } on MissingPluginException {
+      // Native side not registered (older plugin) — ignore.
+    }
+  }
+
+  /// 팝업 위에 뜨는 반투명 닫기(✕) 버튼의 노출 모드를 설정합니다.
+  /// 기본값은 [BootpayPopupCloseButtonMode.auto] (광고 도메인 팝업에만 노출).
+  ///
+  /// 팝업이나 광고를 차단하지 않습니다 — 광고는 항상 인앱에 그대로 표시되며, 이
+  /// 설정은 "✕ 버튼을 언제 보여줄지"만 제어합니다.
+  /// - [BootpayPopupCloseButtonMode.auto]   : 광고 도메인 팝업에만 ✕ 노출 (기본).
+  /// - [BootpayPopupCloseButtonMode.always] : 모든 팝업에 ✕ 노출.
+  /// - [BootpayPopupCloseButtonMode.never]  : ✕ 노출 안 함.
+  ///
+  /// **Note**: iOS / Android 전용. Web 에서는 no-op 입니다.
+  static Future<void> setPopupCloseButtonMode(
+      BootpayPopupCloseButtonMode mode) async {
+    if (kIsWeb) return;
+    if (!Platform.isIOS && !Platform.isAndroid) return;
+
+    try {
+      await _popupChannel.invokeMethod<bool>('setCloseButtonMode', mode.name);
+    } on PlatformException catch (e) {
+      debugPrint('[Bootpay] setPopupCloseButtonMode failed: ${e.message}');
+    } on MissingPluginException {
+      // Native side not registered (older plugin) — ignore.
+    }
+  }
+
+  /// 현재 떠 있는 팝업(window.open / target="_blank")을 프로그래매틱하게 닫습니다.
+  ///
+  /// 예: 광고 SDK 의 "광고 종료" 이벤트를 받았을 때 호출하면, 사용자가 ✕ 를 누르지
+  /// 않아도 팝업이 닫힙니다. 메인 결제 WebView 에는 영향이 없으며, 열린 팝업이
+  /// 없으면 아무 동작도 하지 않습니다.
+  ///
+  /// **Note**: iOS / Android 전용. Web 에서는 no-op 입니다.
+  static Future<void> closePopupWebView() async {
+    if (kIsWeb) return;
+    if (!Platform.isIOS && !Platform.isAndroid) return;
+
+    try {
+      await _popupChannel.invokeMethod<bool>('closePopup');
+    } on PlatformException catch (e) {
+      debugPrint('[Bootpay] closePopupWebView failed: ${e.message}');
+    } on MissingPluginException {
+      // Native side not registered (older plugin) — ignore.
     }
   }
 
