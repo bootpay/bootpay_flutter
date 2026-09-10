@@ -8,7 +8,7 @@
 이 모듈의 4.0.0 이상 버전부터는 Bootpay V2 이며,
 그 이하 버전은 Bootpay V1에 해당합니다.
 
-Bootpay V1, V2에 대한 특이점은 [개발매뉴얼](https://docs.bootpay.co.kr/?front=android&backend=nodejs#migration-feature)을 참고해주세요.
+Bootpay V1, V2에 대한 특이점은 [개발매뉴얼](https://developers.bootpay.ai)을 참고해주세요.
 
 ## 기능
 1. web/ios/android 지원 
@@ -113,7 +113,7 @@ await BootpayWarmUp.releaseWarmUp();
 > **참고**: Android와 Web에서는 이 기능이 no-op으로 동작합니다 (iOS/macOS 전용).
 
 ## 위젯 설정 
-[부트페이 관리자](https://developers.bootpay.co.kr/pg/guides/widget)에서 위젯을 생성하셔야만 사용이 가능합니다. 
+[부트페이 관리자](https://developers.bootpay.ai/pg/guides/widget)에서 위젯을 생성하셔야만 사용이 가능합니다. 
 
 ## 위젯 렌더링 
 ```dart  
@@ -521,7 +521,7 @@ data 포맷은 아래와 같습니다.
 ### onDone 함수
 PG에서 거래 승인 이후에 호출 되는 함수입니다. 결제 완료 후 다음 결제 결과를 호출 할 수 있는 함수 입니다.
 
-이 함수가 호출 된 후 반드시 REST API를 통해 [결제검증](https://developers.bootpay.co.kr/pg/server/receipt)을 수행해증야합니다. data 포맷은 아래와 같습니다.
+이 함수가 호출 된 후 반드시 REST API를 통해 [결제검증](https://developers.bootpay.ai/pg/server/receipt)을 수행해증야합니다. data 포맷은 아래와 같습니다.
 
 ```text
 {
@@ -656,11 +656,11 @@ Bootpay.closePopupWebView();
 
 ## Documentation
 
-[부트페이 개발매뉴얼](https://developer.bootpay.co.kr/)을 참조해주세요
+[부트페이 결제 개발문서](https://developers.bootpay.ai)를 참조해주세요
 
 ## 기술문의
 
-[채팅](https://bootpay.channel.io/)으로 문의
+[부트페이 홈페이지](https://www.bootpay.ai)에서 문의해주세요
 
 ## License
 

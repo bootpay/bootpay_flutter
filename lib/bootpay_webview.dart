@@ -246,6 +246,24 @@ class BootpayWebView extends StatefulWidget {
     return "document.addEventListener('bootpayclose', function (e) { if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage('결제창이 닫혔습니다'); } });";
   }
 
+  // PG 페이지의 닫기(X) 는 최상위 문서에서 window.close() 를 호출한다.
+  // WKWebView / Android WebView 는 스크립트로 열리지 않은 창의 window.close() 를 무시하고
+  // JS 로도 아무 이벤트를 주지 않으며, 이 페이지에는 Bootpay 가 없어 bootpayclose 도 오지 않는다.
+  // 그래서 X 를 눌러도 앱에 아무 일도 일어나지 않았다 — 가로채서 BootpayClose 로 직접 통지한다.
+  // (window.open 으로 뜬 팝업은 opener 가 있으므로 건드리지 않는다 — 네이티브 팝업 제거 경로 유지)
+  String get closeBridgeScript {
+    return r"""
+(function () {
+  if (window.__bootpayFlutterCloseBridge) return;
+  window.__bootpayFlutterCloseBridge = true;
+  if (window.opener) return;
+  window.close = function () {
+    if (window.BootpayClose && window.BootpayClose.postMessage) { BootpayClose.postMessage('결제창이 닫혔습니다'); }
+  };
+})();
+""";
+  }
+
   void setPrivateWidgetEvent(BuildContext context) {
     _context = context;
 
@@ -690,6 +708,10 @@ class BootpayWebViewState extends State<BootpayWebView> {
   }
 
   Future<void> loadPaymentScript(String url) async {
+    // PG 페이지로 최상위 이동한 뒤에도 닫기(X) 를 받아야 하므로 URL 과 무관하게 매 페이지 주입한다
+    widget._controller.runJavaScript(widget.closeBridgeScript).catchError((e) {
+      debugPrint('close bridge inject failed: $e');
+    });
     if (url.startsWith(widget.INAPP_URL)) {
       for (String script in await getBootpayJSBeforeContentLoaded()) {
         widget._controller.runJavaScript(script);
@@ -827,6 +849,8 @@ extension BootpayMethod on BootpayWebViewState {
   void clickCloseButton() {
     if (this.widget.onCancel != null)
       this.widget.onCancel!('{"action":"BootpayCancel","status":-100,"message":"사용자에 의한 취소"}');
+    // onCancel 만 부르고 끝나 X 를 눌러도 창이 닫히지 않았다 — onClose + 화면 닫기까지 진행한다
+    debounceClose();
   }
 
   void debounceClose() {
@@ -843,7 +867,9 @@ extension BootpayMethod on BootpayWebViewState {
           this.widget.onClose!();
         }
         // Then pop the navigator to dismiss Bootpay UI
-        if(context.mounted) {
+        // README 는 onClose 에서 Bootpay().dismiss(context) 를 부르라고 안내한다. 그걸로 이미 닫혔는데
+        // 여기서 또 pop 하면 호출한 화면까지 닫히므로, 이 route 가 아직 맨 위일 때만 pop 한다.
+        if(context.mounted && (ModalRoute.of(context)?.isCurrent ?? false)) {
           Navigator.of(context).pop();
         }
       });
