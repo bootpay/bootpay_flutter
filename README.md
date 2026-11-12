@@ -45,7 +45,7 @@ dependencies:
 
     <key>NSAppTransportSecurity</key>
     <dict>
-        <key>NSAllowsArbitraryLoads</key>
+        <key>NSAllowsArbitraryLoadsInWebContent</key> <!-- 결제 웹뷰 안의 http 통신만 허용 -->
         <true/>
     </dict>
     <key>CFBundleURLTypes</key>
