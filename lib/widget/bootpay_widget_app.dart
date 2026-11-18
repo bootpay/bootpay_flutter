@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../bootpay.dart';
 import '../model/payload.dart';
 import '../model/widget/widget_data.dart';
+import 'bootpay_toast.dart';
 import 'bootpay_widget_webview.dart' show BootpayWidgetWebView, BootpayWidgetWebViewController;
 
 /// 위젯 생성 콜백 (deprecated - 기존 호환성용)
@@ -78,6 +79,19 @@ class _BootpayWidgetState extends State<BootpayWidget> {
       ),
     );
 
+    // Android: 결제 진행 중 '뒤로' 를 누르면 앱 화면이 pop 되며 결제가 버려지던 문제 방지.
+    // 일반 결제 화면(BootpayAppPage)과 같이 한 번은 안내, 2초 안에 한 번 더 누르면 결제를 닫는다(onClose).
+    if (!kIsWeb && Platform.isAndroid) {
+      return PopScope(
+        canPop: !widget.controller._isPaying,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          widget.controller._handleBackDuringPayment(context);
+        },
+        child: webView,
+      );
+    }
+
     return webView;
   }
 }
@@ -114,6 +128,32 @@ class BootpayWidgetController {
   BootpayConfirmCallback? _onConfirm;
   BootpayAsyncConfirmCallback? _onConfirmAsync;
   BootpayDefaultCallback? _onDone;
+
+  // 결제 진행 상태 (Android 뒤로가기 처리용)
+  bool _isPaying = false;
+  DateTime? _lastBackPressedAt;
+
+  void _setPaying(bool value) {
+    if (_isPaying == value) return;
+    _isPaying = value;
+    _lastBackPressedAt = null;
+    _widgetState?._refreshState();
+  }
+
+  /// 결제 진행 중 Android '뒤로' 처리 — 첫 번째는 안내, 2초 안에 두 번째면 결제를 닫는다.
+  void _handleBackDuringPayment(BuildContext context) {
+    final now = DateTime.now();
+    if (_lastBackPressedAt == null ||
+        now.difference(_lastBackPressedAt!) > const Duration(seconds: 2)) {
+      _lastBackPressedAt = now;
+      BootpayToast.show(context, "'뒤로' 버튼을 한번 더 눌러주세요.");
+      return;
+    }
+    debugPrint('[BootpayWidgetController] Payment closed by back button');
+    _setPaying(false);
+    _onClose?.call();
+    _collapseAndReload();
+  }
 
   void _setWebViewController(BootpayWidgetWebViewController controller) {
     _webViewController = controller;
@@ -189,6 +229,7 @@ class BootpayWidgetController {
 
     // 웹뷰 컨트롤러에 결제 콜백 설정
     _setupPaymentCallbacks();
+    _setPaying(true);
 
     // iOS Swift SDK와 동일하게 전체화면으로 확장
     _expandToFullscreen(context);
@@ -206,6 +247,7 @@ class BootpayWidgetController {
 
     _webViewController?.onError = (data) {
       debugPrint('[BootpayWidgetController] onError: $data');
+      _setPaying(false);
       _onError?.call(data);
       // 에러 후 축소 및 위젯 재로드
       _collapseAndReload();
@@ -213,6 +255,7 @@ class BootpayWidgetController {
 
     _webViewController?.onCancel = (data) {
       debugPrint('[BootpayWidgetController] onCancel: $data');
+      _setPaying(false);
       _onCancel?.call(data);
       // 취소 후 축소 및 위젯 재로드
       _collapseAndReload();
@@ -220,6 +263,7 @@ class BootpayWidgetController {
 
     _webViewController?.onClose = () {
       debugPrint('[BootpayWidgetController] onClose');
+      _setPaying(false);
       _onClose?.call();
       _collapseToOriginal();
     };
@@ -231,6 +275,7 @@ class BootpayWidgetController {
 
     _webViewController?.onDone = (data) {
       debugPrint('[BootpayWidgetController] onDone: $data');
+      _setPaying(false);
       _onDone?.call(data);
       // 완료 후 축소
       _collapseToOriginal();
@@ -271,6 +316,7 @@ class BootpayWidgetController {
         webViewController: _webViewController,
         onClose: () {
           debugPrint('[BootpayWidgetController] Overlay close requested');
+          _setPaying(false);
           _onClose?.call();
           _collapseToOriginal();
         },
@@ -340,6 +386,7 @@ class BootpayWidgetController {
 
     // 웹뷰 컨트롤러에 결제 콜백 설정
     _setupPaymentCallbacks();
+    _setPaying(true);
 
     // 기존 웹뷰에서 직접 결제 요청
     _webViewController?.requestPayment(payload: payload);

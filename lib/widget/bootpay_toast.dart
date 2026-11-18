@@ -33,8 +33,11 @@ class BootpayToast {
   static void _dismiss() {
     _timer?.cancel();
     _timer = null;
-    _entry?.remove();
+    final entry = _entry;
     _entry = null;
+    // remove() 는 Overlay 가 이미 사라진 경우에도 안전하다 (그때는 아무것도 하지 않는다).
+    entry?.remove();
+    entry?.dispose();
   }
 }
 
@@ -45,31 +48,41 @@ class _BootpayToastView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottomInset = MediaQuery.maybeOf(context)?.padding.bottom ?? 0;
+    // 키보드가 떠 있으면(카드번호 입력 등) 키보드 위에 띄운다 — 네이티브 Toast 와 같은 위치.
+    final mediaQuery = MediaQuery.maybeOf(context);
+    final bottomInset = (mediaQuery?.padding.bottom ?? 0) +
+        (mediaQuery?.viewInsets.bottom ?? 0);
     return Positioned(
       left: 24,
       right: 24,
       bottom: bottomInset + 64,
       child: IgnorePointer(
-        child: Center(
-          child: TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: 1),
-            duration: const Duration(milliseconds: 150),
-            builder: (context, opacity, child) =>
-                Opacity(opacity: opacity, child: child),
-            child: Material(
-              color: const Color(0xE6323232),
-              borderRadius: BorderRadius.circular(20),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                child: Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    decoration: TextDecoration.none,
+        // 네이티브 Toast 처럼 TalkBack 이 읽어 준다
+        child: Semantics(
+          liveRegion: true,
+          label: message,
+          child: ExcludeSemantics(
+            child: Center(
+              child: TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0, end: 1),
+                duration: const Duration(milliseconds: 150),
+                builder: (context, opacity, child) =>
+                    Opacity(opacity: opacity, child: child),
+                child: Material(
+                  color: const Color(0xE6323232),
+                  borderRadius: BorderRadius.circular(20),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                    child: Text(
+                      message,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
                   ),
                 ),
               ),

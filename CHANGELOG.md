@@ -1,3 +1,13 @@
+## 5.3.4
+* fix: (Android) 위젯 결제 진행 중 '뒤로' 를 누르면 결제가 닫히지 않은 채 앱 화면이 pop 되던 문제 수정
+  - 일반 결제 화면과 같이 첫 번째는 "'뒤로' 버튼을 한번 더 눌러주세요." 안내, 2초 안에 한 번 더 누르면 결제를 닫고 `onClose` 호출 + 위젯 재로드
+  - 결제 중이 아닐 때의 '뒤로' 동작은 그대로
+* fix: SDK 내부 토스트(5.3.3 에서 fluttertoast 대체) 보강
+  - 키보드가 떠 있으면 키보드 위에 표시 (네이티브 Toast 와 같은 위치)
+  - TalkBack 이 안내 문구를 읽도록 live region 으로 노출
+  - 닫을 때 OverlayEntry 를 dispose (표시 중 앱 화면이 사라져도 안전)
+* note: 5.3.3 에서 `fluttertoast` · `package_info_plus` 의존성이 빠졌다. 앱 코드에서 이 패키지를 pubspec 에 선언하지 않고 bootpay 를 통해 간접으로 import 하고 있었다면, 앱 `pubspec.yaml` 에 직접 추가해야 한다
+
 ## 5.3.3
 * fix: `fluttertoast` 의존성 제거 — Flutter 3.44 / AGP 9 에서 빌드가 깨지거나 KGP 경고가 나던 원인 제거
   - fluttertoast 8.x 는 compileSdk 33 고정이라 새 Flutter 3.44 앱에서 `checkDebugAarMetadata` 로 빌드 실패, 10.0.1+ 는 KGP 를 다시 무조건 적용해 Built-in Kotlin 앱에서 빌드 실패
