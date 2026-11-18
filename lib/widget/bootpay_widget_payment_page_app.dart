@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../bootpay.dart';
 import '../model/payload.dart';
+import 'bootpay_toast.dart';
 import 'bootpay_widget_webview.dart';
 
 /// 위젯 결제 전체화면 페이지
@@ -156,7 +156,7 @@ class _BootpayWidgetPaymentPageState extends State<BootpayWidgetPaymentPage> {
           DateTime now = DateTime.now();
           if (now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
             currentBackPressTime = now;
-            Fluttertoast.showToast(msg: "'뒤로' 버튼을 한번 더 눌러주세요.");
+            BootpayToast.show(context, "'뒤로' 버튼을 한번 더 눌러주세요.");
             return Future.value(false);
           }
           return Future.value(true);

@@ -55,7 +55,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "5.3.0"
+    version: "5.3.3"
   bootpay_webview_flutter:
     dependency: "direct main"
     description:
@@ -68,10 +68,10 @@ packages:
     dependency: transitive
     description:
       name: bootpay_webview_flutter_android
-      sha256: "7bea2d7b03751c63ed10d8d2048b7cf674d7871143bfa1eb70bd8148378431db"
+      sha256: "781597dab85f818f9b22de3b2b35ab785960f278b24c98a980fe447e082738ab"
       url: "https://pub.dev"
     source: hosted
-    version: "4.10.64"
+    version: "4.10.65"
   bootpay_webview_flutter_platform_interface:
     dependency: transitive
     description:
@@ -84,10 +84,10 @@ packages:
     dependency: transitive
     description:
       name: bootpay_webview_flutter_wkwebview
-      sha256: "3368acfd3fe2f323eca044e049e66a868f28cc1711c9c7bab463192923243654"
+      sha256: "090c841ada1ad687cf8624d9253a348d9194bd635d88c4b2bcad2021c73f1981"
       url: "https://pub.dev"
     source: hosted
-    version: "3.23.32"
+    version: "3.23.34"
   build:
     dependency: transitive
     description:
@@ -156,10 +156,10 @@ packages:
     dependency: transitive
     description:
       name: characters
-      sha256: f71061c654a3380576a52b451dd5532377954cf9dbd272a78fc8479606670803
+      sha256: faf38497bda5ead2a8c7615f4f7939df04333478bf32e4173fcb06d428b5716b
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "1.4.1"
   checked_yaml:
     dependency: transitive
     description:
@@ -300,14 +300,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  fluttertoast:
-    dependency: transitive
-    description:
-      name: fluttertoast
-      sha256: "24467dc20bbe49fd63e57d8e190798c4d22cbbdac30e54209d153a15273721d1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.2.10"
   frontend_server_client:
     dependency: transitive
     description:
@@ -442,26 +434,26 @@ packages:
     dependency: transitive
     description:
       name: matcher
-      sha256: dc58c723c3c24bf8d3e2d3ad3f2f9d7bd9cf43ec6feaa64181775e60190153f2
+      sha256: dc0b7dc7651697ea4ff3e69ef44b0407ea32c487a39fff6a4004fa585e901861
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.17"
+    version: "0.12.19"
   material_color_utilities:
     dependency: transitive
     description:
       name: material_color_utilities
-      sha256: f7142bb1154231d7ea5f96bc7bde4bda2a0945d2806bb11670e30b850d56bdec
+      sha256: "9c337007e82b1889149c82ed242ed1cb24a66044e30979c44912381e9be4c48b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.11.1"
+    version: "0.13.0"
   meta:
     dependency: transitive
     description:
       name: meta
-      sha256: "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394"
+      sha256: "1741988757a65eb6b36abe716829688cf01910bbf91c34354ff7ec1c3de2b349"
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.0"
+    version: "1.18.0"
   mime:
     dependency: transitive
     description:
@@ -478,22 +470,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  package_info_plus:
-    dependency: transitive
-    description:
-      name: package_info_plus
-      sha256: "67eae327b1b0faf761964a1d2e5d323c797f3799db0e85aa232db8d9e922bc35"
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.2.1"
-  package_info_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: package_info_plus_platform_interface
-      sha256: "205ec83335c2ab9107bbba3f8997f9356d72ca3c715d2f038fc773d0366b4c76"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
   path:
     dependency: transitive
     description:
@@ -727,10 +703,10 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: ab2726c1a94d3176a45960b6234466ec367179b87dd74f1611adb1f3b5fb9d55
+      sha256: "949a932224383300f01be9221c39180316445ecb8e7547f70a41a35bf421fb9e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.7"
+    version: "0.7.11"
   timing:
     dependency: transitive
     description:
@@ -811,14 +787,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
-  win32:
-    dependency: transitive
-    description:
-      name: win32
-      sha256: "154360849a56b7b67331c21f09a386562d88903f90a1099c5987afc1912e1f29"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.10.0"
   xdg_directories:
     dependency: transitive
     description:
@@ -836,5 +804,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.8.0-0 <4.0.0"
+  dart: ">=3.10.0-0 <4.0.0"
   flutter: ">=3.24.0"

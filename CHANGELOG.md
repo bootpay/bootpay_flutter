@@ -1,3 +1,11 @@
+## 5.3.3
+* fix: `fluttertoast` 의존성 제거 — Flutter 3.44 / AGP 9 에서 빌드가 깨지거나 KGP 경고가 나던 원인 제거
+  - fluttertoast 8.x 는 compileSdk 33 고정이라 새 Flutter 3.44 앱에서 `checkDebugAarMetadata` 로 빌드 실패, 10.0.1+ 는 KGP 를 다시 무조건 적용해 Built-in Kotlin 앱에서 빌드 실패
+  - Android '뒤로' 두 번 눌러 닫기 안내 토스트는 SDK 내부 Overlay 구현(`BootpayToast`)으로 대체 — 문구·표시 시간(2초) 동일, 네이티브 코드 없음
+* chore: `package_info_plus` 의존성 제거 — 8.x 는 KGP 를 무조건 적용하고 9.x 는 AGP 8.12.1·Kotlin 2.2 를 요구해 구버전 앱 빌드를 깰 수 있어서
+  - `userTrace` / `pageTrace` 에 `ver` 를 넘기지 않으면 앱 버전 대신 빈 값이 전송된다 (`bootpay_web` 과 동일). 앱 버전이 필요하면 `ver` 를 직접 넘긴다
+* chore: `bootpay_webview_flutter_android` 를 `^4.10.65` 로 올림 — AGP 9 Built-in Kotlin 지원
+
 ## 5.3.2
 * fix: 본인인증·결제창의 닫기(X) 를 누르면 결제 화면뿐 아니라 이를 호출한 화면까지 닫히던 문제 수정
   - README·예제 안내대로 `onClose` 에서 `Bootpay().dismiss(context)` 를 호출하면 SDK 의 자동 닫기와 겹쳐 두 번 pop 되었다 — 결제 화면이 아직 맨 위일 때만 SDK 가 닫도록 변경

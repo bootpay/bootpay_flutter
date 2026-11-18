@@ -1,6 +1,5 @@
 
 import 'package:flutter/foundation.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 void BootpayPrint(Object? object) {
   if(kReleaseMode) return;
@@ -17,7 +16,7 @@ class BootpayConfig {
   static const int ENV_STAGE = -2;
   static const int ENV_PROMOTION = 1;
 
-  static const String VERSION = "5.3.2";
+  static const String VERSION = "5.3.3";
 
 
   static bool DISPLAY_WITH_HYBRID_COMPOSITION = false;

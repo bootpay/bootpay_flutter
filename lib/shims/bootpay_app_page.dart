@@ -2,12 +2,12 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../bootpay_webview.dart';
 import '../config/bootpay_config.dart';
 import '../controller/debounce_close_controller.dart';
+import '../widget/bootpay_toast.dart';
 
 class BootpayAppPage extends StatefulWidget {
 
@@ -130,7 +130,7 @@ class _BootpayAppPageState extends State<BootpayAppPage> with WidgetsBindingObse
           DateTime now = DateTime.now();
           if (now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
             currentBackPressTime = now;
-            Fluttertoast.showToast(msg: "\'뒤로\' 버튼을 한번 더 눌러주세요.");
+            BootpayToast.show(context, "'뒤로' 버튼을 한번 더 눌러주세요.");
             return Future.value(false);
           }
           // bootpayClose();

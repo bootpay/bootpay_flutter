@@ -9,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:package_info_plus/package_info_plus.dart';
 
 import '../bootpay.dart';
 import '../bootpay_api.dart';
@@ -17,7 +16,6 @@ import '../bootpay_webview.dart';
 import '../bootpay_widget_api.dart';
 import '../controller/debounce_close_controller.dart';
 import '../model/payload.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'bootpay_app_page.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as BottomSheet;
@@ -338,11 +336,6 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
     String? applicationId,
     String? ver,
   }) async {
-    if(ver == null) {
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      ver = packageInfo.version;
-    }
-
     return BootpayAnalytics.userTrace(
         id: id,
         email: email,
@@ -364,11 +357,6 @@ class BootpayPlatform extends BootpayApi with BootpayWidgetApi {
     List<StatItem>? items,
     String? ver,
   }) async {
-    if(ver == null) {
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      ver = packageInfo.version;
-    }
-
     return BootpayAnalytics.pageTrace(
         url: url,
         pageType: pageType,
